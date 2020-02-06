@@ -10,6 +10,12 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Scene">
+      <UniqueIdentifier>{b195282d-1eaf-4eee-a285-6f73d401be7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Scene\IntroScene">
+      <UniqueIdentifier>{412ff163-0708-4d91-9f08-ca687692c19c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -22,7 +28,16 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\IntroScene.cpp">
-      <Filter>src</Filter>
+      <Filter>src\Scene\IntroScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\IntroUI.cpp">
+      <Filter>src\Scene\IntroScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\IntroBg.cpp">
+      <Filter>src\Scene\IntroScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Intro.cpp">
+      <Filter>src\Scene\IntroScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -39,7 +54,16 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\IntroScene.h">
-      <Filter>src</Filter>
+      <Filter>src\Scene\IntroScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\IntroBg.h">
+      <Filter>src\Scene\IntroScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\IntroUI.h">
+      <Filter>src\Scene\IntroScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Intro.h">
+      <Filter>src\Scene\IntroScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
