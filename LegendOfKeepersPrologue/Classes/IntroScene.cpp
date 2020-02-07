@@ -1,6 +1,6 @@
 #include "IntroScene.h"
 
-Scene * IntroScene::createScene() {
+Scene* IntroScene::createScene() {
   return IntroScene::create();
 }
 
@@ -11,5 +11,14 @@ bool IntroScene::init() {
 
   _intro = new (std::nothrow) Intro(this);
 
+  this->schedule(schedule_selector(IntroScene::callPerFrame));
+
   return true;
+}
+
+IntroScene::~IntroScene() {
+  CC_SAFE_DELETE(_intro);
+}
+
+void IntroScene::callPerFrame(float delta) {
 }

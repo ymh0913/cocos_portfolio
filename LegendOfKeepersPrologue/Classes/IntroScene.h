@@ -10,8 +10,10 @@ class IntroScene : public Scene
   static Scene* createScene();
   virtual bool init();
   CREATE_FUNC(IntroScene);
+  virtual ~IntroScene();
  private:
   Intro* _intro;
+  void callPerFrame(float delta);
 };
 
 #endif // __INTRO_SCENE_H__
