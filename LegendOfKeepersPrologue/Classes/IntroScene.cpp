@@ -9,16 +9,15 @@ bool IntroScene::init() {
     return false;
   }
 
-  _intro = new (std::nothrow) Intro(this);
-
-  this->schedule(schedule_selector(IntroScene::callPerFrame));
+  for (byte i = 0; i < 2; i++) {
+    _uiLayer[i] = Layer::create();
+  }
+  _labelLayer = Layer::create();
+  _intro = new (std::nothrow) Intro(this, _uiLayer, _labelLayer);
 
   return true;
 }
 
 IntroScene::~IntroScene() {
   CC_SAFE_DELETE(_intro);
-}
-
-void IntroScene::callPerFrame(float delta) {
 }

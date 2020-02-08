@@ -13,7 +13,8 @@ class IntroScene : public Scene
   virtual ~IntroScene();
  private:
   Intro* _intro;
-  void callPerFrame(float delta);
+  Layer* _uiLayer[2];
+  Layer* _labelLayer;
 };
 
 #endif // __INTRO_SCENE_H__

@@ -10,68 +10,141 @@ IntroUI::IntroUI() {
     _btnOver[i]->setScale(1.75f);
     _btnOver[i]->setPosition(Vec2(960, 540 - i * 90));
   }
+
+  for (byte i = 0; i < 2; i++) {
+    if (i == 0) {
+      _iconDiscord[i] = Sprite::create("IntroScene/UI/icon_discord_off.png");
+      _iconDiscord[i]->setPosition(Vec2(120, 100));
+      _iconReddit[i] = Sprite::create("IntroScene/UI/icon_reddit_off.png");
+      _iconReddit[i]->setPosition(Vec2(170, 100));
+      _iconReddit[i] = Sprite::create("IntroScene/UI/icon_reddit_off.png");
+      _iconReddit[i]->setPosition(Vec2(170, 100));
+      _iconTwitter[i] = Sprite::create("IntroScene/UI/icon_twitter_off.png");
+      _iconTwitter[i]->setPosition(Vec2(220, 100));
+    } else {
+      _iconDiscord[i] = Sprite::create("IntroScene/UI/icon_discord_on.png");
+      _iconDiscord[i]->setPosition(Vec2(120, 100));
+      _iconReddit[i] = Sprite::create("IntroScene/UI/icon_reddit_on.png");
+      _iconReddit[i]->setPosition(Vec2(170, 100));
+      _iconReddit[i] = Sprite::create("IntroScene/UI/icon_reddit_on.png");
+      _iconReddit[i]->setPosition(Vec2(170, 100));
+      _iconTwitter[i] = Sprite::create("IntroScene/UI/icon_twitter_on.png");
+      _iconTwitter[i]->setPosition(Vec2(220, 100));
+    }
+  }
+
+  _saveBorderBackground = Sprite::create(
+    "IntroScene/UI/save_border_background.png");
+  _saveBorderBackground->setScale(2);
+  _saveBorderBackground->setPosition(Vec2(960, 540));
+
+  for (byte i = 0; i < 3; i++) {
+    _saveBorderNewsaveState[i] = Sprite::create(
+      "IntroScene/UI/save_border_newsave_state.png");
+    _saveBorderNewsaveState[i]->setScale(2);
+    _saveBorderNewsaveState[i]->setPosition(Vec2(960, 720 - i * 180));
+
+    _saveBorderNewsaveHOver[i] = Sprite::create(
+      "IntroScene/UI/save_border_newsave_hover.png");
+    _saveBorderNewsaveHOver[i]->setScale(2);
+    _saveBorderNewsaveHOver[i]->setPosition(Vec2(960, 720 - i * 180));
+
+    _saveBorderNewsavePressed[i] = Sprite::create(
+      "IntroScene/UI/save_border_newsave_pressed.png");
+    _saveBorderNewsavePressed[i]->setScale(2);
+    _saveBorderNewsavePressed[i]->setPosition(Vec2(960, 720 - i * 180));
+  }
+
+  _btndeleteState = Sprite::create("IntroScene/UI/btndelete_state.png");
+  _btndeleteState->setPosition(Vec2(960, 150));
 }
 
-Sprite* IntroUI::getBtnState(byte i) {
+Sprite * IntroUI::getBtnState(byte i) {
   if (i == 0) {
-    return _btnState[0];
+    return _btnState[i];
   } else if (i == 1) {
-    return _btnState[1];
+    return _btnState[i];
   } else if (i == 2) {
-    return _btnState[2];
+    return _btnState[i];
   } else if (i == 3) {
-    return _btnState[3];
+    return _btnState[i];
   } else {
-    return _btnState[4];
+    return _btnState[i];
   }
 }
 
-Sprite* IntroUI::getBtnOver(byte i) {
+Sprite * IntroUI::getBtnOver(byte i) {
   if (i == 0) {
-    return _btnOver[0];
+    return _btnOver[i];
   } else if (i == 1) {
-    return _btnOver[1];
+    return _btnOver[i];
   } else if (i == 2) {
-    return _btnOver[2];
+    return _btnOver[i];
   } else if (i == 3) {
-    return _btnOver[3];
+    return _btnOver[i];
   } else {
-    return _btnOver[4];
+    return _btnOver[i];
   }
 }
 
-Sprite* IntroUI::getIconDiscord(byte i) {
-  if (i == 0) {
-    _iconDiscord = Sprite::create("IntroScene/UI/icon_discord_off.png");
-    _iconDiscord->setPosition(Vec2(120, 100));
-    return _iconDiscord;
-  } else {
-    _iconDiscord = Sprite::create("IntroScene/UI/icon_discord_on.png");
-    _iconDiscord->setPosition(Vec2(120, 100));
-    return _iconDiscord;
+Sprite * IntroUI::getIconDiscord(byte i) {
+  if (i == 0) {    
+    return _iconDiscord[i];
+  } else {    
+    return _iconDiscord[i];
   }
 }
 
 Sprite * IntroUI::getIconReddit(byte i) {
   if (i == 0) {
-    _iconReddit = Sprite::create("IntroScene/UI/icon_reddit_off.png");
-    _iconReddit->setPosition(Vec2(170, 100));
-    return _iconReddit;
+    return _iconReddit[i];
   } else {
-    _iconReddit = Sprite::create("IntroScene/UI/icon_reddit_on.png");
-    _iconReddit->setPosition(Vec2(170, 100));
-    return _iconReddit;
+    return _iconReddit[i];
   }
 }
 
 Sprite * IntroUI::getIconTwitter(byte i) {
   if (i == 0) {
-    _iconReddit = Sprite::create("IntroScene/UI/icon_reddit_off.png");
-    _iconReddit->setPosition(Vec2(170, 100));
-    return _iconReddit;
+    return _iconTwitter[i];
   } else {
-    _iconReddit = Sprite::create("IntroScene/UI/icon_reddit_on.png");
-    _iconReddit->setPosition(Vec2(170, 100));
-    return _iconReddit;
+    return _iconTwitter[i];
   }
+}
+
+Sprite * IntroUI::getSaveBorderBackground() {
+  return _saveBorderBackground;
+}
+
+Sprite * IntroUI::getSaveBorderNewsaveState(byte i) {
+  if (i == 0) {
+    return _saveBorderNewsaveState[i];
+  } else if (i == 1) {
+    return _saveBorderNewsaveState[i];
+  } else {
+    return _saveBorderNewsaveState[i];
+  }  
+}
+
+Sprite * IntroUI::getSaveBorderNewsaveHOver(byte i) {
+  if (i == 0) {
+    return _saveBorderNewsaveHOver[i];
+  } else if (i == 1) {
+    return _saveBorderNewsaveHOver[i];
+  } else {
+    return _saveBorderNewsaveHOver[i];
+  }
+}
+
+Sprite * IntroUI::getSaveBorderNewsavePressed(byte i) {
+  if (i == 0) {
+    return _saveBorderNewsavePressed[i];
+  } else if (i == 1) {
+    return _saveBorderNewsavePressed[i];
+  } else {
+    return _saveBorderNewsavePressed[i];
+  }
+}
+
+Sprite * IntroUI::getBtndeleteState() {
+  return _btndeleteState;
 }
