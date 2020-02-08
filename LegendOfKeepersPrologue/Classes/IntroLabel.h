@@ -13,6 +13,9 @@ class IntroLabel
   Label* getCredits() { return _credits; }
   Label* getQuit() { return _quit; }
   Label* getV0602() { return _v0602; }
+  Label* getBack() { return _back; }
+  Label* getDelete() { return _delete; }
+  Label* getConfirm() { return _confirm; }
  private:
   Label* _play;
   Label* _settings;
@@ -20,6 +23,9 @@ class IntroLabel
   Label* _credits;
   Label* _quit;
   Label* _v0602;
+  Label* _back;
+  Label* _delete;
+  Label* _confirm;
 };
 
 #endif // __INTRO_LABEL_H__

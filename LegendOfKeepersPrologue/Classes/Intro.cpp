@@ -1,8 +1,9 @@
 #include "Intro.h"
 
-Intro::Intro(Scene * pScene, Layer* pUILayer[2], Layer* pLabelLayer) {  
+Intro::Intro(Scene * pScene, Layer* pUILayer[], Layer* pLabelLayer[]) {  
   _uiLayer[0] = pUILayer[0];  // UI를 담을 레이어 주소 받아오기
   _uiLayer[1] = pUILayer[1];  // UI를 담을 레이어 주소 받아오기
+
   // 멤버변수 초기화
   _isSelect = false;
   _isOverTop = false;
@@ -19,7 +20,9 @@ Intro::Intro(Scene * pScene, Layer* pUILayer[2], Layer* pLabelLayer) {
   for (byte i = 0; i < 5; i++) {
     _uiLayer[0]->addChild(_introUI->getBtnState(i));
     _uiLayer[0]->addChild(_introUI->getBtnOver(i));
+    _uiLayer[0]->addChild(_introUI->getBtnPressed(i));
     _introUI->getBtnOver(i)->setVisible(false);
+    _introUI->getBtnPressed(i)->setVisible(false);
   }
 
   for (byte i = 0; i < 2; i++) {
@@ -42,27 +45,41 @@ Intro::Intro(Scene * pScene, Layer* pUILayer[2], Layer* pLabelLayer) {
     _introUI->getSaveBorderNewsaveHOver(i)->setVisible(false);
     _introUI->getSaveBorderNewsavePressed(i)->setVisible(false);
   }
+  _uiLayer[1]->addChild(_introUI->getBtnBackState());
+  _introUI->getBtnBackState()->setVisible(false);
   _uiLayer[1]->addChild(_introUI->getBtndeleteState());
   _introUI->getBtndeleteState()->setVisible(false);
+  _uiLayer[1]->addChild(_introUI->getBtnConfirmState());
+  _introUI->getBtnConfirmState()->setVisible(false);
   pScene->addChild(_uiLayer[1]);
 
   // 레이블을 담을 레이어 주소 받아오기
-  _labelLayer = pLabelLayer;
+  _labelLayer[0] = pLabelLayer[0];
+  _labelLayer[1] = pLabelLayer[1];
 
   // 인트로 레이블 클래스
   _introLabel = new (std::nothrow) IntroLabel;
-  _labelLayer->addChild(_introLabel->getPlay());
-  _labelLayer->addChild(_introLabel->getSettings());
-  _labelLayer->addChild(_introLabel->getModding());
-  _labelLayer->addChild(_introLabel->getCredits());
-  _labelLayer->addChild(_introLabel->getQuit());
-  _labelLayer->addChild(_introLabel->getV0602());
-  pScene->addChild(_labelLayer);
+  _labelLayer[0]->addChild(_introLabel->getPlay());
+  _labelLayer[0]->addChild(_introLabel->getSettings());
+  _labelLayer[0]->addChild(_introLabel->getModding());
+  _labelLayer[0]->addChild(_introLabel->getCredits());
+  _labelLayer[0]->addChild(_introLabel->getQuit());
+  _labelLayer[0]->addChild(_introLabel->getV0602());
+  pScene->addChild(_labelLayer[0]);
+
+  _labelLayer[1]->addChild(_introLabel->getBack());
+  _introLabel->getBack()->setVisible(false);
+  _labelLayer[1]->addChild(_introLabel->getDelete());
+  _introLabel->getDelete()->setVisible(false);
+  _labelLayer[1]->addChild(_introLabel->getConfirm());
+  _introLabel->getConfirm()->setVisible(false);
+  pScene->addChild(_labelLayer[1]);
 
   // 터치 이벤트 등록
   _touchListener = EventListenerTouchOneByOne::create();
   _touchListener->setSwallowTouches(true);
   _touchListener->onTouchBegan = CC_CALLBACK_2(Intro::onTouchBegan, this);
+  _touchListener->onTouchEnded = CC_CALLBACK_2(Intro::onTouchEnded, this);
   _eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener,
                                                            pScene);
 
@@ -86,35 +103,41 @@ Intro::~Intro() {
 bool Intro::onTouchBegan(Touch * touch, Event * event) {
   auto touchPoint = touch->getLocation();
 
-  bool touchPlay = _introUI->getBtnOver(_introUI->kIntroUIBtnOver_Play)->
-    getBoundingBox().containsPoint(touchPoint);
-  bool touchDelete = _introUI->getBtndeleteState()->
+  bool touchPlay = _introUI->getBtnOver(_introUI->kIntroUIBtn_Play)->
     getBoundingBox().containsPoint(touchPoint);
 
   if (touchPlay) {
-    _isSelect = _introUI->kSelectBtn_Play;
+    _introUI->getBtnPressed(_introUI->kIntroUIBtn_Play)->setVisible(true);
+  } else {    
+  }
+
+  return true;
+}
+
+void Intro::onTouchEnded(Touch * touch, Event * event) {
+  auto touchPoint = touch->getLocation();
+
+  bool touchPlay = _introUI->getBtnOver(_introUI->kIntroUIBtn_Play)->
+    getBoundingBox().containsPoint(touchPoint);
+
+  if (touchPlay) {
     _uiLayer[0]->setVisible(false);
-    _uiLayer[1]->setVisible(true);
-    _labelLayer->setVisible(false);
+    _labelLayer[0]->setVisible(false);
     _introBg->getLegendOfKeepersLogo()->setVisible(false);
     _introBg->getKeyArtBackground()->setOpacity(95);
     _introUI->getSaveBorderBackground()->setVisible(true);
-    /*for (byte i = 0; i < 3; i++) {
+    for (byte i = 0; i < 3; i++) {
       _introUI->getSaveBorderNewsaveState(i)->setVisible(true);
-    }*/
-    log("%d %d", _uiLayer[0]->getChildrenCount(), _uiLayer[1]->getChildrenCount());
+    }
+    _introUI->getBtnBackState()->setVisible(true);
+    _introUI->getBtndeleteState()->setVisible(true);
+    _introUI->getBtnConfirmState()->setVisible(true);    
+    _introLabel->getBack()->setVisible(true);
+    _introLabel->getDelete()->setVisible(true);
+    _introLabel->getConfirm()->setVisible(true);
   } else {
+    _introUI->getBtnPressed(_introUI->kIntroUIBtn_Play)->setVisible(false);
   }
-
-  /*if (touchDelete) {
-    _isSelect = _introUI->kSelectBtn_False;
-    _uiLayer[0]->setVisible(true);
-    _labelLayer->setVisible(true);
-    _introBg->getLegendOfKeepersLogo()->setVisible(true);
-    _introBg->getKeyArtBackground()->setOpacity(255);
-  }*/
-
-  return true;
 }
 
 void Intro::onMouseMove(Event * event) {
@@ -122,19 +145,19 @@ void Intro::onMouseMove(Event * event) {
   EventMouse* mousePosition = (EventMouse*)event;
   
   // 버튼 위에 있는 마우스를 담을 bool 변수
-  bool overPlay = _introUI->getBtnState(_introUI->kIntroUIBtnOver_Play)->
+  bool overPlay = _introUI->getBtnState(_introUI->kIntroUIBtn_Play)->
     getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(),
                                         mousePosition->getCursorY()));
-  bool overSettings = _introUI->getBtnState(_introUI->kIntroUIBtnOver_Settings)->
+  bool overSettings = _introUI->getBtnState(_introUI->kIntroUIBtn_Settings)->
     getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(),
                                         mousePosition->getCursorY()));
-  bool overModding = _introUI->getBtnState(_introUI->kIntroUIBtnOver_Modding)->
+  bool overModding = _introUI->getBtnState(_introUI->kIntroUIBtn_Modding)->
     getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(),
                                         mousePosition->getCursorY()));
-  bool overCredits = _introUI->getBtnState(_introUI->kIntroUIBtnOver_Credits)->
+  bool overCredits = _introUI->getBtnState(_introUI->kIntroUIBtn_Credits)->
     getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(),
                                         mousePosition->getCursorY()));
-  bool overQuit = _introUI->getBtnState(_introUI->kIntroUIBtnOver_Quit)->
+  bool overQuit = _introUI->getBtnState(_introUI->kIntroUIBtn_Quit)->
     getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(),
                                         mousePosition->getCursorY()));
   bool overDiscord = _introUI->getIconDiscord(_introUI->kIntroIcon_Off)->
@@ -220,15 +243,15 @@ void Intro::onMouseMove(Event * event) {
   // UI버튼 선택하기 전에 반응할 조건문
   if (_isSelect == _introUI->kSelectBtn_False) {
     if (overPlay) {
-      _introUI->getBtnOver(_introUI->kIntroUIBtnOver_Play)->setVisible(true);
+      _introUI->getBtnOver(_introUI->kIntroUIBtn_Play)->setVisible(true);
     } else if (overSettings) {
-      _introUI->getBtnOver(_introUI->kIntroUIBtnOver_Settings)->setVisible(true);
+      _introUI->getBtnOver(_introUI->kIntroUIBtn_Settings)->setVisible(true);
     } else if (overModding) {
-      _introUI->getBtnOver(_introUI->kIntroUIBtnOver_Modding)->setVisible(true);
+      _introUI->getBtnOver(_introUI->kIntroUIBtn_Modding)->setVisible(true);
     } else if (overCredits) {
-      _introUI->getBtnOver(_introUI->kIntroUIBtnOver_Credits)->setVisible(true);
+      _introUI->getBtnOver(_introUI->kIntroUIBtn_Credits)->setVisible(true);
     } else if (overQuit) {
-      _introUI->getBtnOver(_introUI->kIntroUIBtnOver_Quit)->setVisible(true);
+      _introUI->getBtnOver(_introUI->kIntroUIBtn_Quit)->setVisible(true);
     } else if (overDiscord) {
       _introUI->getIconDiscord(_introUI->kIntroIcon_Off)->setVisible(false);
       _introUI->getIconDiscord(_introUI->kIntroIcon_On)->setVisible(true);
@@ -239,11 +262,11 @@ void Intro::onMouseMove(Event * event) {
       _introUI->getIconTwitter(_introUI->kIntroIcon_Off)->setVisible(false);
       _introUI->getIconTwitter(_introUI->kIntroIcon_On)->setVisible(true);
     } else {
-      _introUI->getBtnOver(_introUI->kIntroUIBtnOver_Play)->setVisible(false);
-      _introUI->getBtnOver(_introUI->kIntroUIBtnOver_Settings)->setVisible(false);
-      _introUI->getBtnOver(_introUI->kIntroUIBtnOver_Modding)->setVisible(false);
-      _introUI->getBtnOver(_introUI->kIntroUIBtnOver_Credits)->setVisible(false);
-      _introUI->getBtnOver(_introUI->kIntroUIBtnOver_Quit)->setVisible(false);
+      _introUI->getBtnOver(_introUI->kIntroUIBtn_Play)->setVisible(false);
+      _introUI->getBtnOver(_introUI->kIntroUIBtn_Settings)->setVisible(false);
+      _introUI->getBtnOver(_introUI->kIntroUIBtn_Modding)->setVisible(false);
+      _introUI->getBtnOver(_introUI->kIntroUIBtn_Credits)->setVisible(false);
+      _introUI->getBtnOver(_introUI->kIntroUIBtn_Quit)->setVisible(false);
       _introUI->getIconDiscord(_introUI->kIntroIcon_Off)->setVisible(true);
       _introUI->getIconDiscord(_introUI->kIntroIcon_On)->setVisible(false);
       _introUI->getIconReddit(_introUI->kIntroIcon_Off)->setVisible(true);

@@ -9,7 +9,7 @@
 class Intro : Scene
 {
  public:
-  Intro(Scene* pScene, Layer* pUILayer[], Layer* pLabelLayer);
+  Intro(Scene* pScene, Layer* pUILayer[], Layer* pLabelLayer[]);
   ~Intro();
  private:
   IntroBg* _introBg;
@@ -17,10 +17,11 @@ class Intro : Scene
   IntroLabel* _introLabel;
   EventListenerTouchOneByOne* _touchListener;
   bool onTouchBegan(Touch* touch, Event* event);
+  void onTouchEnded(Touch* touch, Event* event);
   EventListenerMouse* _mouseListener;
   void onMouseMove(Event* event);
   Layer* _uiLayer[2];
-  Layer* _labelLayer;
+  Layer* _labelLayer[2];
   byte _isSelect;
   bool _isOverTop;
   bool _isOverMiddle;

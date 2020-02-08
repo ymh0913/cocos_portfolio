@@ -25,4 +25,14 @@ IntroLabel::IntroLabel() {
   mainfontBold.fontSize = 18;
   _v0602 = Label::createWithTTF(mainfontBold, "v0.6.0.2");
   _v0602->setPosition(Vec2(50, 100));
+
+  mainfontBold.fontSize = 36;
+  _back = Label::createWithTTF(mainfontBold, "Back");
+  _back->setPosition(Vec2(690, 150));
+
+  _delete = Label::createWithTTF(mainfontBold, "Delete");
+  _delete->setPosition(Vec2(960, 150));
+
+  _confirm = Label::createWithTTF(mainfontBold, "Confirm");
+  _confirm->setPosition(Vec2(1230, 150));
 }

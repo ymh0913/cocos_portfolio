@@ -9,6 +9,10 @@ IntroUI::IntroUI() {
     _btnOver[i] = Sprite::create("IntroScene/UI/btn_over.png");
     _btnOver[i]->setScale(1.75f);
     _btnOver[i]->setPosition(Vec2(960, 540 - i * 90));
+
+    _btnPressed[i] = Sprite::create("IntroScene/UI/btn_press.png");
+    _btnPressed[i]->setScale(1.75f);
+    _btnPressed[i]->setPosition(Vec2(960, 540 - i * 90));
   }
 
   for (byte i = 0; i < 2; i++) {
@@ -55,8 +59,17 @@ IntroUI::IntroUI() {
     _saveBorderNewsavePressed[i]->setPosition(Vec2(960, 720 - i * 180));
   }
 
+  _btnBackState = Sprite::create("IntroScene/UI/btn_state.png");
+  _btnBackState->setScale(2);
+  _btnBackState->setPosition(Vec2(690, 150));
+
   _btndeleteState = Sprite::create("IntroScene/UI/btndelete_state.png");
+  _btndeleteState->setScale(2);
   _btndeleteState->setPosition(Vec2(960, 150));
+
+  _btnConfirmState = Sprite::create("IntroScene/UI/btn_state.png");
+  _btnConfirmState->setScale(2);
+  _btnConfirmState->setPosition(Vec2(1230, 150));
 }
 
 Sprite * IntroUI::getBtnState(byte i) {
@@ -84,6 +97,20 @@ Sprite * IntroUI::getBtnOver(byte i) {
     return _btnOver[i];
   } else {
     return _btnOver[i];
+  }
+}
+
+Sprite * IntroUI::getBtnPressed(byte i) {
+  if (i == 0) {
+    return _btnPressed[i];
+  } else if (i == 1) {
+    return _btnPressed[i];
+  } else if (i == 2) {
+    return _btnPressed[i];
+  } else if (i == 3) {
+    return _btnPressed[i];
+  } else {
+    return _btnPressed[i];
   }
 }
 
@@ -145,6 +172,14 @@ Sprite * IntroUI::getSaveBorderNewsavePressed(byte i) {
   }
 }
 
+Sprite * IntroUI::getBtnBackState() {
+  return _btnBackState;
+}
+
 Sprite * IntroUI::getBtndeleteState() {
   return _btndeleteState;
+}
+
+Sprite * IntroUI::getBtnConfirmState() {
+  return _btnConfirmState;
 }

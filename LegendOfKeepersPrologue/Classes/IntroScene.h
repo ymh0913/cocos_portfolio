@@ -14,7 +14,7 @@ class IntroScene : public Scene
  private:
   Intro* _intro;
   Layer* _uiLayer[2];
-  Layer* _labelLayer;
+  Layer* _labelLayer[2];
 };
 
 #endif // __INTRO_SCENE_H__
