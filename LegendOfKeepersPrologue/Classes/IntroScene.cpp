@@ -9,12 +9,7 @@ bool IntroScene::init() {
     return false;
   }
 
-  for (byte i = 0; i < 2; i++) {
-    _uiLayer[i] = Layer::create();
-    _labelLayer[i] = Layer::create();
-  }
-
-  _intro = new (std::nothrow) Intro(this, _uiLayer, _labelLayer);
+  _intro = new (std::nothrow) Intro(this);
 
   return true;
 }
