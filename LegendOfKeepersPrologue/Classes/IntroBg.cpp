@@ -8,6 +8,7 @@ IntroBg::IntroBg() {
 
   _legendOfKeepersLogo = Sprite::create(
     "IntroScene/Bg/Legend_Of_Keepers_Logo.png");
-  _legendOfKeepersLogo->setPosition(Vec2(VISIBLESIZE.width / 2 + ORIGIN.x, 
-                                         VISIBLESIZE.height / 2 + ORIGIN.y));
+  _legendOfKeepersLogo->setScale(1.0f / 3.0f);
+  _legendOfKeepersLogo->setPosition(Vec2(VISIBLESIZE.width / 2,
+                                         VISIBLESIZE.height / 2 + 150));
 }

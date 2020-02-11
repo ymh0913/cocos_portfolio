@@ -1,18 +1,31 @@
 #include "IntroUI.h"
 
 IntroUI::IntroUI() {
-  for (byte i = 0; i < 5; i++) {
-    _btnState[i] = Sprite::create("IntroScene/UI/btn_state.png");
-    _btnState[i]->setScale(1.75f);
-    _btnState[i]->setPosition(Vec2(990, 540 - i * 90));
-
-    _btnOver[i] = Sprite::create("IntroScene/UI/btn_over.png");
-    _btnOver[i]->setScale(1.75f);
-    _btnOver[i]->setPosition(Vec2(990, 540 - i * 90));
-
-    _btnPressed[i] = Sprite::create("IntroScene/UI/btn_press.png");
-    _btnPressed[i]->setScale(1.75f);
-    _btnPressed[i]->setPosition(Vec2(990, 540 - i * 90));
+  for (byte i = 0; i < 3; i++) {
+    if (i == 0) {
+      _btnPlay[i] = Sprite::create("IntroScene/UI/btn_state.png");
+      _btnSettings[i] = Sprite::create("IntroScene/UI/btn_state.png");
+      _btnModding[i] = Sprite::create("IntroScene/UI/btn_state.png");
+      _btnCredits[i] = Sprite::create("IntroScene/UI/btn_state.png");
+      _btnQuit[i] = Sprite::create("IntroScene/UI/btn_state.png");
+    } else if (i == 1) {
+      _btnPlay[i] = Sprite::create("IntroScene/UI/btn_over.png");
+      _btnSettings[i] = Sprite::create("IntroScene/UI/btn_over.png");
+      _btnModding[i] = Sprite::create("IntroScene/UI/btn_over.png");
+      _btnCredits[i] = Sprite::create("IntroScene/UI/btn_over.png");
+      _btnQuit[i] = Sprite::create("IntroScene/UI/btn_over.png");
+    } else {
+      _btnPlay[i] = Sprite::create("IntroScene/UI/btn_press.png");
+      _btnSettings[i] = Sprite::create("IntroScene/UI/btn_press.png");
+      _btnModding[i] = Sprite::create("IntroScene/UI/btn_press.png");
+      _btnCredits[i] = Sprite::create("IntroScene/UI/btn_press.png");
+      _btnQuit[i] = Sprite::create("IntroScene/UI/btn_press.png");
+    }
+    _btnPlay[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50));
+    _btnSettings[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 100));
+    _btnModding[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 150));
+    _btnCredits[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 200));
+    _btnQuit[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 250));
   }
 
   for (byte i = 0; i < 2; i++) {
@@ -37,28 +50,6 @@ IntroUI::IntroUI() {
     }
   }
 
-  _saveBorderBackground = Sprite::create(
-    "IntroScene/UI/save_border_background.png");
-  _saveBorderBackground->setScale(2);
-  _saveBorderBackground->setPosition(Vec2(990, 540));
-
-  for (byte i = 0; i < 3; i++) {
-    _saveBorderNewsaveState[i] = Sprite::create(
-      "IntroScene/UI/save_border_newsave_state.png");
-    _saveBorderNewsaveState[i]->setScale(2);
-    _saveBorderNewsaveState[i]->setPosition(Vec2(990, 720 - i * 180));
-
-    _saveBorderNewsaveHOver[i] = Sprite::create(
-      "IntroScene/UI/save_border_newsave_hover.png");
-    _saveBorderNewsaveHOver[i]->setScale(2);
-    _saveBorderNewsaveHOver[i]->setPosition(Vec2(990, 720 - i * 180));
-
-    _saveBorderNewsavePressed[i] = Sprite::create(
-      "IntroScene/UI/save_border_newsave_pressed.png");
-    _saveBorderNewsavePressed[i]->setScale(2);
-    _saveBorderNewsavePressed[i]->setPosition(Vec2(990, 720 - i * 180));
-  }
-
   for (byte i = 0; i < 3; i++) {
     if (i == 0) {
       _btnBack[i] = Sprite::create("IntroScene/UI/btn_state.png");
@@ -73,57 +64,50 @@ IntroUI::IntroUI() {
       _btnDelete[i] = Sprite::create("IntroScene/UI/btndelete_press.png");
       _btnConfirm[i] = Sprite::create("IntroScene/UI/btn_press.png");
     }
-  }
-  
-  for (byte i = 0; i < 3; i++) {
     _btnBack[i]->setScale(2);
-    _btnBack[i]->setPosition(Vec2(720, 150));
+    _btnBack[i]->setPosition(Vec2(520, 150));
     _btnDelete[i]->setScale(2);
-    _btnDelete[i]->setPosition(Vec2(990, 150));
+    _btnDelete[i]->setPosition(Vec2(VISIBLESIZE.width / 2, 150));
     _btnConfirm[i]->setScale(2);
-    _btnConfirm[i]->setPosition(Vec2(1260, 150));
+    _btnConfirm[i]->setPosition(Vec2(760, 150));
   }
-}
 
-Sprite * IntroUI::getBtnState(byte i) {
-  if (i == 0) {
-    return _btnState[i];
-  } else if (i == 1) {
-    return _btnState[i];
-  } else if (i == 2) {
-    return _btnState[i];
-  } else if (i == 3) {
-    return _btnState[i];
-  } else {
-    return _btnState[i];
-  }
-}
+  _saveBorderBackground = Sprite::create(
+    "IntroScene/UI/save_border_background.png");
+  _saveBorderBackground->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2));
 
-Sprite * IntroUI::getBtnOver(byte i) {
-  if (i == 0) {
-    return _btnOver[i];
-  } else if (i == 1) {
-    return _btnOver[i];
-  } else if (i == 2) {
-    return _btnOver[i];
-  } else if (i == 3) {
-    return _btnOver[i];
-  } else {
-    return _btnOver[i];
-  }
-}
-
-Sprite * IntroUI::getBtnPressed(byte i) {
-  if (i == 0) {
-    return _btnPressed[i];
-  } else if (i == 1) {
-    return _btnPressed[i];
-  } else if (i == 2) {
-    return _btnPressed[i];
-  } else if (i == 3) {
-    return _btnPressed[i];
-  } else {
-    return _btnPressed[i];
+  for (byte i = 0; i < 3; i++) {
+    if (i == 0) {
+      _saveBorderNewsaveTop[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_state.png");
+      _saveBorderNewsaveTop[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
+      _saveBorderNewsaveMiddle[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_state.png");
+      _saveBorderNewsaveMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
+      _saveBorderNewsaveBottom[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_state.png");
+      _saveBorderNewsaveBottom[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
+    } else if (i == 1) {
+      _saveBorderNewsaveTop[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_hover.png");
+      _saveBorderNewsaveTop[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
+      _saveBorderNewsaveMiddle[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_hover.png");
+      _saveBorderNewsaveMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
+      _saveBorderNewsaveBottom[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_hover.png");
+      _saveBorderNewsaveBottom[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
+    } else {
+      _saveBorderNewsaveTop[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_pressed.png");
+      _saveBorderNewsaveTop[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
+      _saveBorderNewsaveMiddle[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_pressed.png");
+      _saveBorderNewsaveMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
+      _saveBorderNewsaveBottom[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_pressed.png");
+      _saveBorderNewsaveBottom[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
+    }    
   }
 }
 
@@ -132,6 +116,90 @@ Sprite * IntroUI::getIconDiscord(byte i) {
     return _iconDiscord[i];
   } else {    
     return _iconDiscord[i];
+  }
+}
+
+Sprite * IntroUI::getSaveBorderBackground() {
+  return _saveBorderBackground;
+}
+
+Sprite * IntroUI::getSaveBorderNewsaveTop(byte i) {
+  if (i == 0) {
+    return _saveBorderNewsaveTop[i];
+  } else if (i == 1) {
+    return _saveBorderNewsaveTop[i];
+  } else {
+    return _saveBorderNewsaveTop[i];
+  }  
+}
+
+Sprite * IntroUI::getSaveBorderNewsaveMiddle(byte i) {
+  if (i == 0) {
+    return _saveBorderNewsaveMiddle[i];
+  } else if (i == 1) {
+    return _saveBorderNewsaveMiddle[i];
+  } else {
+    return _saveBorderNewsaveMiddle[i];
+  }
+}
+
+Sprite * IntroUI::getSaveBorderNewsaveBottom(byte i) {
+  if (i == 0) {
+    return _saveBorderNewsaveBottom[i];
+  } else if (i == 1) {
+    return _saveBorderNewsaveBottom[i];
+  } else {
+    return _saveBorderNewsaveBottom[i];
+  }
+}
+
+Sprite * IntroUI::getBtnPlay(byte i) {
+  if (i == 0) {
+    return _btnPlay[i];
+  } else if (i == 1) {
+    return _btnPlay[i];
+  } else {
+    return _btnPlay[i];
+  }
+}
+
+Sprite * IntroUI::getBtnSettings(byte i) {
+  if (i == 0) {
+    return _btnSettings[i];
+  } else if (i == 1) {
+    return _btnSettings[i];
+  } else {
+    return _btnSettings[i];
+  }
+}
+
+Sprite * IntroUI::getBtnModding(byte i) {
+  if (i == 0) {
+    return _btnModding[i];
+  } else if (i == 1) {
+    return _btnModding[i];
+  } else {
+    return _btnModding[i];
+  }
+}
+
+Sprite * IntroUI::getBtnCredits(byte i) {
+  if (i == 0) {
+    return _btnCredits[i];
+  } else if (i == 1) {
+    return _btnCredits[i];
+  } else {
+    return _btnCredits[i];
+  }
+}
+
+Sprite * IntroUI::getBtnQuit(byte i) {
+  if (i == 0) {
+    return _btnQuit[i];
+  } else if (i == 1) {
+    return _btnQuit[i];
+  } else {
+    return _btnQuit[i];
   }
 }
 
@@ -148,40 +216,6 @@ Sprite * IntroUI::getIconTwitter(byte i) {
     return _iconTwitter[i];
   } else {
     return _iconTwitter[i];
-  }
-}
-
-Sprite * IntroUI::getSaveBorderBackground() {
-  return _saveBorderBackground;
-}
-
-Sprite * IntroUI::getSaveBorderNewsaveState(byte i) {
-  if (i == 0) {
-    return _saveBorderNewsaveState[i];
-  } else if (i == 1) {
-    return _saveBorderNewsaveState[i];
-  } else {
-    return _saveBorderNewsaveState[i];
-  }  
-}
-
-Sprite * IntroUI::getSaveBorderNewsaveHOver(byte i) {
-  if (i == 0) {
-    return _saveBorderNewsaveHOver[i];
-  } else if (i == 1) {
-    return _saveBorderNewsaveHOver[i];
-  } else {
-    return _saveBorderNewsaveHOver[i];
-  }
-}
-
-Sprite * IntroUI::getSaveBorderNewsavePressed(byte i) {
-  if (i == 0) {
-    return _saveBorderNewsavePressed[i];
-  } else if (i == 1) {
-    return _saveBorderNewsavePressed[i];
-  } else {
-    return _saveBorderNewsavePressed[i];
   }
 }
 

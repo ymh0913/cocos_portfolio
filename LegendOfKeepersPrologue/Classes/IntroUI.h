@@ -6,7 +6,7 @@
 class IntroUI
 {
  public:
-  // 인트로화면에서 선택할 버튼을 저장할 상수
+  // 인트로화면에서 선택한 버튼을 저장할 상수
   enum eSelectBtn
   {
     kSelectBtn_False,
@@ -15,20 +15,12 @@ class IntroUI
     kSelectBtn_Modding,
     kSelectBtn_Credits,
     kSelectBtn_Quit
-  };  
-  enum eIntroUIBtn
-  {
-    kIntroUIBtn_Play,
-    kIntroUIBtn_Settings,
-    kIntroUIBtn_Modding,
-    kIntroUIBtn_Credits,
-    kIntroUIBtn_Quit
   };
   // 디스코드 페이스북 트위터 아이콘 버튼 클릭
-  enum eIntroIcon
+  enum eIcon
   {
-    kIntroIcon_Off,
-    kIntroIcon_On
+    kIcon_Off,
+    kIcon_On
   };
   enum eSaveBorderNewsave
   {
@@ -36,38 +28,36 @@ class IntroUI
     kSaveBorderNewsave_Middle,
     kSaveBorderNewsave_Bottom
   };
-  enum eSaveBorderBtn
-  {
-    kSaveBorderBtn_State,
-    kSaveBorderBtn_Over,
-    kSaveBorderBtn_Pressed
-  };
  public:
   IntroUI();
-  Sprite* getBtnState(byte i);
-  Sprite* getBtnOver(byte i);
-  Sprite* getBtnPressed(byte i);
+  Sprite* getBtnPlay(byte i);
+  Sprite* getBtnSettings(byte i);
+  Sprite* getBtnModding(byte i);
+  Sprite* getBtnCredits(byte i);
+  Sprite* getBtnQuit(byte i);
   Sprite* getIconDiscord(byte i);
   Sprite* getIconReddit(byte i);
   Sprite* getIconTwitter(byte i);
   Sprite* getSaveBorderBackground();
-  Sprite* getSaveBorderNewsaveState(byte i);
-  Sprite* getSaveBorderNewsaveHOver(byte i);
-  Sprite* getSaveBorderNewsavePressed(byte i);
+  Sprite* getSaveBorderNewsaveTop(byte i);
+  Sprite* getSaveBorderNewsaveMiddle(byte i);
+  Sprite* getSaveBorderNewsaveBottom(byte i);
   Sprite* getBtnBack(byte i);
   Sprite* getBtnDelete(byte i);
   Sprite* getBtnConfirm(byte i);
  private:
-  Sprite* _btnState[5];                   // 기본 버튼
-  Sprite* _btnOver[5];                    // 버튼이 덮혔을 때
-  Sprite* _btnPressed[5];                 // 버튼 클릭했을 때
+  Sprite* _btnPlay[3];                    // Play 버튼
+  Sprite* _btnSettings[3];                // Settings 버튼
+  Sprite* _btnModding[3];                 // Modding 버튼
+  Sprite* _btnCredits[3];                 // Credits 버튼
+  Sprite* _btnQuit[3];                    // Quit 버튼
   Sprite* _iconDiscord[2];                // 디스코드 아이콘
   Sprite* _iconReddit[2];                 // 레딧 아이콘
   Sprite* _iconTwitter[2];                // 레딧 아이콘
-  Sprite* _saveBorderBackground;          // 슬롯 저장창 배경
-  Sprite* _saveBorderNewsaveState[3];     // 슬롯창
-  Sprite* _saveBorderNewsaveHOver[3];     // 슬롯창
-  Sprite* _saveBorderNewsavePressed[3];   // 슬롯창
+  Sprite* _saveBorderBackground;          // 저장경계 배경
+  Sprite* _saveBorderNewsaveTop[3];       // 슬롯창
+  Sprite* _saveBorderNewsaveMiddle[3];    // 슬롯창
+  Sprite* _saveBorderNewsaveBottom[3];    // 슬롯창
   Sprite* _btnBack[3];                    // 뒤로가기 버튼
   Sprite* _btnDelete[3];                  // 슬롯창 삭제버튼
   Sprite* _btnConfirm[3];                 // 슬롯창 확인버튼
