@@ -4,10 +4,10 @@ IntroBg::IntroBg() {
   _keyArtBackground = Sprite::create(
     "IntroScene/Bg/keyArtBackground.png");
   _keyArtBackground->setAnchorPoint(Vec2(0, 0));
-  _keyArtBackground->setPosition(Vec2(0, 0));
+  _keyArtBackground->setScale(2.0f / 3.0f);  
 
-  _Legend_Of_Keepers_Logo = Sprite::create(
+  _legendOfKeepersLogo = Sprite::create(
     "IntroScene/Bg/Legend_Of_Keepers_Logo.png");
-  _Legend_Of_Keepers_Logo->setScale(1.25f / 3.0f);  
-  _Legend_Of_Keepers_Logo->setPosition(Vec2(990, 810));
+  _legendOfKeepersLogo->setPosition(Vec2(VISIBLESIZE.width / 2 + ORIGIN.x, 
+                                         VISIBLESIZE.height / 2 + ORIGIN.y));
 }

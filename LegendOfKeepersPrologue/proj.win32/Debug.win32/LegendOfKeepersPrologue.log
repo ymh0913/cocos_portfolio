@@ -1,24 +1,31 @@
 ﻿  AppDelegate.cpp
   Intro.cpp
-  Test.cpp
-d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\physics\ccphysicsbody.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Intro.cpp)
-d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\physics\ccphysicsshape.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Intro.cpp)
+  IntroBg.cpp
+  IntroScene.cpp
 d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\physics\ccphysicsbody.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\AppDelegate.cpp)
 d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\physics\ccphysicsshape.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\AppDelegate.cpp)
-d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\physics\ccphysicsbody.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Test.cpp)
-d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\physics\ccphysicsshape.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Test.cpp)
-d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\base\ccutf8.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Intro.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\physics\ccphysicsbody.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\IntroScene.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\physics\ccphysicsshape.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\IntroScene.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\physics\ccphysicsbody.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\IntroBg.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\physics\ccphysicsshape.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\IntroBg.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\physics\ccphysicsbody.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Intro.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\physics\ccphysicsshape.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Intro.cpp)
 d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\base\ccutf8.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\AppDelegate.cpp)
-d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\base\ccutf8.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Test.cpp)
-d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\platform\ccsaxparser.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Intro.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\base\ccutf8.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\IntroScene.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\base\ccutf8.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\IntroBg.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\base\ccutf8.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Intro.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\platform\ccsaxparser.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\IntroBg.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\platform\ccsaxparser.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\IntroScene.cpp)
 d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\platform\ccsaxparser.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\AppDelegate.cpp)
-d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\platform\ccsaxparser.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Test.cpp)
-d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\ui\uihelper.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Intro.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\platform\ccsaxparser.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Intro.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\ui\uihelper.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\IntroScene.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\ui\uihelper.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\IntroBg.cpp)
 d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\ui\uihelper.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\AppDelegate.cpp)
-d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\ui\uihelper.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Test.cpp)
-d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\extensions\gui\cccontrolextension\cccontrolpotentiometer.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Intro.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\extensions\gui\cccontrolextension\cccontrolpotentiometer.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\IntroScene.cpp)
 d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\extensions\gui\cccontrolextension\cccontrolpotentiometer.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\AppDelegate.cpp)
-d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\extensions\gui\cccontrolextension\cccontrolpotentiometer.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Test.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\extensions\gui\cccontrolextension\cccontrolpotentiometer.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\IntroBg.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\cocos\ui\uihelper.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Intro.cpp)
+d:\cpp\cocos_portfolio\legendofkeepersprologue\cocos2d\extensions\gui\cccontrolextension\cccontrolpotentiometer.h : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오. (소스 파일 컴파일 중 ..\Classes\Intro.cpp)
 AppDelegate.obj : warning LNK4075: '/EDITANDCONTINUE'이(가) '/SAFESEH' 사양으로 인해 무시됩니다.
      D:\cpp\cocos_portfolio\LegendOfKeepersPrologue\proj.win32\Debug.win32\LegendOfKeepersPrologue.lib 라이브러리 및 D:\cpp\cocos_portfolio\LegendOfKeepersPrologue\proj.win32\Debug.win32\LegendOfKeepersPrologue.exp 개체를 생성하고 있습니다.
   LegendOfKeepersPrologue.vcxproj -> D:\cpp\cocos_portfolio\LegendOfKeepersPrologue\proj.win32\Debug.win32\LegendOfKeepersPrologue.exe

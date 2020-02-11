@@ -8,10 +8,10 @@ class IntroBg
  public:
   IntroBg();
   Sprite* getKeyArtBackground() { return _keyArtBackground; }
-  Sprite* getLegendOfKeepersLogo() { return _Legend_Of_Keepers_Logo; }
+  Sprite* getLegendOfKeepersLogo() { return _legendOfKeepersLogo; }
  private:
-  Sprite* _keyArtBackground;          // 배경
-  Sprite* _Legend_Of_Keepers_Logo;    // 로고
+  Sprite* _keyArtBackground;       // 배경
+  Sprite* _legendOfKeepersLogo;    // 로고
 };
 
 #endif // __INTRO_BG_H__
