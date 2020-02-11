@@ -52,6 +52,40 @@ IntroUI::IntroUI() {
 
   for (byte i = 0; i < 3; i++) {
     if (i == 0) {
+      _saveBorderNewsaveTop[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_state.png");
+      _saveBorderNewsaveTop[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 + 60));
+      _saveBorderNewsaveMiddle[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_state.png");
+      _saveBorderNewsaveMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 60));
+      _saveBorderNewsaveBottom[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_state.png");
+      _saveBorderNewsaveBottom[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 180));
+    } else if (i == 1) {
+      _saveBorderNewsaveTop[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_hover.png");
+      _saveBorderNewsaveTop[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 + 60));
+      _saveBorderNewsaveMiddle[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_hover.png");
+      _saveBorderNewsaveMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 60));
+      _saveBorderNewsaveBottom[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_hover.png");
+      _saveBorderNewsaveBottom[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 180));
+    } else {
+      _saveBorderNewsaveTop[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_pressed.png");
+      _saveBorderNewsaveTop[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 + 60));
+      _saveBorderNewsaveMiddle[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_pressed.png");
+      _saveBorderNewsaveMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 60));
+      _saveBorderNewsaveBottom[i] = Sprite::create(
+        "IntroScene/UI/save_border_newsave_pressed.png");
+      _saveBorderNewsaveBottom[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 180));
+    }    
+  }
+
+  for (byte i = 0; i < 3; i++) {
+    if (i == 0) {
       _btnBack[i] = Sprite::create("IntroScene/UI/btn_state.png");
       _btnDelete[i] = Sprite::create("IntroScene/UI/btndelete_state.png");
       _btnConfirm[i] = Sprite::create("IntroScene/UI/btn_state.png");
@@ -63,51 +97,10 @@ IntroUI::IntroUI() {
       _btnBack[i] = Sprite::create("IntroScene/UI/btn_press.png");
       _btnDelete[i] = Sprite::create("IntroScene/UI/btndelete_press.png");
       _btnConfirm[i] = Sprite::create("IntroScene/UI/btn_press.png");
-    }
-    _btnBack[i]->setScale(2);
-    _btnBack[i]->setPosition(Vec2(520, 150));
-    _btnDelete[i]->setScale(2);
-    _btnDelete[i]->setPosition(Vec2(VISIBLESIZE.width / 2, 150));
-    _btnConfirm[i]->setScale(2);
-    _btnConfirm[i]->setPosition(Vec2(760, 150));
-  }
-
-  _saveBorderBackground = Sprite::create(
-    "IntroScene/UI/save_border_background.png");
-  _saveBorderBackground->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2));
-
-  for (byte i = 0; i < 3; i++) {
-    if (i == 0) {
-      _saveBorderNewsaveTop[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_state.png");
-      _saveBorderNewsaveTop[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
-      _saveBorderNewsaveMiddle[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_state.png");
-      _saveBorderNewsaveMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
-      _saveBorderNewsaveBottom[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_state.png");
-      _saveBorderNewsaveBottom[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
-    } else if (i == 1) {
-      _saveBorderNewsaveTop[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_hover.png");
-      _saveBorderNewsaveTop[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
-      _saveBorderNewsaveMiddle[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_hover.png");
-      _saveBorderNewsaveMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
-      _saveBorderNewsaveBottom[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_hover.png");
-      _saveBorderNewsaveBottom[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
-    } else {
-      _saveBorderNewsaveTop[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_pressed.png");
-      _saveBorderNewsaveTop[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
-      _saveBorderNewsaveMiddle[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_pressed.png");
-      _saveBorderNewsaveMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
-      _saveBorderNewsaveBottom[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_pressed.png");
-      _saveBorderNewsaveBottom[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 50 * i));
     }    
+    _btnBack[i]->setPosition(Vec2(480, 100));    
+    _btnDelete[i]->setPosition(Vec2(VISIBLESIZE.width / 2, 100));    
+    _btnConfirm[i]->setPosition(Vec2(800, 100));
   }
 }
 
@@ -117,10 +110,6 @@ Sprite * IntroUI::getIconDiscord(byte i) {
   } else {    
     return _iconDiscord[i];
   }
-}
-
-Sprite * IntroUI::getSaveBorderBackground() {
-  return _saveBorderBackground;
 }
 
 Sprite * IntroUI::getSaveBorderNewsaveTop(byte i) {

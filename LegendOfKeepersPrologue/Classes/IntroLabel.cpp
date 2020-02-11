@@ -28,11 +28,11 @@ IntroLabel::IntroLabel() {
 
   mainfontBold.fontSize = 18;
   _back = Label::createWithTTF(mainfontBold, "Back");
-  _back->setPosition(Vec2(720, 150));
+  _back->setPosition(Vec2(480, 100));
 
   _delete = Label::createWithTTF(mainfontBold, "Delete");
-  _delete->setPosition(Vec2(VISIBLESIZE.width / 2, 150));
+  _delete->setPosition(Vec2(VISIBLESIZE.width / 2, 100));
 
   _confirm = Label::createWithTTF(mainfontBold, "Confirm");
-  _confirm->setPosition(Vec2(1260, 150));
+  _confirm->setPosition(Vec2(800, 100));
 }

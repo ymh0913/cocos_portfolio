@@ -38,7 +38,6 @@ class IntroUI
   Sprite* getIconDiscord(byte i);
   Sprite* getIconReddit(byte i);
   Sprite* getIconTwitter(byte i);
-  Sprite* getSaveBorderBackground();
   Sprite* getSaveBorderNewsaveTop(byte i);
   Sprite* getSaveBorderNewsaveMiddle(byte i);
   Sprite* getSaveBorderNewsaveBottom(byte i);
@@ -54,7 +53,6 @@ class IntroUI
   Sprite* _iconDiscord[2];                // 디스코드 아이콘
   Sprite* _iconReddit[2];                 // 레딧 아이콘
   Sprite* _iconTwitter[2];                // 레딧 아이콘
-  Sprite* _saveBorderBackground;          // 저장경계 배경
   Sprite* _saveBorderNewsaveTop[3];       // 슬롯창
   Sprite* _saveBorderNewsaveMiddle[3];    // 슬롯창
   Sprite* _saveBorderNewsaveBottom[3];    // 슬롯창

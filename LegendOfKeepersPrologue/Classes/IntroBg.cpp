@@ -11,4 +11,9 @@ IntroBg::IntroBg() {
   _legendOfKeepersLogo->setScale(1.0f / 3.0f);
   _legendOfKeepersLogo->setPosition(Vec2(VISIBLESIZE.width / 2,
                                          VISIBLESIZE.height / 2 + 150));
+
+  _saveBorderBackground = Sprite::create(
+    "IntroScene/Bg/save_border_background.png");
+  _saveBorderBackground->setScale(1.375f);
+  _saveBorderBackground->setPosition(Vec2(640, 360));
 }

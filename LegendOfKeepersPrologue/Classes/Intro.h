@@ -22,7 +22,7 @@ class Intro : Scene
   void onMouseMove(Event* event);
   Layer* _uiLayer[2];
   Layer* _labelLayer[2];
-  Layer* _bgLayer;
+  Layer* _bgLayer[2];
   byte _isSelect;
   bool _isOverTop;
   bool _isOverMiddle;
