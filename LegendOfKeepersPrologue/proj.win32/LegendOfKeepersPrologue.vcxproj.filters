@@ -16,6 +16,9 @@
     <Filter Include="src\Scene\IntroScene">
       <UniqueIdentifier>{412ff163-0708-4d91-9f08-ca687692c19c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Scene\TutorialScene">
+      <UniqueIdentifier>{603fbe6d-e65e-4e50-89d0-41886730adb7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,6 +44,21 @@
     </ClCompile>
     <ClCompile Include="..\Classes\IntroLabel.cpp">
       <Filter>src\Scene\IntroScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Tutorial.cpp">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TutorialBg.cpp">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TutorialLabel.cpp">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TutorialScene.cpp">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TutorialUI.cpp">
+      <Filter>src\Scene\TutorialScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +88,21 @@
     </ClInclude>
     <ClInclude Include="..\Classes\IntroLabel.h">
       <Filter>src\Scene\IntroScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Tutorial.h">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TutorialBg.h">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TutorialLabel.h">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TutorialScene.h">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TutorialUI.h">
+      <Filter>src\Scene\TutorialScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

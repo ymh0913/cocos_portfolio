@@ -38,6 +38,8 @@ IntroUI::IntroUI() {
       _iconReddit[i]->setPosition(Vec2(170, 100));
       _iconTwitter[i] = Sprite::create("IntroScene/UI/icon_twitter_off.png");
       _iconTwitter[i]->setPosition(Vec2(220, 100));
+      _iconFacebook[i] = Sprite::create("IntroScene/UI/icon_facebook_off.png");
+      _iconFacebook[i]->setPosition(Vec2(270, 100));
     } else {
       _iconDiscord[i] = Sprite::create("IntroScene/UI/icon_discord_on.png");
       _iconDiscord[i]->setPosition(Vec2(120, 100));
@@ -47,6 +49,8 @@ IntroUI::IntroUI() {
       _iconReddit[i]->setPosition(Vec2(170, 100));
       _iconTwitter[i] = Sprite::create("IntroScene/UI/icon_twitter_on.png");
       _iconTwitter[i]->setPosition(Vec2(220, 100));
+      _iconFacebook[i] = Sprite::create("IntroScene/UI/icon_facebook_on.png");
+      _iconFacebook[i]->setPosition(Vec2(270, 100));
     }
   }
 
@@ -88,19 +92,34 @@ IntroUI::IntroUI() {
     if (i == 0) {
       _btnBack[i] = Sprite::create("IntroScene/UI/btn_state.png");
       _btnDelete[i] = Sprite::create("IntroScene/UI/btndelete_state.png");
-      _btnConfirm[i] = Sprite::create("IntroScene/UI/btn_state.png");
+      _btnCreate[i] = Sprite::create("IntroScene/UI/btn_state.png");
     } else if (i == 1) {
       _btnBack[i] = Sprite::create("IntroScene/UI/btn_over.png");
       _btnDelete[i] = Sprite::create("IntroScene/UI/btndelete_over.png");
-      _btnConfirm[i] = Sprite::create("IntroScene/UI/btn_over.png");
+      _btnCreate[i] = Sprite::create("IntroScene/UI/btn_over.png");
     } else {
       _btnBack[i] = Sprite::create("IntroScene/UI/btn_press.png");
       _btnDelete[i] = Sprite::create("IntroScene/UI/btndelete_press.png");
-      _btnConfirm[i] = Sprite::create("IntroScene/UI/btn_press.png");
+      _btnCreate[i] = Sprite::create("IntroScene/UI/btn_press.png");
     }    
     _btnBack[i]->setPosition(Vec2(480, 100));    
     _btnDelete[i]->setPosition(Vec2(VISIBLESIZE.width / 2, 100));    
-    _btnConfirm[i]->setPosition(Vec2(800, 100));
+    _btnCreate[i]->setPosition(Vec2(800, 100));
+  }
+
+  for (byte i = 0; i < 3; i++) {
+    if (i == 0) {
+      _btnNo[i] = Sprite::create("IntroScene/UI/btn_state.png");
+      _btnYes[i] = Sprite::create("IntroScene/UI/btn_state.png");
+    } else if (i == 1) {
+      _btnNo[i] = Sprite::create("IntroScene/UI/btn_over.png");
+      _btnYes[i] = Sprite::create("IntroScene/UI/btn_over.png");
+    } else {
+      _btnNo[i] = Sprite::create("IntroScene/UI/btn_press.png");
+      _btnYes[i] = Sprite::create("IntroScene/UI/btn_press.png");
+    }
+    _btnNo[i]->setPosition(Vec2(VISIBLESIZE.width / 2 - 70, VISIBLESIZE.height / 2 - 20));
+    _btnYes[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 70, VISIBLESIZE.height / 2 - 20));
   }
 }
 
@@ -208,6 +227,14 @@ Sprite * IntroUI::getIconTwitter(byte i) {
   }
 }
 
+Sprite * IntroUI::getIconFacebook(byte i) {
+  if (i == 0) {
+    return _iconFacebook[i];
+  } else {
+    return _iconFacebook[i];
+  }
+}
+
 Sprite * IntroUI::getBtnBack(byte i) {
   if (i == 0) {
     return _btnBack[i];
@@ -228,12 +255,32 @@ Sprite * IntroUI::getBtnDelete(byte i) {
   }
 }
 
-Sprite * IntroUI::getBtnConfirm(byte i) {
+Sprite * IntroUI::getBtnCreate(byte i) {
   if (i == 0) {
-    return _btnConfirm[i];
+    return _btnCreate[i];
   } else if (i == 1) {
-    return _btnConfirm[i];
+    return _btnCreate[i];
   } else {
-    return _btnConfirm[i];
+    return _btnCreate[i];
+  }
+}
+
+Sprite * IntroUI::getBtnNo(byte i) {
+  if (i == 0) {
+    return _btnNo[i];
+  } else if (i == 1) {
+    return _btnNo[i];
+  } else {
+    return _btnNo[i];
+  }
+}
+
+Sprite * IntroUI::getBtnYes(byte i) {
+  if (i == 0) {
+    return _btnYes[i];
+  } else if (i == 1) {
+    return _btnYes[i];
+  } else {
+    return _btnYes[i];
   }
 }

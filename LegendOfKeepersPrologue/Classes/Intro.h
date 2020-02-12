@@ -5,6 +5,7 @@
 #include "IntroBg.h"
 #include "IntroUI.h"
 #include "IntroLabel.h"
+#include "TutorialScene.h"
 
 class Intro : Scene
 {
@@ -20,13 +21,13 @@ class Intro : Scene
   void onTouchEnded(Touch* touch, Event* event);
   EventListenerMouse* _mouseListener;
   void onMouseMove(Event* event);
-  Layer* _uiLayer[2];
-  Layer* _labelLayer[2];
-  Layer* _bgLayer[2];
+  Layer* _bgLayer[3];
+  Layer* _uiLayer[3];
+  Layer* _labelLayer[3];  
   byte _isSelect;
-  bool _isOverTop;
-  bool _isOverMiddle;
-  bool _isOverBottom;
+  bool _isTop;
+  bool _isMiddle;
+  bool _isBottom;
 };
 
 #endif // __INTRO_H__

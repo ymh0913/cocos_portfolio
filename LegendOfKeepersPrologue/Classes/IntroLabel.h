@@ -15,7 +15,15 @@ class IntroLabel
   Label* getV0602() { return _v0602; }
   Label* getBack() { return _back; }
   Label* getDelete() { return _delete; }
-  Label* getConfirm() { return _confirm; }
+  Label* getCreate() { return _create; }
+  Label* getTitleSaveTop() { return _titleSaveTop; }
+  Label* getTitleSaveMiddle() { return _titleSaveMiddle; }
+  Label* getTitleSaveBottom() { return _titleSaveBottom; }
+  void setSaveName(const String* tmp) { _saveName = tmp; }
+  const String* getSaveName() { return _saveName; }
+  Label* getTutorial() { return _tutorial; }
+  Label* getNo() { return _no; }
+  Label* getYes() { return _yes; }
  private:
   Label* _play;
   Label* _settings;
@@ -25,7 +33,14 @@ class IntroLabel
   Label* _v0602;
   Label* _back;
   Label* _delete;
-  Label* _confirm;
+  Label* _create;
+  Label* _titleSaveTop;
+  Label* _titleSaveMiddle;
+  Label* _titleSaveBottom;
+  const String* _saveName;
+  Label* _tutorial;
+  Label* _no;
+  Label* _yes;
 };
 
 #endif // __INTRO_LABEL_H__

@@ -16,4 +16,9 @@ IntroBg::IntroBg() {
     "IntroScene/Bg/save_border_background.png");
   _saveBorderBackground->setScale(1.375f);
   _saveBorderBackground->setPosition(Vec2(640, 360));
+
+  _tutorialBorderBackground = Sprite::create(
+    "IntroScene/Bg/save_border_newsave_pressed.png");
+  _tutorialBorderBackground->setScale(1.375f);
+  _tutorialBorderBackground->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2));
 }

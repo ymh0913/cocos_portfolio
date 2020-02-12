@@ -10,10 +10,12 @@ class IntroBg
   Sprite* getKeyArtBackground() { return _keyArtBackground; }
   Sprite* getLegendOfKeepersLogo() { return _legendOfKeepersLogo; }
   Sprite* getSaveBorderBackground() { return _saveBorderBackground; }
+  Sprite* getTutorialBorderBackground() { return _tutorialBorderBackground; }
  private:
-  Sprite* _keyArtBackground;       // 배경
-  Sprite* _legendOfKeepersLogo;    // 로고
-  Sprite* _saveBorderBackground;   // 저장경계 배경
+  Sprite* _keyArtBackground;          // 배경
+  Sprite* _legendOfKeepersLogo;       // 로고
+  Sprite* _saveBorderBackground;      // 저장경계 배경
+  Sprite* _tutorialBorderBackground;  // 튜토리얼 배경
 };
 
 #endif // __INTRO_BG_H__

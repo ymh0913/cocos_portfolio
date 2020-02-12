@@ -36,3 +36,5 @@ using namespace experimental;
 // macro
 #define VISIBLESIZE Director::getInstance()->getVisibleSize()
 #define ORIGIN Director::getInstance()->getVisibleOrigin()
+#define USERDEFAULT UserDefault::getInstance()
+#define DIRECTOR Director::getInstance()
