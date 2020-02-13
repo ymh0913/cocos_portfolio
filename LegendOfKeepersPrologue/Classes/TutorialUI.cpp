@@ -11,6 +11,30 @@ TutorialUI::TutorialUI() {
     }    
     _btnOptions[i]->setPosition(Vec2(VISIBLESIZE.width - 40, VISIBLESIZE.height - 50));
   }
+
+  for (byte i = 0; i < 3; i++) {
+    if (i == 0) {
+      _btnContinue[i] = Sprite::create("TutorialScene/UI/btn_state.png");
+    } else if (i == 1) {
+      _btnContinue[i] = Sprite::create("TutorialScene/UI/btn_over.png");
+    } else {
+      _btnContinue[i] = Sprite::create("TutorialScene/UI/btn_press.png");
+    }
+    _btnContinue[i]->setPosition(Vec2(900, 300));
+  }
+
+  _roomIconTraps = Sprite::create("TutorialScene/UI/room_icon_traps.png");
+  _roomIconTraps->setPosition(Vec2(VISIBLESIZE.width / 2 - 100,
+                                   VISIBLESIZE.height - 100));
+  _roomIconSpell = Sprite::create("TutorialScene/UI/room_icon_spell.png");
+  _roomIconSpell->setPosition(Vec2(VISIBLESIZE.width / 2 - 50,
+                                   VISIBLESIZE.height - 100));
+  _roomIconMonster3 = Sprite::create("TutorialScene/UI/room_icon_monster3.png");
+  _roomIconMonster3->setPosition(Vec2(VISIBLESIZE.width / 2,
+                                      VISIBLESIZE.height - 100));
+  _roomIconBoss = Sprite::create("TutorialScene/UI/room_icon_boss.png");
+  _roomIconBoss->setPosition(Vec2(VISIBLESIZE.width / 2 + 50,
+                                  VISIBLESIZE.height - 100));
 }
 
 Sprite * TutorialUI::getBtnOptions(byte i) {
@@ -20,5 +44,15 @@ Sprite * TutorialUI::getBtnOptions(byte i) {
     return _btnOptions[i];
   } else {
     return _btnOptions[i];
+  }
+}
+
+Sprite * TutorialUI::getBtnContinue(byte i) {
+  if (i == 0) {
+    return _btnContinue[i];
+  } else if (i == 1) {
+    return _btnContinue[i];
+  } else {
+    return _btnContinue[i];
   }
 }

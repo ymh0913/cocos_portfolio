@@ -60,6 +60,12 @@
     <ClCompile Include="..\Classes\TutorialUI.cpp">
       <Filter>src\Scene\TutorialScene</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\TutorialUnit.cpp">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TutorialTrap.cpp">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -102,6 +108,12 @@
       <Filter>src\Scene\TutorialScene</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\TutorialUI.h">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TutorialUnit.h">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TutorialTrap.h">
       <Filter>src\Scene\TutorialScene</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,6 +4,9 @@
 #include "framework.h"
 #include "TutorialBg.h"
 #include "TutorialUI.h"
+#include "TutorialLabel.h"
+#include "TutorialUnit.h"
+#include "TutorialTrap.h"
 
 class Tutorial : Scene
 {
@@ -20,6 +23,12 @@ class Tutorial : Scene
   Layer* _bgLayer[1];
   TutorialUI* _tutorialUI;
   Layer* _uiLayer[1];
+  TutorialLabel* _tutorialLabel;
+  Layer* _labelLayer[1];
+  TutorialUnit* _tutorialUnit;
+  Layer* _unitLayer[1];
+  TutorialTrap* _tutorialTrap;
+  Layer* _trapLayer[1];
 };
 
 #endif // __TUTORIAL_H__
