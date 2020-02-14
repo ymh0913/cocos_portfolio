@@ -1,15 +1,36 @@
 #include "TutorialBg.h"
 
 TutorialBg::TutorialBg() {
-  _bgDungeonRoom = Sprite::create(
-    "TutorialScene/Bg/bg_dungeon_room0_1.png");
-  _bgDungeonRoom->setAnchorPoint(Vec2(0, 0));
-  _bgDungeonRoom->setScale(1.5f);
-  _bgDungeonRoom->setPosition(Vec2(-160, 150));
+  for (byte i = 0; i < 4; i++) {
+    if (i == 0) {
+      _bgDungeonRoom[i] = Sprite::create(
+        "TutorialScene/Bg/bg_dungeon_room0_1.png");
+    } else if (i == 1) {
+      _bgDungeonRoom[i] = Sprite::create(
+        "TutorialScene/Bg/bg_dungeon_room1_1.png");
+    } else if (i == 2) {
+      _bgDungeonRoom[i] = Sprite::create(
+        "TutorialScene/Bg/bg_dungeon_room2_1.png");
+    } else if (i == 3) {
+      _bgDungeonRoom[i] = Sprite::create(
+        "TutorialScene/Bg/bg_dungeon_room3_1.png");
+    } else {
+      _bgDungeonRoom[i] = Sprite::create(
+        "TutorialScene/Bg/bg_dungeon_room4_1.png");
+    }
+    _bgDungeonRoom[i]->setAnchorPoint(Vec2(0, 0));
+    _bgDungeonRoom[i]->setScale(1.5f);
+    _bgDungeonRoom[i]->setPosition(Vec2(-160, 150));
+  }  
+
+  _bgDungeonGround = Sprite::create("TutorialScene/Bg/bg_dungeon_ground_1.png");
+  _bgDungeonGround->setAnchorPoint(Vec2(0, 0));
+  _bgDungeonGround->setScaleX(2);  
 
   _dRH = Sprite::create(
     "TutorialScene/Bg/DRH_state.png");
   _dRH->setAnchorPoint(Vec2(0, 0));
+  _dRH->setScale(1.35f);
 
   _dRHSpeak = Sprite::create(
     "TutorialScene/Bg/DRH_speak_1.png");
@@ -42,4 +63,18 @@ TutorialBg::TutorialBg() {
   _borderScreen->setAnchorPoint(Vec2(0, 0));
   _borderScreen->setScale(1.5f);
   _borderScreen->setPosition(Vec2(540, 360));
+}
+
+Sprite * TutorialBg::getBgDungeonRoom(byte i) {
+  if (i == 0) {
+    return _bgDungeonRoom[i];
+  } else if (i == 1) {
+    return _bgDungeonRoom[i];
+  } else if (i == 2) {
+    return _bgDungeonRoom[i];
+  } else if (i == 3) {
+    return _bgDungeonRoom[i];
+  } else {
+    return _bgDungeonRoom[i];
+  }
 }

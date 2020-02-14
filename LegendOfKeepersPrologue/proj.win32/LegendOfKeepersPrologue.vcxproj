@@ -159,10 +159,12 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Tutorial.cpp" />
     <ClCompile Include="..\Classes\TutorialBg.cpp" />
     <ClCompile Include="..\Classes\TutorialLabel.cpp" />
+    <ClCompile Include="..\Classes\TutorialMaster.cpp" />
+    <ClCompile Include="..\Classes\TutorialMonster.cpp" />
     <ClCompile Include="..\Classes\TutorialScene.cpp" />
     <ClCompile Include="..\Classes\TutorialTrap.cpp" />
     <ClCompile Include="..\Classes\TutorialUI.cpp" />
-    <ClCompile Include="..\Classes\TutorialUnit.cpp" />
+    <ClCompile Include="..\Classes\TutorialHero.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -177,10 +179,12 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Tutorial.h" />
     <ClInclude Include="..\Classes\TutorialBg.h" />
     <ClInclude Include="..\Classes\TutorialLabel.h" />
+    <ClInclude Include="..\Classes\TutorialMaster.h" />
+    <ClInclude Include="..\Classes\TutorialMonster.h" />
     <ClInclude Include="..\Classes\TutorialScene.h" />
     <ClInclude Include="..\Classes\TutorialTrap.h" />
     <ClInclude Include="..\Classes\TutorialUI.h" />
-    <ClInclude Include="..\Classes\TutorialUnit.h" />
+    <ClInclude Include="..\Classes\TutorialHero.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

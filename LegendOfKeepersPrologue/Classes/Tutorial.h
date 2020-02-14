@@ -5,8 +5,10 @@
 #include "TutorialBg.h"
 #include "TutorialUI.h"
 #include "TutorialLabel.h"
-#include "TutorialUnit.h"
+#include "TutorialHero.h"
 #include "TutorialTrap.h"
+#include "TutorialMonster.h"
+#include "TutorialMaster.h"
 
 class Tutorial : Scene
 {
@@ -20,15 +22,17 @@ class Tutorial : Scene
   EventListenerMouse* _mouseListener;
   void onMouseMove(Event* event);
   TutorialBg* _tutorialBg;
-  Layer* _bgLayer[1];
+  Layer* _bgLayer[2];
   TutorialUI* _tutorialUI;
-  Layer* _uiLayer[1];
+  Layer* _uiLayer[2];
   TutorialLabel* _tutorialLabel;
-  Layer* _labelLayer[1];
-  TutorialUnit* _tutorialUnit;
-  Layer* _unitLayer[1];
+  Layer* _labelLayer[2];
+  TutorialHero* _tutorialHero;
+  Layer* _heroLayer[1];
   TutorialTrap* _tutorialTrap;
-  Layer* _trapLayer[1];
+  Layer* _trapLayer[1];  
+  byte _isContinue;
+  bool _isTrap;
 };
 
 #endif // __TUTORIAL_H__

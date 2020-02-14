@@ -27,4 +27,13 @@ TutorialLabel::TutorialLabel() {
     "employees to prepare a defense.");
   _heroes->setPosition(Vec2(VISIBLESIZE.width / 2 + 195,
                             VISIBLESIZE.height / 2 + 105));
+
+  mainfontBold.fontSize = 9;
+  _boneCatapult = Label::createWithTTF(mainfontBold, "BONE CATAPULT");
+  _boneCatapult->setPosition(Vec2(VISIBLESIZE.width / 2,
+                                  VISIBLESIZE.height / 2 + 100));
+
+  mainfontBold.fontSize = 12;
+  _confirm = Label::createWithTTF(mainfontBold, "Confirm");
+  _confirm->setPosition(Vec2(VISIBLESIZE.width - 100, 100));
 }

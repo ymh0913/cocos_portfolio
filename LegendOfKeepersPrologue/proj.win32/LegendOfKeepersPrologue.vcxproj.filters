@@ -60,10 +60,16 @@
     <ClCompile Include="..\Classes\TutorialUI.cpp">
       <Filter>src\Scene\TutorialScene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\TutorialUnit.cpp">
+    <ClCompile Include="..\Classes\TutorialTrap.cpp">
       <Filter>src\Scene\TutorialScene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\TutorialTrap.cpp">
+    <ClCompile Include="..\Classes\TutorialMonster.cpp">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TutorialHero.cpp">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TutorialMaster.cpp">
       <Filter>src\Scene\TutorialScene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,10 +116,16 @@
     <ClInclude Include="..\Classes\TutorialUI.h">
       <Filter>src\Scene\TutorialScene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\TutorialUnit.h">
+    <ClInclude Include="..\Classes\TutorialTrap.h">
       <Filter>src\Scene\TutorialScene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\TutorialTrap.h">
+    <ClInclude Include="..\Classes\TutorialMonster.h">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TutorialHero.h">
+      <Filter>src\Scene\TutorialScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TutorialMaster.h">
       <Filter>src\Scene\TutorialScene</Filter>
     </ClInclude>
   </ItemGroup>

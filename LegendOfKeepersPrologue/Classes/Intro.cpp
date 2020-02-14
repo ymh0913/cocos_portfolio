@@ -19,7 +19,7 @@ Intro::Intro(Scene * pScene) {
   _isBottom = false;
 
   // 배경 클래스
-  _introBg = new (std::nothrow) IntroBg;
+  _introBg = new (nothrow) IntroBg;
   _bgLayer[0]->addChild(_introBg->getKeyArtBackground(), 0, "인트로배경");
   _bgLayer[0]->addChild(_introBg->getLegendOfKeepersLogo(), 0, "인트로로고");
   pScene->addChild(_bgLayer[0]);
@@ -33,7 +33,7 @@ Intro::Intro(Scene * pScene) {
   pScene->addChild(_bgLayer[2]);
 
   // UI 클래스
-  _introUI = new (std::nothrow) IntroUI;
+  _introUI = new (nothrow) IntroUI;
   for (byte i = 0; i < 3; i++) {
     if (i == 0) {
       _uiLayer[0]->addChild(_introUI->getBtnPlay(i), 0, "Play버튼기본");
@@ -143,7 +143,7 @@ Intro::Intro(Scene * pScene) {
   pScene->addChild(_uiLayer[2]);
 
   // Label 클래스
-  _introLabel = new (std::nothrow) IntroLabel;
+  _introLabel = new (nothrow) IntroLabel;
   _labelLayer[0]->addChild(_introLabel->getPlay(), 0, "Play레이블");
   _labelLayer[0]->addChild(_introLabel->getSettings(), 0, "Settings레이블");
   _labelLayer[0]->addChild(_introLabel->getModding(), 0, "Modding레이블");
