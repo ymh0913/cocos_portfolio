@@ -17,9 +17,26 @@ Tutorial::Tutorial(Scene * pScene) {
     _trapLayer[i] = Layer::create();
   }
 
+  srand(time(NULL));
   // 멤버변수 초기화
   _isContinue = 0;
   _isTrap = false;
+  for (byte i = 0; i < 3; i++) {
+    _checkBg[i] = rand() % 5;
+  }
+  for (byte i = 0; i < 3; i++) {
+    for (byte j = 0; j < 3; j++) {
+      if (i == j) {
+        continue;
+      }
+      while (_checkBg[i] == _checkBg[j]) {
+        _checkBg[i] = rand() % 5;
+        if (_checkBg[i] != _checkBg[j]) {
+          break;
+        }
+      }
+    }
+  }
   
   // 배경 클래스
   _tutorialBg = new (nothrow) TutorialBg;
@@ -29,8 +46,8 @@ Tutorial::Tutorial(Scene * pScene) {
   _bgLayer[0]->addChild(_tutorialBg->getDRHSpeakEye(), 0, "dRH눈");
   _bgLayer[0]->getChildByName("dRH눈")->runAction(_tutorialBg->getDRHSpeakEyeAction());
   pScene->addChild(_bgLayer[0]);
-  _bgLayer[1]->addChild(_tutorialBg->getBgDungeonRoom(0/*0~4까지 구현예정*/), 0, "튜토리얼배경");
-  _bgLayer[1]->getChildByName("튜토리얼배경")->setOpacity(127);
+
+  _bgLayer[1]->addChild(_tutorialBg->getBgDungeonRoom(_checkBg[0]), 0, "튜토리얼배경");
   _bgLayer[1]->addChild(_tutorialBg->getBgDungeonGround(), 0, "튜토리얼땅배경");  
   _bgLayer[1]->addChild(_tutorialBg->getBorderScreen(), 0, "borderScreen");
   pScene->addChild(_bgLayer[1], -1);
@@ -166,6 +183,8 @@ bool Tutorial::onTouchBegan(Touch * touch, Event * event) {
       getBoundingBox().containsPoint(touchPoint);
     if (touchBoneCatapult) {
       _uiLayer[1]->getChildByName("boneCatapult버튼클릭")->setVisible(true);
+    } else {
+      _uiLayer[1]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
     }
   }
 
@@ -194,6 +213,7 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
       getBoundingBox().containsPoint(touchPoint);
     if (clickContinue) {
       _isContinue++;
+      _bgLayer[1]->setOpacity(255);
       _uiLayer[1]->getChildByName("boneCatapult버튼기본")->setVisible(true);
       _labelLayer[1]->getChildByName("boneCatapult")->setVisible(true);
       _trapLayer[0]->getChildByName("boneCatapult")->setVisible(true);
@@ -213,13 +233,13 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
     clickTmp = _uiLayer[1]->getChildByName("tmp")->
       getBoundingBox().containsPoint(touchPoint);
     if (clickBoneCatapult) {
-      _isTrap = true;      
+      _isTrap = true;
       _uiLayer[1]->getChildByName("tmp")->setVisible(true);
-      _uiLayer[1]->getChildByName("confirm버튼기본")->setVisible(true);
+      _uiLayer[1]->getChildByName("confirm버튼기본")->setVisible(true);      
       _labelLayer[1]->getChildByName("confirm")->setVisible(true);
       _trapLayer[0]->getChildByName("boneCatapultClone")->setVisible(true);
-      _uiLayer[1]->getChildByName("boneCatapult버튼클릭")->setVisible(false);                 
-    } if (clickTmp) {
+      _uiLayer[1]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
+    } else if (clickTmp) {
       _isTrap = false;
       _uiLayer[1]->getChildByName("tmp")->setVisible(false);
       _uiLayer[1]->getChildByName("confirm버튼기본")->setVisible(false);
@@ -230,6 +250,7 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
     } else if (_isTrap) {
 
     } else {
+      _uiLayer[1]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
     }
   }
 
@@ -238,7 +259,8 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
 void Tutorial::onMouseMove(Event * event) {
   EventMouse* mousePosition = (EventMouse*)event;
 
-  bool overContinue = false, overOption = false, overBoneCatapult = false;
+  bool overContinue = false, overOption = false, overBoneCatapult = false,
+    overConfirm = false;
 
   overOption = _uiLayer[0]->getChildByName("option버튼기본")->
     getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(),
@@ -260,10 +282,13 @@ void Tutorial::onMouseMove(Event * event) {
     }
 
   } else {
-    overBoneCatapult = _trapLayer[0]->getChildByName("boneCatapult")->
+    overBoneCatapult = _uiLayer[1]->getChildByName("boneCatapult버튼기본")->
       getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(),
                                           mousePosition->getCursorY()));
     if (overBoneCatapult) {
+      _uiLayer[1]->getChildByName("boneCatapult버튼오버")->setVisible(true);
+    } else {
+      _uiLayer[1]->getChildByName("boneCatapult버튼오버")->setVisible(false);
     }
   }
 }

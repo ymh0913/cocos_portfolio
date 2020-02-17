@@ -22,6 +22,7 @@ class Tutorial : Scene
   EventListenerMouse* _mouseListener;
   void onMouseMove(Event* event);
   TutorialBg* _tutorialBg;
+  byte _checkBg[3];
   Layer* _bgLayer[2];
   TutorialUI* _tutorialUI;
   Layer* _uiLayer[2];
