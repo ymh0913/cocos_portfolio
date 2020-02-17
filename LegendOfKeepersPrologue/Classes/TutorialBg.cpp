@@ -1,7 +1,7 @@
 #include "TutorialBg.h"
 
 TutorialBg::TutorialBg() {
-  for (byte i = 0; i < 4; i++) {
+  for (byte i = 0; i < 5; i++) {
     if (i == 0) {
       _bgDungeonRoom[i] = Sprite::create(
         "TutorialScene/Bg/bg_dungeon_room0_1.png");

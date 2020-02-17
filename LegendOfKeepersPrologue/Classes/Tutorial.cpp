@@ -18,6 +18,7 @@ Tutorial::Tutorial(Scene * pScene) {
   }
 
   srand(time(NULL));
+
   // 멤버변수 초기화
   _isContinue = 0;
   _isTrap = false;
@@ -31,9 +32,6 @@ Tutorial::Tutorial(Scene * pScene) {
       }
       while (_checkBg[i] == _checkBg[j]) {
         _checkBg[i] = rand() % 5;
-        if (_checkBg[i] != _checkBg[j]) {
-          break;
-        }
       }
     }
   }
@@ -52,6 +50,14 @@ Tutorial::Tutorial(Scene * pScene) {
   _bgLayer[1]->addChild(_tutorialBg->getBorderScreen(), 0, "borderScreen");
   pScene->addChild(_bgLayer[1], -1);
   _bgLayer[1]->setOpacity(7);
+
+  _bgLayer[2]->addChild(_tutorialBg->getBgDungeonRoom(_checkBg[1]), 0, "튜토리얼배경");
+  _bgLayer[2]->getChildByName("튜토리얼배경")->setVisible(false);
+  pScene->addChild(_bgLayer[2], -1);
+
+  _bgLayer[3]->addChild(_tutorialBg->getBgDungeonRoom(_checkBg[2]), 0, "튜토리얼배경");
+  _bgLayer[3]->getChildByName("튜토리얼배경")->setVisible(false);
+  pScene->addChild(_bgLayer[3], -1);
 
   // UI 클래스
   _tutorialUI = new (nothrow) TutorialUI;  
@@ -167,7 +173,7 @@ Tutorial::~Tutorial() {
 bool Tutorial::onTouchBegan(Touch * touch, Event * event) {
   auto touchPoint = touch->getLocation();
 
-  bool touchContinue = false, touchBoneCatapult = false;
+  bool touchContinue = false, touchBoneCatapult = false, touchConfirm = false;
 
   if (_isContinue < 2) {
     touchContinue = _uiLayer[0]->getChildByName("continue버튼오버")->
@@ -181,10 +187,15 @@ bool Tutorial::onTouchBegan(Touch * touch, Event * event) {
   } else {
     touchBoneCatapult = _uiLayer[1]->getChildByName("boneCatapult버튼오버")->
       getBoundingBox().containsPoint(touchPoint);
+    touchConfirm = _uiLayer[1]->getChildByName("confirm버튼오버")->
+      getBoundingBox().containsPoint(touchPoint);
     if (touchBoneCatapult) {
       _uiLayer[1]->getChildByName("boneCatapult버튼클릭")->setVisible(true);
+    } else if (touchConfirm) {
+      _uiLayer[1]->getChildByName("confirm버튼클릭")->setVisible(true);
     } else {
       _uiLayer[1]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
+      _uiLayer[1]->getChildByName("confirm버튼클릭")->setVisible(false);
     }
   }
 
@@ -194,7 +205,8 @@ bool Tutorial::onTouchBegan(Touch * touch, Event * event) {
 void Tutorial::onTouchEnded(Touch * touch, Event * event) {
   auto touchPoint = touch->getLocation();
 
-  bool clickContinue = false, clickBoneCatapult = false, clickTmp = false;
+  bool clickContinue = false, clickBoneCatapult = false, clickTmp = false,
+    clickConfirm = false;
 
   if (_isContinue == 0) {
     clickContinue = _uiLayer[0]->getChildByName("continue버튼클릭")->
@@ -235,7 +247,7 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
     if (clickBoneCatapult) {
       _isTrap = true;
       _uiLayer[1]->getChildByName("tmp")->setVisible(true);
-      _uiLayer[1]->getChildByName("confirm버튼기본")->setVisible(true);      
+      _uiLayer[1]->getChildByName("confirm버튼기본")->setVisible(true);
       _labelLayer[1]->getChildByName("confirm")->setVisible(true);
       _trapLayer[0]->getChildByName("boneCatapultClone")->setVisible(true);
       _uiLayer[1]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
@@ -248,7 +260,25 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
       _labelLayer[1]->getChildByName("confirm")->setVisible(false);
       _trapLayer[0]->getChildByName("boneCatapultClone")->setVisible(false);
     } else if (_isTrap) {
-
+      clickConfirm = _uiLayer[1]->getChildByName("confirm버튼클릭")->
+        getBoundingBox().containsPoint(touchPoint);
+      if (clickConfirm) {
+        _bgLayer[2]->getChildByName("튜토리얼배경")->setVisible(true);
+        _uiLayer[1]->getChildByName("boneCatapult버튼기본")->setVisible(false);
+        _uiLayer[1]->getChildByName("boneCatapult버튼오버")->setVisible(false);
+        _uiLayer[1]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
+        _labelLayer[1]->getChildByName("boneCatapult")->setVisible(false);
+        _bgLayer[1]->getChildByName("튜토리얼배경")->setVisible(false);
+        _uiLayer[1]->getChildByName("confirm버튼기본")->setVisible(false);
+        _uiLayer[1]->getChildByName("confirm버튼오버")->setVisible(false);
+        _uiLayer[1]->getChildByName("confirm버튼클릭")->setVisible(false);
+        _uiLayer[1]->getChildByName("tmp")->setVisible(false);
+        _labelLayer[1]->getChildByName("confirm")->setVisible(false);
+        _trapLayer[0]->getChildByName("boneCatapult")->setVisible(false);
+        _trapLayer[0]->getChildByName("boneCatapultClone")->setVisible(false);
+      } else {
+        _uiLayer[1]->getChildByName("confirm버튼클릭")->setVisible(false);
+      }
     } else {
       _uiLayer[1]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
     }
@@ -285,10 +315,19 @@ void Tutorial::onMouseMove(Event * event) {
     overBoneCatapult = _uiLayer[1]->getChildByName("boneCatapult버튼기본")->
       getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(),
                                           mousePosition->getCursorY()));
+    overConfirm = _uiLayer[1]->getChildByName("confirm버튼기본")->
+      getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(),
+                                          mousePosition->getCursorY()));
     if (overBoneCatapult) {
       _uiLayer[1]->getChildByName("boneCatapult버튼오버")->setVisible(true);
+    } else if (_isTrap) {
+      if (overConfirm) {
+        _uiLayer[1]->getChildByName("confirm버튼오버")->setVisible(true);
+      } else {
+        _uiLayer[1]->getChildByName("confirm버튼오버")->setVisible(false);
+      }
     } else {
-      _uiLayer[1]->getChildByName("boneCatapult버튼오버")->setVisible(false);
+      _uiLayer[1]->getChildByName("boneCatapult버튼오버")->setVisible(false);      
     }
   }
 }

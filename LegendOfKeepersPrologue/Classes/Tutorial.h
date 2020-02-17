@@ -23,11 +23,11 @@ class Tutorial : Scene
   void onMouseMove(Event* event);
   TutorialBg* _tutorialBg;
   byte _checkBg[3];
-  Layer* _bgLayer[2];
+  Layer* _bgLayer[4];
   TutorialUI* _tutorialUI;
-  Layer* _uiLayer[2];
+  Layer* _uiLayer[3];
   TutorialLabel* _tutorialLabel;
-  Layer* _labelLayer[2];
+  Layer* _labelLayer[3];
   TutorialHero* _tutorialHero;
   Layer* _heroLayer[1];
   TutorialTrap* _tutorialTrap;
