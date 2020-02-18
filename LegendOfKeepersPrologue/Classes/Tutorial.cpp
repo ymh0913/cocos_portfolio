@@ -330,7 +330,6 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
       _labelLayer[kRoomName_Monster]->setVisible(true);
       _bgLayer[kRoomName_Spell]->setVisible(false);
       _labelLayer[kRoomName_Spell]->setVisible(false);
-      _heroLayer->setVisible(false);
       _uiLayerDRH->getChildByName("continue버튼오버")->setVisible(false);
       _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
     } else {
@@ -340,7 +339,10 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
   } else if (_room == kRoomName_Monster) {
     bool clickContinue = _uiLayerDRH->getChildByName("continue버튼클릭")->getBoundingBox().containsPoint(clickPoint);
     if (clickContinue) {
-      
+      _bgLayerDRH->setVisible(false);
+      _uiLayerDRH->setVisible(false);
+      _labelLayerDRH->setVisible(false);
+      _labelLayer[kRoomName_Monster]->setVisible(false);
     }
   }
 }
