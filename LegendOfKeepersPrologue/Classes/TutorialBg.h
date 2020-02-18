@@ -8,7 +8,7 @@ class TutorialBg
  public:
   TutorialBg();
   Sprite* getBgDungeonRoom(byte i);
-  Sprite* getBgDungeonGround() { return _bgDungeonGround; }
+  Sprite* getBgDungeonGround(byte i);
   Sprite* getDRH() { return _dRH; }
   Sprite* getDRHSpeak() { return _dRHSpeak; }
   RepeatForever* getDRHSpeakAction() { return _dRHSpeakAction; }
@@ -17,7 +17,7 @@ class TutorialBg
   Sprite* getBorderScreen() { return _borderScreen; }
  private:
   Sprite* _bgDungeonRoom[5];
-  Sprite* _bgDungeonGround;
+  Sprite* _bgDungeonGround[3];
   Sprite* _dRH;
   Sprite* _dRHSpeak;
   RepeatForever* _dRHSpeakAction;

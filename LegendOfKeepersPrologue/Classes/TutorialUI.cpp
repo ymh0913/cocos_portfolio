@@ -24,20 +24,16 @@ TutorialUI::TutorialUI() {
   }
 
   _roomIconTraps = Sprite::create("TutorialScene/UI/room_icon_traps.png");
-  _roomIconTraps->setPosition(Vec2(VISIBLESIZE.width / 2 - 100,
-                                   VISIBLESIZE.height - 100));
+  _roomIconTraps->setPosition(Vec2(VISIBLESIZE.width / 2 - 100, VISIBLESIZE.height - 100));
   _roomIconSpell = Sprite::create("TutorialScene/UI/room_icon_spell.png");
-  _roomIconSpell->setPosition(Vec2(VISIBLESIZE.width / 2 - 50,
-                                   VISIBLESIZE.height - 100));
+  _roomIconSpell->setPosition(Vec2(VISIBLESIZE.width / 2 - 50, VISIBLESIZE.height - 100));
   _roomIconMonster3 = Sprite::create("TutorialScene/UI/room_icon_monster3.png");
-  _roomIconMonster3->setPosition(Vec2(VISIBLESIZE.width / 2,
-                                      VISIBLESIZE.height - 100));
+  _roomIconMonster3->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height - 100));
   _roomIconBoss = Sprite::create("TutorialScene/UI/room_icon_boss.png");
-  _roomIconBoss->setPosition(Vec2(VISIBLESIZE.width / 2 + 50,
-                                  VISIBLESIZE.height - 100));
+  _roomIconBoss->setPosition(Vec2(VISIBLESIZE.width / 2 + 50, VISIBLESIZE.height - 100));
 
-  _tmp = Sprite::create("TutorialScene/UI/brazierfire_1_idle_00.png");
-  _tmp->setPosition(Vec2(VISIBLESIZE.width / 2 + 120, VISIBLESIZE.height / 2));
+  _remove = Sprite::create("TutorialScene/UI/brazierfire_1_idle_00.png");
+  _remove->setPosition(Vec2(VISIBLESIZE.width / 2 + 120, VISIBLESIZE.height / 2));
 
   for (byte i = 0; i < 3; i++) {
     if (i == 0) {
@@ -50,8 +46,7 @@ TutorialUI::TutorialUI() {
       _boneCatapult[i] = Sprite::create("TutorialScene/UI/btn_press.png");
       _confirm[i] = Sprite::create("TutorialScene/UI/btn_press.png");
     }
-    _boneCatapult[i]->setPosition(Vec2(VISIBLESIZE.width / 2,
-                                       VISIBLESIZE.height / 2 + 100));
+    _boneCatapult[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 + 100));
     _confirm[i]->setPosition(Vec2(VISIBLESIZE.width - 100, 100));
   }
 }

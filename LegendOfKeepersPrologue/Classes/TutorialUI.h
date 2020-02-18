@@ -14,7 +14,7 @@ class TutorialUI
   Sprite* getRoomIconMonster3() { return _roomIconMonster3; }
   Sprite* getRoomIconBoss() { return _roomIconBoss; }
   Sprite* getBoneCatapult(byte i);
-  Sprite* getTmp() { return _tmp; }
+  Sprite* getRemove() { return _remove; }
   Sprite* getConfirm(byte i);
  private:
   Sprite* _btnOptions[3];
@@ -24,7 +24,7 @@ class TutorialUI
   Sprite* _roomIconMonster3;
   Sprite* _roomIconBoss;
   Sprite* _boneCatapult[3];
-  Sprite* _tmp;
+  Sprite* _remove;
   Sprite* _confirm[3];
 };
 

@@ -28,6 +28,11 @@ TutorialLabel::TutorialLabel() {
   _heroes->setPosition(Vec2(VISIBLESIZE.width / 2 + 195,
                             VISIBLESIZE.height / 2 + 105));
 
+  mainfontBold.fontSize = 12;
+  _placeATrap = Label::createWithTTF(mainfontBold, "Place a trap");
+  _placeATrap->setPosition(Vec2(VISIBLESIZE.width / 2,
+                                VISIBLESIZE.height - 150));
+
   mainfontBold.fontSize = 9;
   _boneCatapult = Label::createWithTTF(mainfontBold, "BONE CATAPULT");
   _boneCatapult->setPosition(Vec2(VISIBLESIZE.width / 2,
@@ -36,4 +41,21 @@ TutorialLabel::TutorialLabel() {
   mainfontBold.fontSize = 12;
   _confirm = Label::createWithTTF(mainfontBold, "Confirm");
   _confirm->setPosition(Vec2(VISIBLESIZE.width - 100, 100));
+
+  mainfontBold.fontSize = 15;
+  _we = Label::createWithTTF(
+    mainfontBold,
+    "We always leave an empty room in every dungeon.\n\n"
+    "You can use it to ambush the adventures with one of your favourite\n"
+    "spells!");
+  _we->setPosition(Vec2(VISIBLESIZE.width / 2 + 195, VISIBLESIZE.height / 2 + 105));
+
+  _some = Label::createWithTTF(
+    mainfontBold,
+    "Some rooms are dedicated to combat. That is my favourite bit!\n\n"
+    "Make sure you analyse each group of adventures. Your employees are\n"
+    "counting on you to prepare an effective strategy.\n\n"
+    "Pay attention to your monster's Registances and Armor, so you don't have\n"
+    "to send them to the infirmary.");
+  _some->setPosition(Vec2(VISIBLESIZE.width / 2 + 195, VISIBLESIZE.height / 2 + 90));
 }

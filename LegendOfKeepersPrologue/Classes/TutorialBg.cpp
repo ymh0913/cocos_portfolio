@@ -21,11 +21,13 @@ TutorialBg::TutorialBg() {
     _bgDungeonRoom[i]->setAnchorPoint(Vec2(0, 0));
     _bgDungeonRoom[i]->setScale(1.5f);
     _bgDungeonRoom[i]->setPosition(Vec2(-160, 150));
-  }  
+  }
 
-  _bgDungeonGround = Sprite::create("TutorialScene/Bg/bg_dungeon_ground_1.png");
-  _bgDungeonGround->setAnchorPoint(Vec2(0, 0));
-  _bgDungeonGround->setScaleX(2);  
+  for (byte i = 0; i < 3; i++) {
+    _bgDungeonGround[i] = Sprite::create("TutorialScene/Bg/bg_dungeon_ground_1.png");
+    _bgDungeonGround[i]->setAnchorPoint(Vec2(0, 0));
+    _bgDungeonGround[i]->setScaleX(2);
+  }
 
   _dRH = Sprite::create(
     "TutorialScene/Bg/DRH_state.png");
@@ -39,7 +41,7 @@ TutorialBg::TutorialBg() {
 
   auto speakAnimation = Animation::create();
   speakAnimation->setDelayPerUnit(0.15f);
-  speakAnimation->addSpriteFrameWithFile("TutorialScene/Bg/DRH_speak_1.png");  
+  speakAnimation->addSpriteFrameWithFile("TutorialScene/Bg/DRH_speak_1.png");
   speakAnimation->addSpriteFrameWithFile("TutorialScene/Bg/DRH_speak_2.png");
   speakAnimation->addSpriteFrameWithFile("TutorialScene/Bg/DRH_speak_3.png");
   speakAnimation->addSpriteFrameWithFile("TutorialScene/Bg/DRH_speak_4.png");
@@ -76,5 +78,15 @@ Sprite * TutorialBg::getBgDungeonRoom(byte i) {
     return _bgDungeonRoom[i];
   } else {
     return _bgDungeonRoom[i];
+  }
+}
+
+Sprite * TutorialBg::getBgDungeonGround(byte i) {
+  if (i == 0) {
+    return _bgDungeonGround[i];
+  } else if(i == 1){
+    return _bgDungeonGround[i];
+  } else {
+    return _bgDungeonGround[i];
   }
 }
