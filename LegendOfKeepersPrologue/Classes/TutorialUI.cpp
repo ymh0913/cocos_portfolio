@@ -32,8 +32,8 @@ TutorialUI::TutorialUI() {
   _roomIconBoss = Sprite::create("TutorialScene/UI/room_icon_boss.png");
   _roomIconBoss->setPosition(Vec2(VISIBLESIZE.width / 2 + 50, VISIBLESIZE.height - 100));
 
-  _remove = Sprite::create("TutorialScene/UI/brazierfire_1_idle_00.png");
-  _remove->setPosition(Vec2(VISIBLESIZE.width / 2 + 120, VISIBLESIZE.height / 2));
+  _trapRemove = Sprite::create("TutorialScene/UI/brazierfire_1_idle_00.png");
+  _trapRemove->setPosition(Vec2(VISIBLESIZE.width / 2 + 120, VISIBLESIZE.height / 2));
 
   for (byte i = 0; i < 3; i++) {
     if (i == 0) {
@@ -48,6 +48,72 @@ TutorialUI::TutorialUI() {
     }
     _boneCatapult[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 + 100));
     _confirm[i]->setPosition(Vec2(VISIBLESIZE.width - 100, 100));
+  }
+
+  for (byte i = 0; i < 3; i++) {
+    if (i == 0) {
+      _orc[i] = Sprite::create("TutorialScene/UI/btn_state.png");
+      _skeletonMagus[i] = Sprite::create("TutorialScene/UI/btn_state.png");
+      _ghost[i] = Sprite::create("TutorialScene/UI/btn_state.png");
+    } else if (i == 1) {
+      _orc[i] = Sprite::create("TutorialScene/UI/btn_over.png");
+      _skeletonMagus[i] = Sprite::create("TutorialScene/UI/btn_over.png");
+      _ghost[i] = Sprite::create("TutorialScene/UI/btn_over.png");
+    } else {
+      _orc[i] = Sprite::create("TutorialScene/UI/btn_press.png");
+      _skeletonMagus[i] = Sprite::create("TutorialScene/UI/btn_press.png");
+      _ghost[i] = Sprite::create("TutorialScene/UI/btn_press.png");
+    }
+    _orc[i]->setPosition(Vec2(VISIBLESIZE.width / 2 - 200, VISIBLESIZE.height / 2 + 100));
+    _skeletonMagus[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 + 100));
+    _ghost[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 200, VISIBLESIZE.height / 2 + 100));
+  }
+
+  for (byte i = 0; i < 3; i++) {
+    _monsterRemove[i] = Sprite::create("TutorialScene/UI/brazierfire_1_idle_00.png");
+    /*if (i == 0) {
+      _monsterRemove[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 50, 300));
+    } else if (i == 1) {
+      _monsterRemove[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 200, 300));
+    } else {
+      _monsterRemove[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 350, 300));
+    }*/
+  }
+
+  for (byte i = 0; i < 3; i++) {
+    _clickToPlace[i] = Sprite::create("TutorialScene/UI/elementalist_attack_wolf_00.png");
+    /*if (i == 0) {
+      _clickToPlace[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 50, 300));
+    } else if (i == 1) {
+      _clickToPlace[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 50, 300));
+    } else {
+      _clickToPlace[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 50, 300));
+    }*/
+  }
+
+  for (byte i = 0; i < 3; i++) {
+    _transparencyPlace[i] = Sprite::create("TutorialScene/UI/effect_tooltip.png");
+    if (i == 0) {
+      _transparencyPlace[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 150, 300));
+    } else if (i == 1) {
+      _transparencyPlace[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 325, 300));
+    } else {
+      _transparencyPlace[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 500, 300));
+    }
+    _transparencyPlace[i]->setScaleX(1.2f);
+    _transparencyPlace[i]->setScaleY(2.5f);
+    _transparencyPlace[i]->setOpacity(0);
+  }
+
+  for (byte i = 0; i < 3; i++) {
+    if (i == 0) {
+      _previous[i] = Sprite::create("TutorialScene/UI/btn_state.png");
+    } else if (i == 1) {
+      _previous[i] = Sprite::create("TutorialScene/UI/btn_over.png");
+    } else {
+      _previous[i] = Sprite::create("TutorialScene/UI/btn_press.png");
+    }
+    _previous[i]->setPosition(Vec2(100, 100));
   }
 }
 
@@ -88,5 +154,75 @@ Sprite * TutorialUI::getConfirm(byte i) {
     return _confirm[i];
   } else {
     return _confirm[i];
+  }
+}
+
+Sprite * TutorialUI::getOrc(byte i) {
+  if (i == 0) {
+    return _orc[i];
+  } else if (i == 1) {
+    return _orc[i];
+  } else {
+    return _orc[i];
+  }
+}
+
+Sprite * TutorialUI::getSkeletonMagus(byte i) {
+  if (i == 0) {
+    return _skeletonMagus[i];
+  } else if (i == 1) {
+    return _skeletonMagus[i];
+  } else {
+    return _skeletonMagus[i];
+  }
+}
+
+Sprite * TutorialUI::getGhost(byte i) {
+  if (i == 0) {
+    return _ghost[i];
+  } else if (i == 1) {
+    return _ghost[i];
+  } else {
+    return _ghost[i];
+  }
+}
+
+Sprite * TutorialUI::getMonsterRemove(byte i) {
+  if (i == 0) {
+    return _monsterRemove[i];
+  } else if (i == 1) {
+    return _monsterRemove[i];
+  } else {
+    return _monsterRemove[i];
+  }
+}
+
+Sprite * TutorialUI::getClickToPlace(byte i) {
+  if (i == 0) {
+    return _clickToPlace[i];
+  } else if (i == 1) {
+    return _clickToPlace[i];
+  } else {
+    return _clickToPlace[i];
+  }
+}
+
+Sprite * TutorialUI::getTransparencyPlace(byte i) {
+  if (i == 0) {
+    return _transparencyPlace[i];
+  } else if (i == 1) {
+    return _transparencyPlace[i];
+  } else {
+    return _transparencyPlace[i];
+  }
+}
+
+Sprite * TutorialUI::getPrevious(byte i) {
+  if (i == 0) {
+    return _previous[i];
+  } else if (i == 1) {
+    return _previous[i];
+  } else {
+    return _previous[i];
   }
 }

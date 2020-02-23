@@ -13,8 +13,7 @@ TutorialLabel::TutorialLabel() {
     "As you saw on the job posting, your main task is to project the treasures\n"
     "we keep in our dungeons. We don't have much time to spend training\n"
     "you, so please keep up!");
-  _congratulations->setPosition(Vec2(VISIBLESIZE.width / 2 + 195,
-                                     VISIBLESIZE.height / 2 + 105));
+  _congratulations->setPosition(Vec2(VISIBLESIZE.width / 2 + 195, VISIBLESIZE.height / 2 + 105));
 
   _continue = Label::createWithTTF(mainfontBold, "Continue");
   _continue->setPosition(Vec2(900, 300));
@@ -25,18 +24,15 @@ TutorialLabel::TutorialLabel() {
     "has worked hard to promise gold and glory to these idiotic villagers.\n\n"
     "We have a little time before they get here, so let's place our traps and our\n"
     "employees to prepare a defense.");
-  _heroes->setPosition(Vec2(VISIBLESIZE.width / 2 + 195,
-                            VISIBLESIZE.height / 2 + 105));
+  _heroes->setPosition(Vec2(VISIBLESIZE.width / 2 + 195, VISIBLESIZE.height / 2 + 105));
 
   mainfontBold.fontSize = 12;
   _placeATrap = Label::createWithTTF(mainfontBold, "Place a trap");
-  _placeATrap->setPosition(Vec2(VISIBLESIZE.width / 2,
-                                VISIBLESIZE.height - 150));
+  _placeATrap->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height - 150));
 
   mainfontBold.fontSize = 9;
   _boneCatapult = Label::createWithTTF(mainfontBold, "BONE CATAPULT");
-  _boneCatapult->setPosition(Vec2(VISIBLESIZE.width / 2,
-                                  VISIBLESIZE.height / 2 + 100));
+  _boneCatapult->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 + 100));
 
   mainfontBold.fontSize = 12;
   _confirm = Label::createWithTTF(mainfontBold, "Confirm");
@@ -58,4 +54,22 @@ TutorialLabel::TutorialLabel() {
     "Pay attention to your monster's Registances and Armor, so you don't have\n"
     "to send them to the infirmary.");
   _some->setPosition(Vec2(VISIBLESIZE.width / 2 + 195, VISIBLESIZE.height / 2 + 90));
+
+  mainfontBold.fontSize = 12;
+  _placeATrap = Label::createWithTTF(mainfontBold, "PLACE YOUR MONSTERS");
+  _placeATrap->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height - 150));
+
+  mainfontBold.fontSize = 9;
+  _grogmar = Label::createWithTTF(mainfontBold, "GROGMAR");
+  _grogmar->setPosition(Vec2(VISIBLESIZE.width / 2 - 200, VISIBLESIZE.height / 2 + 100));
+
+  _khidus = Label::createWithTTF(mainfontBold, "KHIDUS");
+  _khidus->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 + 100));
+
+  _aurora = Label::createWithTTF(mainfontBold, "AURORA");
+  _aurora->setPosition(Vec2(VISIBLESIZE.width / 2 + 200, VISIBLESIZE.height / 2 + 100));
+
+  mainfontBold.fontSize = 12;
+  _previous = Label::createWithTTF(mainfontBold, "Previous");
+  _previous->setPosition(Vec2(100, 100));
 }

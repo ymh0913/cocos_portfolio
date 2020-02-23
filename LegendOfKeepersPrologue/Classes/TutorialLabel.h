@@ -15,6 +15,13 @@ class TutorialLabel
   Label* getConfirm() { return _confirm; }
   Label* getWe() { return _we; }
   Label* getSome() { return _some; }
+  Label* getPlaceYourMonsters() { return _placeYourMonsters; }
+  Label* getRaguk() { return _raguk; }
+  Label* getKhidus() { return _khidus; }
+  Label* getOra() { return _ora; }
+  Label* getGrogmar() { return _grogmar; }
+  Label* getAurora() { return _aurora; }
+  Label* getPrevious() { return _previous; }
  private:
   Label* _congratulations;
   Label* _continue;
@@ -24,6 +31,13 @@ class TutorialLabel
   Label* _confirm;
   Label* _we;
   Label* _some;
+  Label* _placeYourMonsters;
+  Label* _raguk;
+  Label* _khidus;
+  Label* _ora;
+  Label* _grogmar;
+  Label* _aurora;
+  Label* _previous;
 };
 
 #endif // __TUTORIAL_LABEL_H__

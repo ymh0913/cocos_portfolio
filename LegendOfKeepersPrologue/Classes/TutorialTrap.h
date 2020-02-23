@@ -7,11 +7,11 @@ class TutorialTrap
 {
  public:
   TutorialTrap();
+  Sprite* getBoneCatapultPortrait() { return _boneCatapultPortrait; }
   Sprite* getBoneCatapult() { return _boneCatapult; }
-  Sprite* getBoneCatapultClone() { return _boneCatapultClone; }
  private:
+  Sprite* _boneCatapultPortrait;
   Sprite* _boneCatapult;
-  Sprite* _boneCatapultClone;
 };
 
 #endif // __TUTORIAL_TRAP_H__

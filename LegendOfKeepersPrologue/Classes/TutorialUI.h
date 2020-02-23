@@ -14,8 +14,15 @@ class TutorialUI
   Sprite* getRoomIconMonster3() { return _roomIconMonster3; }
   Sprite* getRoomIconBoss() { return _roomIconBoss; }
   Sprite* getBoneCatapult(byte i);
-  Sprite* getRemove() { return _remove; }
+  Sprite* getTrapRemove() { return _trapRemove; }
   Sprite* getConfirm(byte i);
+  Sprite* getOrc(byte i);
+  Sprite* getSkeletonMagus(byte i);
+  Sprite* getGhost(byte i);
+  Sprite* getMonsterRemove(byte i);
+  Sprite* getClickToPlace(byte i);
+  Sprite* getTransparencyPlace(byte i);
+  Sprite* getPrevious(byte i);
  private:
   Sprite* _btnOptions[3];
   Sprite* _btnContinue[3];
@@ -24,8 +31,15 @@ class TutorialUI
   Sprite* _roomIconMonster3;
   Sprite* _roomIconBoss;
   Sprite* _boneCatapult[3];
-  Sprite* _remove;
+  Sprite* _trapRemove;
   Sprite* _confirm[3];
+  Sprite* _orc[3];
+  Sprite* _skeletonMagus[3];
+  Sprite* _ghost[3];
+  Sprite* _clickToPlace[3];
+  Sprite* _monsterRemove[3];
+  Sprite* _transparencyPlace[3];
+  Sprite* _previous[3];
 };
 
 #endif // __TUTORIAL_UI_H__

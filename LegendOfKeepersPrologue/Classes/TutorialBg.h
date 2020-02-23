@@ -15,6 +15,7 @@ class TutorialBg
   Sprite* getDRHSpeakEye() { return _dRHSpeakEye; }
   RepeatForever* getDRHSpeakEyeAction() { return _dRHSpeakEyeAction; }
   Sprite* getBorderScreen() { return _borderScreen; }
+  Sprite* getPlace(byte i);
  private:
   Sprite* _bgDungeonRoom[5];
   Sprite* _bgDungeonGround[3];
@@ -24,6 +25,7 @@ class TutorialBg
   Sprite* _dRHSpeakEye;
   RepeatForever* _dRHSpeakEyeAction;
   Sprite* _borderScreen;
+  Sprite* _place[3];
 };
 
 #endif // __TUTORIAL_BG_H__
