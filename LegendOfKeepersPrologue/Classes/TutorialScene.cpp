@@ -9,7 +9,7 @@ bool TutorialScene::init() {
     return false;
   }
 
-  _tutorial = new (nothrow) Tutorial(this);
+  _tutorial = new Tutorial(this);
 
   return true;
 }

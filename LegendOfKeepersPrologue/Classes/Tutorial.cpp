@@ -2,6 +2,8 @@
 
 Tutorial::Tutorial(Scene * pScene) {
   _scene = pScene;
+  log("_pScene = %d\n", pScene);
+  log("_scene = %d\n", _scene);
 
   // 멤버변수 초기화
   _room = kRoomName_Trap;
@@ -21,13 +23,13 @@ Tutorial::Tutorial(Scene * pScene) {
   }
 
   // 동적할당
-  _tutorialBg = new (nothrow) TutorialBg;
-  _tutorialUI = new (nothrow) TutorialUI;
-  _tutorialLabel = new (nothrow) TutorialLabel;
-  _tutorialHero = new (nothrow) TutorialHero;
-  _tutorialTrap = new (nothrow) TutorialTrap;
-  _tutorialMonster = new (nothrow) TutorialMonster;
-  _tutorialMaster = new (nothrow) TutorialMaster;
+  _tutorialBg = new TutorialBg;
+  _tutorialUI = new TutorialUI;
+  _tutorialLabel = new TutorialLabel;
+  _tutorialHero = new TutorialHero;
+  _tutorialTrap = new TutorialTrap;
+  _tutorialMonster = new TutorialMonster;
+  _tutorialMaster = new TutorialMaster;
 
   // 공통 UI
   for (byte i = 0; i < 3; i++) {
@@ -311,7 +313,7 @@ Tutorial::Tutorial(Scene * pScene) {
   _scene->addChild(_masterLayer);
 
   // Schedule
-  this->schedule(schedule_selector(Tutorial::callPerFrame));
+  _scene->schedule(schedule_selector(Tutorial::callPerFrame));
 
   // 터치 이벤트 등록
   _touchListener = EventListenerTouchOneByOne::create();
@@ -503,6 +505,13 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
           _isCombat = true;
           _bgLayer[kRoomName_Master]->setVisible(true);
           _masterLayer->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("previous버튼기본")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("previous버튼오버")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("previous버튼클릭")->setVisible(false);
+          _scene->getChildByName("confirm버튼기본")->setVisible(false);
+          _scene->getChildByName("confirm버튼오버")->setVisible(false);
+          _scene->getChildByName("confirm버튼클릭")->setVisible(false);
+          _scene->getChildByName("confirm")->setVisible(false);
           _uiLayer[kRoomName_Monster]->setVisible(false);
           _labelLayer[kRoomName_Monster]->setVisible(false);
           _monsterLayer->setVisible(false);
@@ -510,7 +519,7 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
           _uiLayerDRH->setVisible(false);
           _labelLayerDRH->setVisible(false);
           _heroLayer->setVisible(false);
-          this->scheduleOnce(schedule_selector(Tutorial::callOnce), 0);
+          _scene->scheduleOnce(schedule_selector(Tutorial::callOnce), 0);
         }
       } else if (clickPrevious) {
         _room = kRoomName_Trap;
@@ -1601,4 +1610,5 @@ void Tutorial::callPerFrame(float delta) {
 }
 
 void Tutorial::callOnce(float delta) {
+  log("check");
 }

@@ -57,33 +57,33 @@ IntroUI::IntroUI() {
   for (byte i = 0; i < 3; i++) {
     if (i == 0) {
       _saveBorderNewsaveTop[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_state.png");
+        "IntroScene/Bg/save_border_newsave_state.png");
       _saveBorderNewsaveTop[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 + 60));
       _saveBorderNewsaveMiddle[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_state.png");
+        "IntroScene/Bg/save_border_newsave_state.png");
       _saveBorderNewsaveMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 60));
       _saveBorderNewsaveBottom[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_state.png");
+        "IntroScene/Bg/save_border_newsave_state.png");
       _saveBorderNewsaveBottom[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 180));
     } else if (i == 1) {
       _saveBorderNewsaveTop[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_hover.png");
+        "IntroScene/Bg/save_border_newsave_hover.png");
       _saveBorderNewsaveTop[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 + 60));
       _saveBorderNewsaveMiddle[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_hover.png");
+        "IntroScene/Bg/save_border_newsave_hover.png");
       _saveBorderNewsaveMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 60));
       _saveBorderNewsaveBottom[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_hover.png");
+        "IntroScene/Bg/save_border_newsave_hover.png");
       _saveBorderNewsaveBottom[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 180));
     } else {
       _saveBorderNewsaveTop[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_pressed.png");
+        "IntroScene/Bg/save_border_newsave_pressed.png");
       _saveBorderNewsaveTop[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 + 60));
       _saveBorderNewsaveMiddle[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_pressed.png");
+        "IntroScene/Bg/save_border_newsave_pressed.png");
       _saveBorderNewsaveMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 60));
       _saveBorderNewsaveBottom[i] = Sprite::create(
-        "IntroScene/UI/save_border_newsave_pressed.png");
+        "IntroScene/Bg/save_border_newsave_pressed.png");
       _saveBorderNewsaveBottom[i]->setPosition(Vec2(VISIBLESIZE.width / 2, VISIBLESIZE.height / 2 - 180));
     }    
   }

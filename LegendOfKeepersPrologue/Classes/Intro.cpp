@@ -452,7 +452,9 @@ void Intro::onTouchEnded(Touch * touch, Event * event) {
       } else if (clickYes) {
         _uiLayer[2]->getChildByName("Yes버튼클릭")->setVisible(true);
         auto pScene = TutorialScene::createScene();
-        DIRECTOR->replaceScene(pScene);
+        //DIRECTOR->replaceScene(pScene);
+        log("pScene %d\n", pScene);
+        DIRECTOR->pushScene(pScene);
       } else {
         _uiLayer[2]->getChildByName("No버튼클릭")->setVisible(false);
         _uiLayer[2]->getChildByName("Yes버튼클릭")->setVisible(false);

@@ -9,7 +9,7 @@ bool IntroScene::init() {
     return false;
   }
 
-  _intro = new (nothrow) Intro(this);
+  _intro = new Intro(this);
 
   return true;
 }
