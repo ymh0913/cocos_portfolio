@@ -7,6 +7,7 @@ Tutorial::Tutorial(Scene * pScene) {
   _room = kRoomName_Trap;
   _continue = 0;
   _isTrap = false;
+  _isCombat = false;
 
   // 레이어 생성
   for (byte i = 0; i < sizeof(_bgLayer) / sizeof(Layer*); i++) { 
@@ -309,6 +310,9 @@ Tutorial::Tutorial(Scene * pScene) {
   _masterLayer->setVisible(false);
   _scene->addChild(_masterLayer);
 
+  // Schedule
+  this->schedule(schedule_selector(Tutorial::callPerFrame));
+
   // 터치 이벤트 등록
   _touchListener = EventListenerTouchOneByOne::create();
   _touchListener->setSwallowTouches(true);
@@ -344,46 +348,50 @@ bool Tutorial::onTouchBegan(Touch * touch, Event * event) {
     _scene->getChildByName("option버튼클릭")->setVisible(false);
   }
   
-  if (_room == kRoomName_Trap) {
-    if (_continue < 2) {
+  if (!_isCombat) {
+    if (_room == kRoomName_Trap) {
+      if (_continue < 2) {
+        bool touchContinue = _uiLayerDRH->getChildByName("continue버튼오버")->getBoundingBox().containsPoint(touchPoint);
+        if (touchContinue) {
+          _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(true);
+        } else {
+          _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
+        }
+      } else {
+        bool touchBoneCatapult = _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼오버")->getBoundingBox().containsPoint(touchPoint);
+        if (touchBoneCatapult) {
+          _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼클릭")->setVisible(true);
+        } else {
+          _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
+        }
+        if (_isTrap) {
+          bool touchConfirm = _scene->getChildByName("confirm버튼오버")->getBoundingBox().containsPoint(touchPoint);
+          if (touchConfirm) {
+            _scene->getChildByName("confirm버튼클릭")->setVisible(true);
+          } else {
+            _scene->getChildByName("confirm버튼클릭")->setVisible(false);
+          }
+        }
+      }
+
+    } else if (_room == kRoomName_Spell) {
       bool touchContinue = _uiLayerDRH->getChildByName("continue버튼오버")->getBoundingBox().containsPoint(touchPoint);
       if (touchContinue) {
         _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(true);
       } else {
         _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
       }
-    } else {
-      bool touchBoneCatapult = _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼오버")->getBoundingBox().containsPoint(touchPoint);
-      if (touchBoneCatapult) {
-        _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼클릭")->setVisible(true);
+
+    } else if (_room == kRoomName_Monster) {
+      bool touchContinue = _uiLayerDRH->getChildByName("continue버튼오버")->getBoundingBox().containsPoint(touchPoint);
+      if (touchContinue) {
+        _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(true);
       } else {
-        _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
-      }
-      if (_isTrap) {
-        bool touchConfirm = _scene->getChildByName("confirm버튼오버")->getBoundingBox().containsPoint(touchPoint);
-        if (touchConfirm) {
-          _scene->getChildByName("confirm버튼클릭")->setVisible(true);
-        } else {
-          _scene->getChildByName("confirm버튼클릭")->setVisible(false);
-        }
+        _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
       }
     }
+  } else if (_isCombat) {
 
-  } else if (_room == kRoomName_Spell) {
-    bool touchContinue = _uiLayerDRH->getChildByName("continue버튼오버")->getBoundingBox().containsPoint(touchPoint);
-    if (touchContinue) {
-      _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(true);
-    } else {
-      _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
-    }
-
-  } else if (_room == kRoomName_Monster) {
-    bool touchContinue = _uiLayerDRH->getChildByName("continue버튼오버")->getBoundingBox().containsPoint(touchPoint);
-    if (touchContinue) {
-      _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(true);
-    } else {
-      _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
-    }
   }
 
   return true;
@@ -397,501 +405,198 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
   } else {
   }
 
-  if (_room == kRoomName_Trap) {
-    if (_continue == 0) {
-      bool clickContinue = _uiLayerDRH->getChildByName("continue버튼클릭")->getBoundingBox().containsPoint(clickPoint);
-      if (clickContinue) {
-        _continue++;
-        _labelLayerDRH->getChildByName("heroes")->setVisible(true);
-        _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
-        _labelLayerDRH->getChildByName("congratulations")->setVisible(false);
+  if (!_isCombat) {
+    if (_room == kRoomName_Trap) {
+      if (_continue == 0) {
+        bool clickContinue = _uiLayerDRH->getChildByName("continue버튼클릭")->getBoundingBox().containsPoint(clickPoint);
+        if (clickContinue) {
+          _continue++;
+          _labelLayerDRH->getChildByName("heroes")->setVisible(true);
+          _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
+          _labelLayerDRH->getChildByName("congratulations")->setVisible(false);
+        } else {
+          _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
+        }
+      } else if (_continue == 1) {
+        bool clickContinue = _uiLayerDRH->getChildByName("continue버튼클릭")->getBoundingBox().containsPoint(clickPoint);
+        if (clickContinue) {
+          _continue++;
+          _uiLayer[kRoomName_Trap]->setVisible(true);
+          _labelLayer[kRoomName_Trap]->setVisible(true);
+          _heroLayer->setOpacity(255);
+          _trapLayer->setVisible(true);
+          _bgLayerDRH->setVisible(false);
+          _uiLayerDRH->setVisible(false);
+          _labelLayerDRH->setVisible(false);
+          _uiLayerDRH->getChildByName("continue버튼오버")->setVisible(false);
+          _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
+          _labelLayerDRH->getChildByName("heroes")->setVisible(false);
+        } else {
+          _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
+        }
       } else {
-        _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
+        bool clickBoneCatapult = _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼클릭")->getBoundingBox().containsPoint(clickPoint);
+        bool clickTrapRemove = _uiLayer[kRoomName_Trap]->getChildByName("trapRemove")->getBoundingBox().containsPoint(clickPoint);
+        if (clickBoneCatapult) {
+          _isTrap = true;
+          _scene->getChildByName("confirm버튼기본")->setVisible(true);
+          _scene->getChildByName("confirm")->setVisible(true);
+          _uiLayer[kRoomName_Trap]->getChildByName("trapRemove")->setVisible(true);
+          _trapLayer->getChildByName("boneCatapult")->setVisible(true);
+          _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼오버")->setVisible(false);
+          _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
+        } else if (clickTrapRemove) {
+          _isTrap = false;
+          _scene->getChildByName("confirm버튼기본")->setVisible(false);
+          _scene->getChildByName("confirm")->setVisible(false);
+          _uiLayer[kRoomName_Trap]->getChildByName("trapRemove")->setVisible(false);
+          _trapLayer->getChildByName("boneCatapult")->setVisible(false);
+        } else {
+          _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
+        }
+        if (_isTrap) {
+          bool clickConfirm = _scene->getChildByName("confirm버튼클릭")->getBoundingBox().containsPoint(clickPoint);
+          if (clickConfirm) {
+            _room = kRoomName_Spell;
+            _bgLayer[kRoomName_Spell]->setVisible(true);
+            _bgLayerDRH->setVisible(true);
+            _uiLayerDRH->setVisible(true);
+            _labelLayerDRH->setVisible(true);
+            _labelLayer[kRoomName_Spell]->setVisible(true);
+            _scene->getChildByName("confirm버튼기본")->setVisible(false);
+            _scene->getChildByName("confirm버튼오버")->setVisible(false);
+            _scene->getChildByName("confirm버튼클릭")->setVisible(false);
+            _scene->getChildByName("confirm")->setVisible(false);
+            _bgLayer[kRoomName_Trap]->setVisible(false);
+            _uiLayer[kRoomName_Trap]->setVisible(false);
+            _labelLayer[kRoomName_Trap]->setVisible(false);
+            _trapLayer->setVisible(false);
+          }
+        }
       }
-    } else if (_continue == 1) {
+
+    } else if (_room == kRoomName_Spell) {
       bool clickContinue = _uiLayerDRH->getChildByName("continue버튼클릭")->getBoundingBox().containsPoint(clickPoint);
       if (clickContinue) {
-        _continue++;
-        _uiLayer[kRoomName_Trap]->setVisible(true);
-        _labelLayer[kRoomName_Trap]->setVisible(true);
-        _heroLayer->setOpacity(255);
-        _trapLayer->setVisible(true);
-        _bgLayerDRH->setVisible(false);
-        _uiLayerDRH->setVisible(false);
-        _labelLayerDRH->setVisible(false);
+        _room = kRoomName_Monster;
+        _bgLayer[kRoomName_Monster]->setVisible(true);
+        _bgLayerDRH->setVisible(true);
+        _uiLayerDRH->setVisible(true);
+        _labelLayerDRH->setVisible(true);
+        _labelLayer[kRoomName_Monster]->setVisible(true);
+        _bgLayer[kRoomName_Spell]->setVisible(false);
+        _labelLayer[kRoomName_Spell]->setVisible(false);
         _uiLayerDRH->getChildByName("continue버튼오버")->setVisible(false);
         _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
-        _labelLayerDRH->getChildByName("heroes")->setVisible(false);
       } else {
         _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
       }
-    } else {
-      bool clickBoneCatapult = _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼클릭")->getBoundingBox().containsPoint(clickPoint);
-      bool clickTrapRemove = _uiLayer[kRoomName_Trap]->getChildByName("trapRemove")->getBoundingBox().containsPoint(clickPoint);
-      if (clickBoneCatapult) {
-        _isTrap = true;
-        _scene->getChildByName("confirm버튼기본")->setVisible(true);
-        _scene->getChildByName("confirm")->setVisible(true);
-        _uiLayer[kRoomName_Trap]->getChildByName("trapRemove")->setVisible(true);
-        _trapLayer->getChildByName("boneCatapult")->setVisible(true);
-        _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼오버")->setVisible(false);
-        _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
-      } else if (clickTrapRemove) {
-        _isTrap = false;
-        _scene->getChildByName("confirm버튼기본")->setVisible(false);
-        _scene->getChildByName("confirm")->setVisible(false);
-        _uiLayer[kRoomName_Trap]->getChildByName("trapRemove")->setVisible(false);
-        _trapLayer->getChildByName("boneCatapult")->setVisible(false);
-      } else {
-        _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼클릭")->setVisible(false);
-      }
-      if (_isTrap) {
-        bool clickConfirm = _scene->getChildByName("confirm버튼클릭")->getBoundingBox().containsPoint(clickPoint);
-        if (clickConfirm) {
-          _room = kRoomName_Spell;
-          _bgLayer[kRoomName_Spell]->setVisible(true);
-          _bgLayerDRH->setVisible(true);
-          _uiLayerDRH->setVisible(true);
-          _labelLayerDRH->setVisible(true);
-          _labelLayer[kRoomName_Spell]->setVisible(true);
-          _scene->getChildByName("confirm버튼기본")->setVisible(false);
-          _scene->getChildByName("confirm버튼오버")->setVisible(false);
-          _scene->getChildByName("confirm버튼클릭")->setVisible(false);
-          _scene->getChildByName("confirm")->setVisible(false);
-          _bgLayer[kRoomName_Trap]->setVisible(false);
-          _uiLayer[kRoomName_Trap]->setVisible(false);
-          _labelLayer[kRoomName_Trap]->setVisible(false);
-          _trapLayer->setVisible(false);
+
+    } else if (_room == kRoomName_Monster) {
+      bool clickConfirm = _scene->getChildByName("confirm버튼클릭")->getBoundingBox().containsPoint(clickPoint);
+      bool clickPrevious = _uiLayer[kRoomName_Monster]->getChildByName("previous버튼클릭")->getBoundingBox().containsPoint(clickPoint);
+      if (clickConfirm) {
+        if (_clickToPlace == 0) {
+
+        } else {
+          _room = kRoomName_Master;
+          _isCombat = true;
+          _bgLayer[kRoomName_Master]->setVisible(true);
+          _masterLayer->setVisible(true);
+          _uiLayer[kRoomName_Monster]->setVisible(false);
+          _labelLayer[kRoomName_Monster]->setVisible(false);
+          _monsterLayer->setVisible(false);
+          _bgLayerDRH->setVisible(false);
+          _uiLayerDRH->setVisible(false);
+          _labelLayerDRH->setVisible(false);
+          _heroLayer->setVisible(false);
+          this->scheduleOnce(schedule_selector(Tutorial::callOnce), 0);
         }
-      }
-    }
-
-  } else if (_room == kRoomName_Spell) {
-    bool clickContinue = _uiLayerDRH->getChildByName("continue버튼클릭")->getBoundingBox().containsPoint(clickPoint);
-    if (clickContinue) {
-      _room = kRoomName_Monster;
-      _bgLayer[kRoomName_Monster]->setVisible(true);
-      _bgLayerDRH->setVisible(true);
-      _uiLayerDRH->setVisible(true);
-      _labelLayerDRH->setVisible(true);
-      _labelLayer[kRoomName_Monster]->setVisible(true);
-      _bgLayer[kRoomName_Spell]->setVisible(false);
-      _labelLayer[kRoomName_Spell]->setVisible(false);
-      _uiLayerDRH->getChildByName("continue버튼오버")->setVisible(false);
-      _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
-    } else {
-      _uiLayerDRH->getChildByName("continue버튼클릭")->setVisible(false);
-    }
-
-  } else if (_room == kRoomName_Monster) {
-    bool clickConfirm = _scene->getChildByName("confirm버튼클릭")->getBoundingBox().containsPoint(clickPoint);
-    bool clickPrevious = _uiLayer[kRoomName_Monster]->getChildByName("previous버튼클릭")->getBoundingBox().containsPoint(clickPoint);
-    if (clickConfirm) {
-      if (_clickToPlace == 0) {
-
-      } else {
-        _room = kRoomName_Master;
-        _bgLayer[kRoomName_Master]->setVisible(true);
-        _masterLayer->setVisible(true);
-        _uiLayer[kRoomName_Monster]->setVisible(false);
-        _labelLayer[kRoomName_Monster]->setVisible(false);
-        _monsterLayer->setVisible(false);
-        _bgLayerDRH->setVisible(false);
-        _uiLayerDRH->setVisible(false);
-        _labelLayerDRH->setVisible(false);
-        _heroLayer->setVisible(false);
-      }
-    } else if (clickPrevious) {
-      _room = kRoomName_Trap;
-    }
-
-    if (_clickToPlace == -1) {
-      bool clickContinue = _uiLayerDRH->getChildByName("continue버튼클릭")->getBoundingBox().containsPoint(clickPoint);
-      if (clickContinue) {
-        _scene->getChildByName("confirm버튼기본")->setVisible(true);
-        _scene->getChildByName("confirm")->setVisible(true);
-        _clickToPlace++;
-        _bgLayer[kRoomName_Monster]->getChildByName("placeFront")->setVisible(true);
-        _bgLayer[kRoomName_Monster]->getChildByName("placeMiddle")->setVisible(true);
-        _bgLayer[kRoomName_Monster]->getChildByName("placeBack")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceFront")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceMiddle")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceBack")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("previous버튼기본")->setVisible(true);
-        _labelLayer[kRoomName_Monster]->setVisible(true);
-        _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setVisible(true);
-        _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setVisible(true);
-        _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setVisible(true);
-        _labelLayer[kRoomName_Monster]->getChildByName("previous")->setVisible(true);
-        _monsterLayer->setVisible(true);
-        _monsterLayer->getChildByName("orcPortrait")->setVisible(true);
-        _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(true);
-        _monsterLayer->getChildByName("ghostPortrait")->setVisible(true);
-        _bgLayerDRH->setVisible(false);
-        _uiLayerDRH->setVisible(false);
-        _labelLayerDRH->setVisible(false);
-        _labelLayer[kRoomName_Monster]->getChildByName("some")->setVisible(false);
-      }
-    } else if (_clickToPlace == 0) {
-      bool clickOrcBtn = _uiLayer[kRoomName_Monster]->getChildByName("orc버튼클릭")->getBoundingBox().containsPoint(clickPoint);
-      bool clickOrcPortrait = _monsterLayer->getChildByName("orcPortrait")->getBoundingBox().containsPoint(clickPoint);
-      bool clickSkeletonMagusBtn = _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagus버튼클릭")->getBoundingBox().containsPoint(clickPoint);
-      bool clickSkeletonMagusPortrait = _monsterLayer->getChildByName("skeletonMagusPortrait")->getBoundingBox().containsPoint(clickPoint);
-      bool clickGhostBtn = _uiLayer[kRoomName_Monster]->getChildByName("ghost버튼클릭")->getBoundingBox().containsPoint(clickPoint);
-      bool clickGhostPortrait = _monsterLayer->getChildByName("ghostPortrait")->getBoundingBox().containsPoint(clickPoint);
-      if ((clickOrcBtn || clickOrcPortrait) && (!_isDecidedMonster[kSelectedMonster_Orc])) {
-        _selectedMonster = kSelectedMonster_Orc;
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_areaPosition[kArea_Front].x - 100, _areaPosition[kArea_Front].y);
-        _monsterLayer->getChildByName("orc")->setVisible(true);
-        _monsterLayer->getChildByName("orc")->setPosition(_areaPosition[kArea_Front]);
-        // 중복 클릭 방지
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
-        _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
-        _monsterLayer->getChildByName("ghost")->setVisible(false);
-      } else if ((clickSkeletonMagusBtn || clickSkeletonMagusPortrait) && (!_isDecidedMonster[kSelectedMonster_SkeletonMagus])) {
-        _selectedMonster = kSelectedMonster_SkeletonMagus;
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_areaPosition[kArea_Front].x - 100, _areaPosition[kArea_Front].y);
-        _monsterLayer->getChildByName("skeletonMagus")->setVisible(true);
-        _monsterLayer->getChildByName("skeletonMagus")->setPosition(_areaPosition[kArea_Front]);
-        // 중복 클릭 방지
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
-        _monsterLayer->getChildByName("orc")->setVisible(false);
-        _monsterLayer->getChildByName("ghost")->setVisible(false);
-      } else if ((clickGhostBtn || clickGhostPortrait) && (!_isDecidedMonster[kSelectedMonster_Ghost])) {
-        _selectedMonster = kSelectedMonster_Ghost;
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_areaPosition[kArea_Front].x - 100, _areaPosition[kArea_Front].y);
-        _monsterLayer->getChildByName("ghost")->setVisible(true);
-        _monsterLayer->getChildByName("ghost")->setPosition(_areaPosition[kArea_Front]);
-        // 중복 클릭 방지
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
-        _monsterLayer->getChildByName("orc")->setVisible(false);
-        _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
+      } else if (clickPrevious) {
+        _room = kRoomName_Trap;
       }
 
-      if (_selectedMonster == kSelectedMonster_Orc) {
-        bool clickOrc = _monsterLayer->getChildByName("orc")->getBoundingBox().containsPoint(clickPoint);
-        if (clickOrc) {
+      if (_clickToPlace == -1) {
+        bool clickContinue = _uiLayerDRH->getChildByName("continue버튼클릭")->getBoundingBox().containsPoint(clickPoint);
+        if (clickContinue) {
+          _scene->getChildByName("confirm버튼기본")->setVisible(true);
+          _scene->getChildByName("confirm")->setVisible(true);
           _clickToPlace++;
-          _isDecidedMonster[kSelectedMonster_Orc] = true;
-          _decideMonster[0] = kSelectedMonster_Orc;
-          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
-          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
-          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
-          _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(127);
-          _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(true);
-          _monsterLayer->getChildByName("orcPortraitDisable")->setOpacity(127);
-          _monsterLayer->getChildByName("orcPortraitDisable")->setColor(Color3B(127, 127, 127));
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
-          _monsterLayer->getChildByName("orcPortrait")->setVisible(false);
+          _bgLayer[kRoomName_Monster]->getChildByName("placeFront")->setVisible(true);
+          _bgLayer[kRoomName_Monster]->getChildByName("placeMiddle")->setVisible(true);
+          _bgLayer[kRoomName_Monster]->getChildByName("placeBack")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceFront")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceMiddle")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceBack")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("previous버튼기본")->setVisible(true);
+          _labelLayer[kRoomName_Monster]->setVisible(true);
+          _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setVisible(true);
+          _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setVisible(true);
+          _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setVisible(true);
+          _labelLayer[kRoomName_Monster]->getChildByName("previous")->setVisible(true);
+          _monsterLayer->setVisible(true);
+          _monsterLayer->getChildByName("orcPortrait")->setVisible(true);
+          _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(true);
+          _monsterLayer->getChildByName("ghostPortrait")->setVisible(true);
+          _bgLayerDRH->setVisible(false);
+          _uiLayerDRH->setVisible(false);
+          _labelLayerDRH->setVisible(false);
+          _labelLayer[kRoomName_Monster]->getChildByName("some")->setVisible(false);
         }
-      } else if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
-        bool clickSkeletonMagus = _monsterLayer->getChildByName("skeletonMagus")->getBoundingBox().containsPoint(clickPoint);
-        if (clickSkeletonMagus) {
-          _clickToPlace++;
-          _isDecidedMonster[kSelectedMonster_SkeletonMagus] = true;
-          _decideMonster[0] = kSelectedMonster_SkeletonMagus;
-          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
-          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[2]);
-          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
-          _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(127);
-          _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(true);
-          _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setOpacity(127);
-          _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setColor(Color3B(127, 127, 127));
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
-          _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(false);
-        }
-      } else if (_selectedMonster == kSelectedMonster_Ghost) {
-        bool clickGhost = _monsterLayer->getChildByName("ghost")->getBoundingBox().containsPoint(clickPoint);
-        if (clickGhost) {
-          _clickToPlace++;
-          _isDecidedMonster[kSelectedMonster_Ghost] = true;
-          _decideMonster[0] = kSelectedMonster_Ghost;
-          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
-          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[1]);
-          _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[2]);
-          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
-          _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(127);
-          _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(true);
-          _monsterLayer->getChildByName("ghostPortraitDisable")->setOpacity(127);
-          _monsterLayer->getChildByName("ghostPortraitDisable")->setColor(Color3B(127, 127, 127));
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
-          _monsterLayer->getChildByName("ghostPortrait")->setVisible(false);
-        }
-      }
-    } else if (_clickToPlace == 1) {
-      bool clickRemoveOrc = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->getBoundingBox().containsPoint(clickPoint);
-      bool clickRemoveSkeletonMagus = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->getBoundingBox().containsPoint(clickPoint);
-      bool clickRemoveGhost = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->getBoundingBox().containsPoint(clickPoint);
-      if (clickRemoveOrc && _isDecidedMonster[kSelectedMonster_Orc] == true) {
-        _selectedMonster = kSelectedMonster_None;
-        _clickToPlace--;
-        _selectedMonsterArea[0] = Vec2::ZERO;
-        _decideMonster[0] = kSelectedMonster_None;
-        _isDecidedMonster[kSelectedMonster_Orc] = false;
-        _monsterLayer->getChildByName("orcPortrait")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(Vec2::ZERO);
-        _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[2]);
-        _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(255);
-        _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(false);
-        _monsterLayer->getChildByName("orc")->setVisible(false);
-      } else if (clickRemoveSkeletonMagus && _isDecidedMonster[kSelectedMonster_SkeletonMagus] == true) {
-        _selectedMonster = kSelectedMonster_None;
-        _clickToPlace--;
-        _selectedMonsterArea[0] = Vec2::ZERO;
-        _decideMonster[0] = kSelectedMonster_None;
-        _isDecidedMonster[kSelectedMonster_SkeletonMagus] = false;
-        _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(Vec2::ZERO);
-        _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[2]);
-        _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(255);
-        _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(false);
-        _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
-      } else if (clickRemoveGhost && _isDecidedMonster[kSelectedMonster_Ghost] == true) {
-        _selectedMonster = kSelectedMonster_None;
-        _clickToPlace--;
-        _selectedMonsterArea[0] = Vec2::ZERO;
-        _decideMonster[0] = kSelectedMonster_None;
-        _isDecidedMonster[kSelectedMonster_Ghost] = false;
-        _monsterLayer->getChildByName("ghostPortrait")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(Vec2::ZERO);
-        _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[1]);
-        _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[2]);
-        _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(255);
-        _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(false);
-        _monsterLayer->getChildByName("ghost")->setVisible(false);
-      }
-      
-      if (_decideMonster[0] == kSelectedMonster_Orc) {
-        bool clickSkeletonMagusBtn = _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagus버튼오버")->getBoundingBox().containsPoint(clickPoint);
-        bool clickSkeletonMagusPortrait = _monsterLayer->getChildByName("skeletonMagusPortrait")->getBoundingBox().containsPoint(clickPoint);
-        bool clickGhostBtn = _uiLayer[kRoomName_Monster]->getChildByName("ghost버튼오버")->getBoundingBox().containsPoint(clickPoint);
-        bool clickGhostPortrait = _monsterLayer->getChildByName("ghostPortrait")->getBoundingBox().containsPoint(clickPoint);
-        if ((clickSkeletonMagusBtn || clickSkeletonMagusPortrait) && (!_isDecidedMonster[kSelectedMonster_SkeletonMagus])) {
-          _selectedMonster = kSelectedMonster_SkeletonMagus;
-          _monsterLayer->getChildByName("skeletonMagus")->setVisible(true);
-          if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
-            _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-          } else {
-            _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-          }
-          // 중복 클릭 방지
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
-          _monsterLayer->getChildByName("ghost")->setVisible(false);
-        } else if ((clickGhostBtn || clickGhostPortrait) && (!_isDecidedMonster[kSelectedMonster_Ghost])) {
-          _selectedMonster = kSelectedMonster_Ghost;
-          _monsterLayer->getChildByName("ghost")->setVisible(true);
-          if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
-            _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-          } else {
-            _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-          }
-          // 중복 클릭 방지
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
-          _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
-        }
-
-        if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
-          bool clickSkeletonMagus = _monsterLayer->getChildByName("skeletonMagus")->getBoundingBox().containsPoint(clickPoint);
-          if (clickSkeletonMagus) {
-            _clickToPlace++;
-            _isDecidedMonster[kSelectedMonster_SkeletonMagus] = true;
-            _decideMonster[1] = kSelectedMonster_SkeletonMagus;
-            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[2]);
-            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
-            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
-            _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(127);
-            _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(true);
-            _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setOpacity(127);
-            _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setColor(Color3B(127, 127, 127));
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
-            _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(false);
-          }
-        } else if (_selectedMonster == kSelectedMonster_Ghost) {
-          bool clickGhost = _monsterLayer->getChildByName("ghost")->getBoundingBox().containsPoint(clickPoint);
-          if (clickGhost) {
-            _clickToPlace++;
-            _isDecidedMonster[kSelectedMonster_Ghost] = true;
-            _decideMonster[1] = kSelectedMonster_Ghost;
-            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[1]);
-            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
-            _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[2]);
-            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
-            _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(127);
-            _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(true);
-            _monsterLayer->getChildByName("ghostPortraitDisable")->setOpacity(127);
-            _monsterLayer->getChildByName("ghostPortraitDisable")->setColor(Color3B(127, 127, 127));
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
-            _monsterLayer->getChildByName("ghostPortrait")->setVisible(false);
-          }
-        }
-      } else if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
-        bool clickOrcBtn = _uiLayer[kRoomName_Monster]->getChildByName("orc버튼오버")->getBoundingBox().containsPoint(clickPoint);
+      } else if (_clickToPlace == 0) {
+        bool clickOrcBtn = _uiLayer[kRoomName_Monster]->getChildByName("orc버튼클릭")->getBoundingBox().containsPoint(clickPoint);
         bool clickOrcPortrait = _monsterLayer->getChildByName("orcPortrait")->getBoundingBox().containsPoint(clickPoint);
-        bool clickGhostBtn = _uiLayer[kRoomName_Monster]->getChildByName("ghost버튼오버")->getBoundingBox().containsPoint(clickPoint);
+        bool clickSkeletonMagusBtn = _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagus버튼클릭")->getBoundingBox().containsPoint(clickPoint);
+        bool clickSkeletonMagusPortrait = _monsterLayer->getChildByName("skeletonMagusPortrait")->getBoundingBox().containsPoint(clickPoint);
+        bool clickGhostBtn = _uiLayer[kRoomName_Monster]->getChildByName("ghost버튼클릭")->getBoundingBox().containsPoint(clickPoint);
         bool clickGhostPortrait = _monsterLayer->getChildByName("ghostPortrait")->getBoundingBox().containsPoint(clickPoint);
         if ((clickOrcBtn || clickOrcPortrait) && (!_isDecidedMonster[kSelectedMonster_Orc])) {
           _selectedMonster = kSelectedMonster_Orc;
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_areaPosition[kArea_Front].x - 100, _areaPosition[kArea_Front].y);
           _monsterLayer->getChildByName("orc")->setVisible(true);
-          if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
-            _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-          } else {
-            _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-          }
-          // 중복 클릭 방지
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
-          _monsterLayer->getChildByName("ghost")->setVisible(false);
-        } else if ((clickGhostBtn || clickGhostPortrait) && (!_isDecidedMonster[kSelectedMonster_Ghost])) {
-          _selectedMonster = kSelectedMonster_Ghost;
-          _monsterLayer->getChildByName("ghost")->setVisible(true);
-          if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
-            _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-          } else {
-            _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-          }
-          // 중복 클릭 방지
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
-          _monsterLayer->getChildByName("orc")->setVisible(false);
-        }
-        if (_selectedMonster == kSelectedMonster_Orc) {
-          bool clickOrc = _monsterLayer->getChildByName("orc")->getBoundingBox().containsPoint(clickPoint);
-          if (clickOrc) {
-            _clickToPlace++;
-            _isDecidedMonster[kSelectedMonster_Orc] = true;
-            _decideMonster[1] = kSelectedMonster_Orc;
-            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
-            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
-            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
-            _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(127);
-            _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(true);
-            _monsterLayer->getChildByName("orcPortraitDisable")->setOpacity(127);
-            _monsterLayer->getChildByName("orcPortraitDisable")->setColor(Color3B(127, 127, 127));
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
-            _monsterLayer->getChildByName("orcPortrait")->setVisible(false);
-          }
-        } else if (_selectedMonster == kSelectedMonster_Ghost) {
-          bool clickGhost = _monsterLayer->getChildByName("ghost")->getBoundingBox().containsPoint(clickPoint);
-          if (clickGhost) {
-            _clickToPlace++;
-            _isDecidedMonster[kSelectedMonster_Ghost] = true;
-            _decideMonster[1] = kSelectedMonster_Ghost;
-            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[1]);
-            _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[2]);
-            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
-            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
-            _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(127);
-            _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(true);
-            _monsterLayer->getChildByName("ghostPortraitDisable")->setOpacity(127);
-            _monsterLayer->getChildByName("ghostPortraitDisable")->setColor(Color3B(127, 127, 127));
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
-            _monsterLayer->getChildByName("ghostPortrait")->setVisible(false);
-          }
-        }
-      } else if (_decideMonster[0] == kSelectedMonster_Ghost) {
-        bool clickOrcBtn = _uiLayer[kRoomName_Monster]->getChildByName("orc버튼오버")->getBoundingBox().containsPoint(clickPoint);
-        bool clickOrcPortrait = _monsterLayer->getChildByName("orcPortrait")->getBoundingBox().containsPoint(clickPoint);
-        bool clickSkeletonMagusBtn = _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagus버튼오버")->getBoundingBox().containsPoint(clickPoint);
-        bool clickSkeletonMagusPortrait = _monsterLayer->getChildByName("skeletonMagusPortrait")->getBoundingBox().containsPoint(clickPoint);
-        if ((clickOrcBtn || clickOrcPortrait) && (!_isDecidedMonster[kSelectedMonster_Orc])) {
-          _selectedMonster = kSelectedMonster_Orc;
-          _monsterLayer->getChildByName("orc")->setVisible(true);
-          if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
-            _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-          } else {
-            _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-          }
+          _monsterLayer->getChildByName("orc")->setPosition(_areaPosition[kArea_Front]);
           // 중복 클릭 방지
           _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
           _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
+          _monsterLayer->getChildByName("ghost")->setVisible(false);
         } else if ((clickSkeletonMagusBtn || clickSkeletonMagusPortrait) && (!_isDecidedMonster[kSelectedMonster_SkeletonMagus])) {
           _selectedMonster = kSelectedMonster_SkeletonMagus;
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_areaPosition[kArea_Front].x - 100, _areaPosition[kArea_Front].y);
           _monsterLayer->getChildByName("skeletonMagus")->setVisible(true);
-          if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
-            _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-          } else {
-            _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-            _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-          }
+          _monsterLayer->getChildByName("skeletonMagus")->setPosition(_areaPosition[kArea_Front]);
           // 중복 클릭 방지
           _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
           _monsterLayer->getChildByName("orc")->setVisible(false);
+          _monsterLayer->getChildByName("ghost")->setVisible(false);
+        } else if ((clickGhostBtn || clickGhostPortrait) && (!_isDecidedMonster[kSelectedMonster_Ghost])) {
+          _selectedMonster = kSelectedMonster_Ghost;
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_areaPosition[kArea_Front].x - 100, _areaPosition[kArea_Front].y);
+          _monsterLayer->getChildByName("ghost")->setVisible(true);
+          _monsterLayer->getChildByName("ghost")->setPosition(_areaPosition[kArea_Front]);
+          // 중복 클릭 방지
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
+          _monsterLayer->getChildByName("orc")->setVisible(false);
+          _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
         }
+
         if (_selectedMonster == kSelectedMonster_Orc) {
           bool clickOrc = _monsterLayer->getChildByName("orc")->getBoundingBox().containsPoint(clickPoint);
           if (clickOrc) {
             _clickToPlace++;
             _isDecidedMonster[kSelectedMonster_Orc] = true;
-            _decideMonster[1] = kSelectedMonster_Orc;
+            _decideMonster[0] = kSelectedMonster_Orc;
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
             _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
-            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
             _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(127);
             _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(true);
             _monsterLayer->getChildByName("orcPortraitDisable")->setOpacity(127);
@@ -900,16 +605,16 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
             _monsterLayer->getChildByName("orcPortrait")->setVisible(false);
           }
         } else if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
-          bool clickGhost = _monsterLayer->getChildByName("skeletonMagus")->getBoundingBox().containsPoint(clickPoint);
-          if (clickGhost) {
+          bool clickSkeletonMagus = _monsterLayer->getChildByName("skeletonMagus")->getBoundingBox().containsPoint(clickPoint);
+          if (clickSkeletonMagus) {
             _clickToPlace++;
             _isDecidedMonster[kSelectedMonster_SkeletonMagus] = true;
-            _decideMonster[1] = kSelectedMonster_SkeletonMagus;
+            _decideMonster[0] = kSelectedMonster_SkeletonMagus;
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
             _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(true);
-            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
-            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[2]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
             _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(127);
             _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(true);
             _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setOpacity(127);
@@ -917,336 +622,645 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
             _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
             _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(false);
           }
+        } else if (_selectedMonster == kSelectedMonster_Ghost) {
+          bool clickGhost = _monsterLayer->getChildByName("ghost")->getBoundingBox().containsPoint(clickPoint);
+          if (clickGhost) {
+            _clickToPlace++;
+            _isDecidedMonster[kSelectedMonster_Ghost] = true;
+            _decideMonster[0] = kSelectedMonster_Ghost;
+            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+            _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[1]);
+            _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[2]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+            _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(127);
+            _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(true);
+            _monsterLayer->getChildByName("ghostPortraitDisable")->setOpacity(127);
+            _monsterLayer->getChildByName("ghostPortraitDisable")->setColor(Color3B(127, 127, 127));
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
+            _monsterLayer->getChildByName("ghostPortrait")->setVisible(false);
+          }
         }
-      }
+      } else if (_clickToPlace == 1) {
+        bool clickRemoveOrc = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->getBoundingBox().containsPoint(clickPoint);
+        bool clickRemoveSkeletonMagus = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->getBoundingBox().containsPoint(clickPoint);
+        bool clickRemoveGhost = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->getBoundingBox().containsPoint(clickPoint);
+        if (clickRemoveOrc && _isDecidedMonster[kSelectedMonster_Orc] == true) {
+          _selectedMonster = kSelectedMonster_None;
+          _clickToPlace--;
+          _selectedMonsterArea[0] = Vec2::ZERO;
+          _decideMonster[0] = kSelectedMonster_None;
+          _isDecidedMonster[kSelectedMonster_Orc] = false;
+          _monsterLayer->getChildByName("orcPortrait")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(Vec2::ZERO);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[2]);
+          _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(255);
+          _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(false);
+          _monsterLayer->getChildByName("orc")->setVisible(false);
+        } else if (clickRemoveSkeletonMagus && _isDecidedMonster[kSelectedMonster_SkeletonMagus] == true) {
+          _selectedMonster = kSelectedMonster_None;
+          _clickToPlace--;
+          _selectedMonsterArea[0] = Vec2::ZERO;
+          _decideMonster[0] = kSelectedMonster_None;
+          _isDecidedMonster[kSelectedMonster_SkeletonMagus] = false;
+          _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(Vec2::ZERO);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[2]);
+          _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(255);
+          _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(false);
+          _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
+        } else if (clickRemoveGhost && _isDecidedMonster[kSelectedMonster_Ghost] == true) {
+          _selectedMonster = kSelectedMonster_None;
+          _clickToPlace--;
+          _selectedMonsterArea[0] = Vec2::ZERO;
+          _decideMonster[0] = kSelectedMonster_None;
+          _isDecidedMonster[kSelectedMonster_Ghost] = false;
+          _monsterLayer->getChildByName("ghostPortrait")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(Vec2::ZERO);
+          _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[1]);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[2]);
+          _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(255);
+          _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(false);
+          _monsterLayer->getChildByName("ghost")->setVisible(false);
+        }
 
-    } else if (_clickToPlace == 2) {
-      bool clickRemoveOrc = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->getBoundingBox().containsPoint(clickPoint);
-      bool clickRemoveSkeletonMagus = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->getBoundingBox().containsPoint(clickPoint);
-      bool clickRemoveGhost = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->getBoundingBox().containsPoint(clickPoint);
-      if (clickRemoveOrc && _isDecidedMonster[kSelectedMonster_Orc] == true) {
-        _selectedMonster = kSelectedMonster_None;
-        _clickToPlace--;
         if (_decideMonster[0] == kSelectedMonster_Orc) {
-          _decideMonster[0] = kSelectedMonster_None;
-          _selectedMonsterArea[0] = Vec2::ZERO;
-        } else if (_decideMonster[1] == kSelectedMonster_Orc) {
-          _decideMonster[1] = kSelectedMonster_None;
-          _selectedMonsterArea[1] = Vec2::ZERO;
-        }
-        _isDecidedMonster[kSelectedMonster_Orc] = false;
-        _monsterLayer->getChildByName("orcPortrait")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(Vec2::ZERO);
-        if (_isDecidedMonster[kSelectedMonster_SkeletonMagus]) {
-          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[2]);
-          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
-        } else if (_isDecidedMonster[kSelectedMonster_Ghost]) {
-          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
-        }
-        _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(255);
-        _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(false);
-        _monsterLayer->getChildByName("orc")->setVisible(false);
+          bool clickSkeletonMagusBtn = _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagus버튼오버")->getBoundingBox().containsPoint(clickPoint);
+          bool clickSkeletonMagusPortrait = _monsterLayer->getChildByName("skeletonMagusPortrait")->getBoundingBox().containsPoint(clickPoint);
+          bool clickGhostBtn = _uiLayer[kRoomName_Monster]->getChildByName("ghost버튼오버")->getBoundingBox().containsPoint(clickPoint);
+          bool clickGhostPortrait = _monsterLayer->getChildByName("ghostPortrait")->getBoundingBox().containsPoint(clickPoint);
+          if ((clickSkeletonMagusBtn || clickSkeletonMagusPortrait) && (!_isDecidedMonster[kSelectedMonster_SkeletonMagus])) {
+            _selectedMonster = kSelectedMonster_SkeletonMagus;
+            _monsterLayer->getChildByName("skeletonMagus")->setVisible(true);
+            if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
+              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+            } else {
+              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+            }
+            // 중복 클릭 방지
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
+            _monsterLayer->getChildByName("ghost")->setVisible(false);
+          } else if ((clickGhostBtn || clickGhostPortrait) && (!_isDecidedMonster[kSelectedMonster_Ghost])) {
+            _selectedMonster = kSelectedMonster_Ghost;
+            _monsterLayer->getChildByName("ghost")->setVisible(true);
+            if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
+              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+            } else {
+              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+            }
+            // 중복 클릭 방지
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
+            _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
+          }
 
-      } else if (clickRemoveSkeletonMagus && _isDecidedMonster[kSelectedMonster_SkeletonMagus] == true) {
-        _selectedMonster = kSelectedMonster_None;
-        _clickToPlace--;
-        if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
-          _decideMonster[0] = kSelectedMonster_None;
-          _selectedMonsterArea[0] = Vec2::ZERO;
-        } else if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
-          _decideMonster[1] = kSelectedMonster_None;
-          _selectedMonsterArea[1] = Vec2::ZERO;
+          if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
+            bool clickSkeletonMagus = _monsterLayer->getChildByName("skeletonMagus")->getBoundingBox().containsPoint(clickPoint);
+            if (clickSkeletonMagus) {
+              _clickToPlace++;
+              _isDecidedMonster[kSelectedMonster_SkeletonMagus] = true;
+              _decideMonster[1] = kSelectedMonster_SkeletonMagus;
+              _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[2]);
+              _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
+              _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
+              _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(127);
+              _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(true);
+              _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setOpacity(127);
+              _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setColor(Color3B(127, 127, 127));
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
+              _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(false);
+            }
+          } else if (_selectedMonster == kSelectedMonster_Ghost) {
+            bool clickGhost = _monsterLayer->getChildByName("ghost")->getBoundingBox().containsPoint(clickPoint);
+            if (clickGhost) {
+              _clickToPlace++;
+              _isDecidedMonster[kSelectedMonster_Ghost] = true;
+              _decideMonster[1] = kSelectedMonster_Ghost;
+              _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[1]);
+              _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
+              _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[2]);
+              _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
+              _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(127);
+              _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(true);
+              _monsterLayer->getChildByName("ghostPortraitDisable")->setOpacity(127);
+              _monsterLayer->getChildByName("ghostPortraitDisable")->setColor(Color3B(127, 127, 127));
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
+              _monsterLayer->getChildByName("ghostPortrait")->setVisible(false);
+            }
+          }
+        } else if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
+          bool clickOrcBtn = _uiLayer[kRoomName_Monster]->getChildByName("orc버튼오버")->getBoundingBox().containsPoint(clickPoint);
+          bool clickOrcPortrait = _monsterLayer->getChildByName("orcPortrait")->getBoundingBox().containsPoint(clickPoint);
+          bool clickGhostBtn = _uiLayer[kRoomName_Monster]->getChildByName("ghost버튼오버")->getBoundingBox().containsPoint(clickPoint);
+          bool clickGhostPortrait = _monsterLayer->getChildByName("ghostPortrait")->getBoundingBox().containsPoint(clickPoint);
+          if ((clickOrcBtn || clickOrcPortrait) && (!_isDecidedMonster[kSelectedMonster_Orc])) {
+            _selectedMonster = kSelectedMonster_Orc;
+            _monsterLayer->getChildByName("orc")->setVisible(true);
+            if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
+              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+            } else {
+              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+            }
+            // 중복 클릭 방지
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
+            _monsterLayer->getChildByName("ghost")->setVisible(false);
+          } else if ((clickGhostBtn || clickGhostPortrait) && (!_isDecidedMonster[kSelectedMonster_Ghost])) {
+            _selectedMonster = kSelectedMonster_Ghost;
+            _monsterLayer->getChildByName("ghost")->setVisible(true);
+            if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
+              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+            } else {
+              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+            }
+            // 중복 클릭 방지
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
+            _monsterLayer->getChildByName("orc")->setVisible(false);
+          }
+          if (_selectedMonster == kSelectedMonster_Orc) {
+            bool clickOrc = _monsterLayer->getChildByName("orc")->getBoundingBox().containsPoint(clickPoint);
+            if (clickOrc) {
+              _clickToPlace++;
+              _isDecidedMonster[kSelectedMonster_Orc] = true;
+              _decideMonster[1] = kSelectedMonster_Orc;
+              _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
+              _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+              _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
+              _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(127);
+              _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(true);
+              _monsterLayer->getChildByName("orcPortraitDisable")->setOpacity(127);
+              _monsterLayer->getChildByName("orcPortraitDisable")->setColor(Color3B(127, 127, 127));
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
+              _monsterLayer->getChildByName("orcPortrait")->setVisible(false);
+            }
+          } else if (_selectedMonster == kSelectedMonster_Ghost) {
+            bool clickGhost = _monsterLayer->getChildByName("ghost")->getBoundingBox().containsPoint(clickPoint);
+            if (clickGhost) {
+              _clickToPlace++;
+              _isDecidedMonster[kSelectedMonster_Ghost] = true;
+              _decideMonster[1] = kSelectedMonster_Ghost;
+              _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[1]);
+              _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[2]);
+              _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+              _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
+              _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(127);
+              _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(true);
+              _monsterLayer->getChildByName("ghostPortraitDisable")->setOpacity(127);
+              _monsterLayer->getChildByName("ghostPortraitDisable")->setColor(Color3B(127, 127, 127));
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
+              _monsterLayer->getChildByName("ghostPortrait")->setVisible(false);
+            }
+          }
+        } else if (_decideMonster[0] == kSelectedMonster_Ghost) {
+          bool clickOrcBtn = _uiLayer[kRoomName_Monster]->getChildByName("orc버튼오버")->getBoundingBox().containsPoint(clickPoint);
+          bool clickOrcPortrait = _monsterLayer->getChildByName("orcPortrait")->getBoundingBox().containsPoint(clickPoint);
+          bool clickSkeletonMagusBtn = _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagus버튼오버")->getBoundingBox().containsPoint(clickPoint);
+          bool clickSkeletonMagusPortrait = _monsterLayer->getChildByName("skeletonMagusPortrait")->getBoundingBox().containsPoint(clickPoint);
+          if ((clickOrcBtn || clickOrcPortrait) && (!_isDecidedMonster[kSelectedMonster_Orc])) {
+            _selectedMonster = kSelectedMonster_Orc;
+            _monsterLayer->getChildByName("orc")->setVisible(true);
+            if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
+              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+            } else {
+              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+            }
+            // 중복 클릭 방지
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
+            _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
+          } else if ((clickSkeletonMagusBtn || clickSkeletonMagusPortrait) && (!_isDecidedMonster[kSelectedMonster_SkeletonMagus])) {
+            _selectedMonster = kSelectedMonster_SkeletonMagus;
+            _monsterLayer->getChildByName("skeletonMagus")->setVisible(true);
+            if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
+              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+            } else {
+              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+            }
+            // 중복 클릭 방지
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
+            _monsterLayer->getChildByName("orc")->setVisible(false);
+          }
+          if (_selectedMonster == kSelectedMonster_Orc) {
+            bool clickOrc = _monsterLayer->getChildByName("orc")->getBoundingBox().containsPoint(clickPoint);
+            if (clickOrc) {
+              _clickToPlace++;
+              _isDecidedMonster[kSelectedMonster_Orc] = true;
+              _decideMonster[1] = kSelectedMonster_Orc;
+              _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
+              _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
+              _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(127);
+              _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(true);
+              _monsterLayer->getChildByName("orcPortraitDisable")->setOpacity(127);
+              _monsterLayer->getChildByName("orcPortraitDisable")->setColor(Color3B(127, 127, 127));
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
+              _monsterLayer->getChildByName("orcPortrait")->setVisible(false);
+            }
+          } else if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
+            bool clickGhost = _monsterLayer->getChildByName("skeletonMagus")->getBoundingBox().containsPoint(clickPoint);
+            if (clickGhost) {
+              _clickToPlace++;
+              _isDecidedMonster[kSelectedMonster_SkeletonMagus] = true;
+              _decideMonster[1] = kSelectedMonster_SkeletonMagus;
+              _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+              _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(true);
+              _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+              _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
+              _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(127);
+              _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(true);
+              _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setOpacity(127);
+              _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setColor(Color3B(127, 127, 127));
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
+              _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(false);
+            }
+          }
         }
-        _isDecidedMonster[kSelectedMonster_SkeletonMagus] = false;
-        _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(Vec2::ZERO);
-        if (_isDecidedMonster[kSelectedMonster_Orc]) {
-          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
-          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
-        } else if (_isDecidedMonster[kSelectedMonster_Ghost]) {
-          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
-        }
-        _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(255);
-        _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(false);
-        _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
 
-      } else if (clickRemoveGhost && _isDecidedMonster[kSelectedMonster_Ghost] == true) {
-        _selectedMonster = kSelectedMonster_None;
-        _clickToPlace--;
-        if (_decideMonster[0] == kSelectedMonster_Ghost) {
-          _decideMonster[0] = kSelectedMonster_None;
-          _selectedMonsterArea[0] = Vec2::ZERO;
-        } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
-          _decideMonster[1] = kSelectedMonster_None;
-          _selectedMonsterArea[1] = Vec2::ZERO;
+      } else if (_clickToPlace == 2) {
+        bool clickRemoveOrc = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->getBoundingBox().containsPoint(clickPoint);
+        bool clickRemoveSkeletonMagus = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->getBoundingBox().containsPoint(clickPoint);
+        bool clickRemoveGhost = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->getBoundingBox().containsPoint(clickPoint);
+        if (clickRemoveOrc && _isDecidedMonster[kSelectedMonster_Orc] == true) {
+          _selectedMonster = kSelectedMonster_None;
+          _clickToPlace--;
+          if (_decideMonster[0] == kSelectedMonster_Orc) {
+            _decideMonster[0] = kSelectedMonster_None;
+            _selectedMonsterArea[0] = Vec2::ZERO;
+          } else if (_decideMonster[1] == kSelectedMonster_Orc) {
+            _decideMonster[1] = kSelectedMonster_None;
+            _selectedMonsterArea[1] = Vec2::ZERO;
+          }
+          _isDecidedMonster[kSelectedMonster_Orc] = false;
+          _monsterLayer->getChildByName("orcPortrait")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(Vec2::ZERO);
+          if (_isDecidedMonster[kSelectedMonster_SkeletonMagus]) {
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[2]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+          } else if (_isDecidedMonster[kSelectedMonster_Ghost]) {
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+          }
+          _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(255);
+          _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(false);
+          _monsterLayer->getChildByName("orc")->setVisible(false);
+
+        } else if (clickRemoveSkeletonMagus && _isDecidedMonster[kSelectedMonster_SkeletonMagus] == true) {
+          _selectedMonster = kSelectedMonster_None;
+          _clickToPlace--;
+          if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
+            _decideMonster[0] = kSelectedMonster_None;
+            _selectedMonsterArea[0] = Vec2::ZERO;
+          } else if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
+            _decideMonster[1] = kSelectedMonster_None;
+            _selectedMonsterArea[1] = Vec2::ZERO;
+          }
+          _isDecidedMonster[kSelectedMonster_SkeletonMagus] = false;
+          _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(Vec2::ZERO);
+          if (_isDecidedMonster[kSelectedMonster_Orc]) {
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+          } else if (_isDecidedMonster[kSelectedMonster_Ghost]) {
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+          }
+          _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(255);
+          _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(false);
+          _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
+
+        } else if (clickRemoveGhost && _isDecidedMonster[kSelectedMonster_Ghost] == true) {
+          _selectedMonster = kSelectedMonster_None;
+          _clickToPlace--;
+          if (_decideMonster[0] == kSelectedMonster_Ghost) {
+            _decideMonster[0] = kSelectedMonster_None;
+            _selectedMonsterArea[0] = Vec2::ZERO;
+          } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
+            _decideMonster[1] = kSelectedMonster_None;
+            _selectedMonsterArea[1] = Vec2::ZERO;
+          }
+          _isDecidedMonster[kSelectedMonster_Ghost] = false;
+          _monsterLayer->getChildByName("ghostPortrait")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(Vec2::ZERO);
+          if (_isDecidedMonster[kSelectedMonster_Orc]) {
+            _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[1]);
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+          } else if (_isDecidedMonster[kSelectedMonster_SkeletonMagus]) {
+            _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[1]);
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[2]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+          }
+          _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(255);
+          _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(false);
+          _monsterLayer->getChildByName("ghost")->setVisible(false);
         }
-        _isDecidedMonster[kSelectedMonster_Ghost] = false;
-        _monsterLayer->getChildByName("ghostPortrait")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(Vec2::ZERO);
-        if (_isDecidedMonster[kSelectedMonster_Orc]) {
+
+        // 남은 위치 탐색
+        if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
+          if (_selectedMonsterArea[1] == _areaPosition[kArea_Middle]) {
+            _selectedMonsterArea[2] = _areaPosition[kArea_Back];
+          } else if (_selectedMonsterArea[1] == _areaPosition[kArea_Back]) {
+            _selectedMonsterArea[2] = _areaPosition[kArea_Middle];
+          }
+        } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Middle]) {
+          if (_selectedMonsterArea[1] == _areaPosition[kArea_Front]) {
+            _selectedMonsterArea[2] = _areaPosition[kArea_Back];
+          } else if (_selectedMonsterArea[1] == _areaPosition[kArea_Back]) {
+            _selectedMonsterArea[2] = _areaPosition[kArea_Front];
+          }
+        } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Back]) {
+          if (_selectedMonsterArea[1] == _areaPosition[kArea_Front]) {
+            _selectedMonsterArea[2] = _areaPosition[kArea_Middle];
+          } else if (_selectedMonsterArea[1] == _areaPosition[kArea_Middle]) {
+            _selectedMonsterArea[2] = _areaPosition[kArea_Front];
+          }
+        }
+        // 남은 몬스터 탐색
+        if (_selectedMonsterArea[2] == _areaPosition[kArea_Back]) {
+          if (_decideMonster[0] == kSelectedMonster_Orc) {
+            if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
+              _selectedMonster = kSelectedMonster_Ghost;
+            } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
+              _selectedMonster = kSelectedMonster_SkeletonMagus;
+            }
+          } else if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
+            if (_decideMonster[1] == kSelectedMonster_Orc) {
+              _selectedMonster = kSelectedMonster_Ghost;
+            } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
+              _selectedMonster = kSelectedMonster_Orc;
+            }
+          } else if (_decideMonster[0] == kSelectedMonster_Ghost) {
+            if (_decideMonster[1] == kSelectedMonster_Orc) {
+              _selectedMonster = kSelectedMonster_SkeletonMagus;
+            } else if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
+              _selectedMonster = kSelectedMonster_Orc;
+            }
+          }
+        } else if (_selectedMonsterArea[2] == _areaPosition[kArea_Middle]) {
+          if (_decideMonster[0] == kSelectedMonster_Orc) {
+            if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
+              _selectedMonster = kSelectedMonster_Ghost;
+            } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
+              _selectedMonster = kSelectedMonster_SkeletonMagus;
+            }
+          } else if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
+            if (_decideMonster[1] == kSelectedMonster_Orc) {
+              _selectedMonster = kSelectedMonster_Ghost;
+            } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
+              _selectedMonster = kSelectedMonster_Orc;
+            }
+          } else if (_decideMonster[0] == kSelectedMonster_Ghost) {
+            if (_decideMonster[1] == kSelectedMonster_Orc) {
+              _selectedMonster = kSelectedMonster_SkeletonMagus;
+            } else if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
+              _selectedMonster = kSelectedMonster_Orc;
+            }
+          }
+        } else if (_selectedMonsterArea[2] == _areaPosition[kArea_Front]) {
+          if (_decideMonster[0] == kSelectedMonster_Orc) {
+            if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
+              _selectedMonster = kSelectedMonster_Ghost;
+            } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
+              _selectedMonster = kSelectedMonster_SkeletonMagus;
+            }
+          } else if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
+            if (_decideMonster[1] == kSelectedMonster_Orc) {
+              _selectedMonster = kSelectedMonster_Ghost;
+            } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
+              _selectedMonster = kSelectedMonster_Orc;
+            }
+          } else if (_decideMonster[0] == kSelectedMonster_Ghost) {
+            if (_decideMonster[1] == kSelectedMonster_Orc) {
+              _selectedMonster = kSelectedMonster_SkeletonMagus;
+            } else if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
+              _selectedMonster = kSelectedMonster_Orc;
+            }
+          }
+        }
+
+        if (_selectedMonster == kSelectedMonster_Ghost) {
+          bool clickGhostBtn = _uiLayer[kRoomName_Monster]->getChildByName("ghost버튼오버")->getBoundingBox().containsPoint(clickPoint);
+          bool clickGhostPortrait = _monsterLayer->getChildByName("ghostPortrait")->getBoundingBox().containsPoint(clickPoint);
+          bool clickGhost = _monsterLayer->getChildByName("ghost")->getBoundingBox().containsPoint(clickPoint);
+          if ((clickGhostBtn || clickGhostPortrait) && (!_isDecidedMonster[kSelectedMonster_Ghost])) {
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
+            _monsterLayer->getChildByName("ghost")->setVisible(true);
+            _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[2]);
+          } else if (clickGhost) {
+            _clickToPlace++;
+            _isDecidedMonster[kSelectedMonster_Ghost] = true;
+            _decideMonster[2] = kSelectedMonster_Ghost;
+            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
+            _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[1]);
+            _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[2]);
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[4]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[5]);
+            _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(127);
+            _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(true);
+            _monsterLayer->getChildByName("ghostPortraitDisable")->setOpacity(127);
+            _monsterLayer->getChildByName("ghostPortraitDisable")->setColor(Color3B(127, 127, 127));
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
+            _monsterLayer->getChildByName("ghostPortrait")->setVisible(false);
+          }
+        } else if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
+          bool clickSkeletonMagusBtn = _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagus버튼오버")->getBoundingBox().containsPoint(clickPoint);
+          bool clickSkeletonMagusPortrait = _monsterLayer->getChildByName("skeletonMagusPortrait")->getBoundingBox().containsPoint(clickPoint);
+          bool clickSkeletonMagus = _monsterLayer->getChildByName("skeletonMagus")->getBoundingBox().containsPoint(clickPoint);
+          if ((clickSkeletonMagusBtn || clickSkeletonMagusPortrait) && (!_isDecidedMonster[kSelectedMonster_SkeletonMagus])) {
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
+            _monsterLayer->getChildByName("skeletonMagus")->setVisible(true);
+            _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[2]);
+          } else if (clickSkeletonMagus) {
+            _clickToPlace++;
+            _isDecidedMonster[kSelectedMonster_SkeletonMagus] = true;
+            _decideMonster[2] = kSelectedMonster_SkeletonMagus;
+            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[4]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[5]);
+            _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(127);
+            _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(true);
+            _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setOpacity(127);
+            _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setColor(Color3B(127, 127, 127));
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
+            _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(false);
+          }
+        } else if (_selectedMonster == kSelectedMonster_Orc) {
+          bool clickOrcBtn = _uiLayer[kRoomName_Monster]->getChildByName("orc버튼오버")->getBoundingBox().containsPoint(clickPoint);
+          bool clickOrcPortrait = _monsterLayer->getChildByName("orcPortrait")->getBoundingBox().containsPoint(clickPoint);
+          bool clickOrc = _monsterLayer->getChildByName("orc")->getBoundingBox().containsPoint(clickPoint);
+          if ((clickOrcBtn || clickOrcPortrait) && (!_isDecidedMonster[kSelectedMonster_Orc])) {
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
+            _monsterLayer->getChildByName("orc")->setVisible(true);
+            _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[2]);
+          } else if (clickOrc) {
+            _clickToPlace++;
+            _isDecidedMonster[kSelectedMonster_Orc] = true;
+            _decideMonster[2] = kSelectedMonster_Orc;
+            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[4]);
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[5]);
+            _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(127);
+            _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(true);
+            _monsterLayer->getChildByName("orcPortraitDisable")->setOpacity(127);
+            _monsterLayer->getChildByName("orcPortraitDisable")->setColor(Color3B(127, 127, 127));
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
+            _monsterLayer->getChildByName("orcPortrait")->setVisible(false);
+          }
+        }
+
+      } else if (_clickToPlace == 3) {
+        bool clickRemoveOrc = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->getBoundingBox().containsPoint(clickPoint);
+        bool clickRemoveSkeletonMagus = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->getBoundingBox().containsPoint(clickPoint);
+        bool clickRemoveGhost = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->getBoundingBox().containsPoint(clickPoint);
+        if (clickRemoveOrc && _isDecidedMonster[kSelectedMonster_Orc] == true) {
+          _selectedMonster = kSelectedMonster_None;
+          _clickToPlace--;
+          if (_decideMonster[0] == kSelectedMonster_Orc) {
+            _decideMonster[0] = kSelectedMonster_None;
+            _selectedMonsterArea[0] = Vec2::ZERO;
+          } else if (_decideMonster[1] == kSelectedMonster_Orc) {
+            _decideMonster[1] = kSelectedMonster_None;
+            _selectedMonsterArea[1] = Vec2::ZERO;
+          } else if (_decideMonster[2] == kSelectedMonster_Orc) {
+            _decideMonster[2] = kSelectedMonster_None;
+            _selectedMonsterArea[2] = Vec2::ZERO;
+          }
+          _isDecidedMonster[kSelectedMonster_Orc] = false;
+          _monsterLayer->getChildByName("orcPortrait")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(Vec2::ZERO);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
+          _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(255);
+          _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(false);
+          _monsterLayer->getChildByName("orc")->setVisible(false);
+
+        } else if (clickRemoveSkeletonMagus && _isDecidedMonster[kSelectedMonster_SkeletonMagus] == true) {
+          _selectedMonster = kSelectedMonster_None;
+          _clickToPlace--;
+          if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
+            _decideMonster[0] = kSelectedMonster_None;
+            _selectedMonsterArea[0] = Vec2::ZERO;
+          } else if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
+            _decideMonster[1] = kSelectedMonster_None;
+            _selectedMonsterArea[1] = Vec2::ZERO;
+          } else if (_decideMonster[2] == kSelectedMonster_SkeletonMagus) {
+            _decideMonster[2] = kSelectedMonster_None;
+            _selectedMonsterArea[2] = Vec2::ZERO;
+          }
+          _isDecidedMonster[kSelectedMonster_SkeletonMagus] = false;
+          _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(Vec2::ZERO);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
+          _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(255);
+          _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(false);
+          _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
+
+        } else if (clickRemoveGhost && _isDecidedMonster[kSelectedMonster_Ghost] == true) {
+          _selectedMonster = kSelectedMonster_None;
+          _clickToPlace--;
+          if (_decideMonster[0] == kSelectedMonster_Ghost) {
+            _decideMonster[0] = kSelectedMonster_None;
+            _selectedMonsterArea[0] = Vec2::ZERO;
+          } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
+            _decideMonster[1] = kSelectedMonster_None;
+            _selectedMonsterArea[1] = Vec2::ZERO;
+          } else if (_decideMonster[2] == kSelectedMonster_Ghost) {
+            _decideMonster[2] = kSelectedMonster_None;
+            _selectedMonsterArea[2] = Vec2::ZERO;
+          }
+          _isDecidedMonster[kSelectedMonster_Ghost] = false;
+          _monsterLayer->getChildByName("ghostPortrait")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(Vec2::ZERO);
           _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[1]);
           _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
-          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
-        } else if (_isDecidedMonster[kSelectedMonster_SkeletonMagus]) {
-          _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[1]);
-          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[2]);
-          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
-        }
-        _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(255);
-        _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(false);
-        _monsterLayer->getChildByName("ghost")->setVisible(false);
-      }
-
-      // 남은 위치 탐색
-      if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
-        if (_selectedMonsterArea[1] == _areaPosition[kArea_Middle]) {
-          _selectedMonsterArea[2] = _areaPosition[kArea_Back];
-        } else if (_selectedMonsterArea[1] == _areaPosition[kArea_Back]) {
-          _selectedMonsterArea[2] = _areaPosition[kArea_Middle];
-        }
-      } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Middle]) {
-        if (_selectedMonsterArea[1] == _areaPosition[kArea_Front]) {
-          _selectedMonsterArea[2] = _areaPosition[kArea_Back];
-        } else if (_selectedMonsterArea[1] == _areaPosition[kArea_Back]) {
-          _selectedMonsterArea[2] = _areaPosition[kArea_Front];
-        }
-      } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Back]) {
-        if (_selectedMonsterArea[1] == _areaPosition[kArea_Front]) {
-          _selectedMonsterArea[2] = _areaPosition[kArea_Middle];
-        } else if (_selectedMonsterArea[1] == _areaPosition[kArea_Middle]) {
-          _selectedMonsterArea[2] = _areaPosition[kArea_Front];
-        }
-      }
-      // 남은 몬스터 탐색
-      if (_selectedMonsterArea[2] == _areaPosition[kArea_Back]) {
-        if (_decideMonster[0] == kSelectedMonster_Orc) {
-          if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
-            _selectedMonster = kSelectedMonster_Ghost;
-          } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
-            _selectedMonster = kSelectedMonster_SkeletonMagus;
-          }
-        } else if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
-          if (_decideMonster[1] == kSelectedMonster_Orc) {
-            _selectedMonster = kSelectedMonster_Ghost;
-          } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
-            _selectedMonster = kSelectedMonster_Orc;
-          }
-        } else if (_decideMonster[0] == kSelectedMonster_Ghost) {
-          if (_decideMonster[1] == kSelectedMonster_Orc) {
-            _selectedMonster = kSelectedMonster_SkeletonMagus;
-          } else if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
-            _selectedMonster = kSelectedMonster_Orc;
-          }
-        }
-      } else if (_selectedMonsterArea[2] == _areaPosition[kArea_Middle]) {
-        if (_decideMonster[0] == kSelectedMonster_Orc) {
-          if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
-            _selectedMonster = kSelectedMonster_Ghost;
-          } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
-            _selectedMonster = kSelectedMonster_SkeletonMagus;
-          }
-        } else if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
-          if (_decideMonster[1] == kSelectedMonster_Orc) {
-            _selectedMonster = kSelectedMonster_Ghost;
-          } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
-            _selectedMonster = kSelectedMonster_Orc;
-          }
-        } else if (_decideMonster[0] == kSelectedMonster_Ghost) {
-          if (_decideMonster[1] == kSelectedMonster_Orc) {
-            _selectedMonster = kSelectedMonster_SkeletonMagus;
-          } else if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
-            _selectedMonster = kSelectedMonster_Orc;
-          }
-        }
-      } else if (_selectedMonsterArea[2] == _areaPosition[kArea_Front]) {
-        if (_decideMonster[0] == kSelectedMonster_Orc) {
-          if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
-            _selectedMonster = kSelectedMonster_Ghost;
-          } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
-            _selectedMonster = kSelectedMonster_SkeletonMagus;
-          }
-        } else if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
-          if (_decideMonster[1] == kSelectedMonster_Orc) {
-            _selectedMonster = kSelectedMonster_Ghost;
-          } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
-            _selectedMonster = kSelectedMonster_Orc;
-          }
-        } else if (_decideMonster[0] == kSelectedMonster_Ghost) {
-          if (_decideMonster[1] == kSelectedMonster_Orc) {
-            _selectedMonster = kSelectedMonster_SkeletonMagus;
-          } else if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
-            _selectedMonster = kSelectedMonster_Orc;
-          }
-        }
-      }
-
-      if (_selectedMonster == kSelectedMonster_Ghost) {
-        bool clickGhostBtn = _uiLayer[kRoomName_Monster]->getChildByName("ghost버튼오버")->getBoundingBox().containsPoint(clickPoint);
-        bool clickGhostPortrait = _monsterLayer->getChildByName("ghostPortrait")->getBoundingBox().containsPoint(clickPoint);
-        bool clickGhost = _monsterLayer->getChildByName("ghost")->getBoundingBox().containsPoint(clickPoint);
-        if ((clickGhostBtn || clickGhostPortrait) && (!_isDecidedMonster[kSelectedMonster_Ghost])) {
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
-          _monsterLayer->getChildByName("ghost")->setVisible(true);
-          _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[2]);
-        } else if (clickGhost) {
-          _clickToPlace++;
-          _isDecidedMonster[kSelectedMonster_Ghost] = true;
-          _decideMonster[2] = kSelectedMonster_Ghost;
-          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
-          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[1]);
-          _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[2]);
-          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
-          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[4]);
-          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[5]);
-          _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(127);
-          _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(true);
-          _monsterLayer->getChildByName("ghostPortraitDisable")->setOpacity(127);
-          _monsterLayer->getChildByName("ghostPortraitDisable")->setColor(Color3B(127, 127, 127));
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(false);
-          _monsterLayer->getChildByName("ghostPortrait")->setVisible(false);
-        }
-      } else if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
-        bool clickSkeletonMagusBtn = _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagus버튼오버")->getBoundingBox().containsPoint(clickPoint);
-        bool clickSkeletonMagusPortrait = _monsterLayer->getChildByName("skeletonMagusPortrait")->getBoundingBox().containsPoint(clickPoint);
-        bool clickSkeletonMagus = _monsterLayer->getChildByName("skeletonMagus")->getBoundingBox().containsPoint(clickPoint);
-        if ((clickSkeletonMagusBtn || clickSkeletonMagusPortrait) && (!_isDecidedMonster[kSelectedMonster_SkeletonMagus])) {
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
-          _monsterLayer->getChildByName("skeletonMagus")->setVisible(true);
-          _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[2]);
-        } else if (clickSkeletonMagus) {
-          _clickToPlace++;
-          _isDecidedMonster[kSelectedMonster_SkeletonMagus] = true;
-          _decideMonster[2] = kSelectedMonster_SkeletonMagus;
-          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
-          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(true);
           _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
-          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[4]);
-          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[5]);
-          _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(127);
-          _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(true);
-          _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setOpacity(127);
-          _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setColor(Color3B(127, 127, 127));
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
-          _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(false);
-        }
-      } else if (_selectedMonster == kSelectedMonster_Orc) {
-        bool clickOrcBtn = _uiLayer[kRoomName_Monster]->getChildByName("orc버튼오버")->getBoundingBox().containsPoint(clickPoint);
-        bool clickOrcPortrait = _monsterLayer->getChildByName("orcPortrait")->getBoundingBox().containsPoint(clickPoint);
-        bool clickOrc = _monsterLayer->getChildByName("orc")->getBoundingBox().containsPoint(clickPoint);
-        if ((clickOrcBtn || clickOrcPortrait) && (!_isDecidedMonster[kSelectedMonster_Orc])) {
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
-          _monsterLayer->getChildByName("orc")->setVisible(true);
-          _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[2]);
-        } else if (clickOrc) {
-          _clickToPlace++;
-          _isDecidedMonster[kSelectedMonster_Orc] = true;
-          _decideMonster[2] = kSelectedMonster_Orc;
-          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
-          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(true);
-          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[4]);
-          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
-          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[5]);
-          _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(127);
-          _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(true);
-          _monsterLayer->getChildByName("orcPortraitDisable")->setOpacity(127);
-          _monsterLayer->getChildByName("orcPortraitDisable")->setColor(Color3B(127, 127, 127));
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(false);
-          _monsterLayer->getChildByName("orcPortrait")->setVisible(false);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
+          _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(255);
+          _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(false);
+          _monsterLayer->getChildByName("ghost")->setVisible(false);
         }
       }
-
-    } else if (_clickToPlace == 3) {
-      bool clickRemoveOrc = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->getBoundingBox().containsPoint(clickPoint);
-      bool clickRemoveSkeletonMagus = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->getBoundingBox().containsPoint(clickPoint);
-      bool clickRemoveGhost = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->getBoundingBox().containsPoint(clickPoint);
-      if (clickRemoveOrc && _isDecidedMonster[kSelectedMonster_Orc] == true) {
-        _selectedMonster = kSelectedMonster_None;
-        _clickToPlace--;
-        if (_decideMonster[0] == kSelectedMonster_Orc) {
-          _decideMonster[0] = kSelectedMonster_None;
-          _selectedMonsterArea[0] = Vec2::ZERO;
-        } else if (_decideMonster[1] == kSelectedMonster_Orc) {
-          _decideMonster[1] = kSelectedMonster_None;
-          _selectedMonsterArea[1] = Vec2::ZERO;
-        } else if (_decideMonster[2] == kSelectedMonster_Orc) {
-          _decideMonster[2] = kSelectedMonster_None;
-          _selectedMonsterArea[2] = Vec2::ZERO;
-        }
-        _isDecidedMonster[kSelectedMonster_Orc] = false;
-        _monsterLayer->getChildByName("orcPortrait")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(Vec2::ZERO);
-        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
-        _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
-        _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(255);
-        _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(false);
-        _monsterLayer->getChildByName("orc")->setVisible(false);
-
-      } else if (clickRemoveSkeletonMagus && _isDecidedMonster[kSelectedMonster_SkeletonMagus] == true) {
-        _selectedMonster = kSelectedMonster_None;
-        _clickToPlace--;
-        if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
-          _decideMonster[0] = kSelectedMonster_None;
-          _selectedMonsterArea[0] = Vec2::ZERO;
-        } else if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
-          _decideMonster[1] = kSelectedMonster_None;
-          _selectedMonsterArea[1] = Vec2::ZERO;
-        } else if (_decideMonster[2] == kSelectedMonster_SkeletonMagus) {
-          _decideMonster[2] = kSelectedMonster_None;
-          _selectedMonsterArea[2] = Vec2::ZERO;
-        }
-        _isDecidedMonster[kSelectedMonster_SkeletonMagus] = false;
-        _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(Vec2::ZERO);
-        _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
-        _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(255);
-        _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(false);
-        _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
-
-      } else if (clickRemoveGhost && _isDecidedMonster[kSelectedMonster_Ghost] == true) {
-        _selectedMonster = kSelectedMonster_None;
-        _clickToPlace--;
-        if (_decideMonster[0] == kSelectedMonster_Ghost) {
-          _decideMonster[0] = kSelectedMonster_None;
-          _selectedMonsterArea[0] = Vec2::ZERO;
-        } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
-          _decideMonster[1] = kSelectedMonster_None;
-          _selectedMonsterArea[1] = Vec2::ZERO;
-        } else if (_decideMonster[2] == kSelectedMonster_Ghost) {
-          _decideMonster[2] = kSelectedMonster_None;
-          _selectedMonsterArea[2] = Vec2::ZERO;
-        }
-        _isDecidedMonster[kSelectedMonster_Ghost] = false;
-        _monsterLayer->getChildByName("ghostPortrait")->setVisible(true);
-        _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(false);
-        _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(Vec2::ZERO);
-        _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[1]);
-        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
-        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
-        _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
-        _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(255);
-        _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(false);
-        _monsterLayer->getChildByName("ghost")->setVisible(false);
-      }
+    } else if (_room == kRoomName_Master) {
     }
-  } else if (_room == kRoomName_Master) {
+  } else if (_isCombat) {
+
   }
 }
 
@@ -1260,318 +1274,331 @@ void Tutorial::onMouseMove(Event * event) {
     _scene->getChildByName("option버튼오버")->setVisible(false);
   }
 
-  if (_room == kRoomName_Trap) {
-    if (_continue < 2) {
+  if (!_isCombat) {
+    if (_room == kRoomName_Trap) {
+      if (_continue < 2) {
+        bool overContinue = _uiLayerDRH->getChildByName("continue버튼기본")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
+        if (overContinue) {
+          _uiLayerDRH->getChildByName("continue버튼오버")->setVisible(true);
+        } else {
+          _uiLayerDRH->getChildByName("continue버튼오버")->setVisible(false);
+        }
+      } else {
+        bool overBoneCatapult = _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼기본")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
+        if (overBoneCatapult) {
+          _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼오버")->setVisible(true);
+        } else {
+          _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼오버")->setVisible(false);
+        }
+        if (_isTrap) {
+          bool overConfirm = _scene->getChildByName("confirm버튼기본")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
+          if (overConfirm) {
+            _scene->getChildByName("confirm버튼오버")->setVisible(true);
+          } else {
+            _scene->getChildByName("confirm버튼오버")->setVisible(false);
+          }
+        }
+      }
+
+    } else if (_room == kRoomName_Spell) {
       bool overContinue = _uiLayerDRH->getChildByName("continue버튼기본")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
       if (overContinue) {
         _uiLayerDRH->getChildByName("continue버튼오버")->setVisible(true);
       } else {
         _uiLayerDRH->getChildByName("continue버튼오버")->setVisible(false);
       }
-    } else {
-      bool overBoneCatapult = _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼기본")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
-      if (overBoneCatapult) {
-        _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼오버")->setVisible(true);
-      } else {
-        _uiLayer[kRoomName_Trap]->getChildByName("boneCatapult버튼오버")->setVisible(false);
-      }
-      if (_isTrap) {
-        bool overConfirm = _scene->getChildByName("confirm버튼기본")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
-        if (overConfirm) {
-          _scene->getChildByName("confirm버튼오버")->setVisible(true);
-        } else {
-          _scene->getChildByName("confirm버튼오버")->setVisible(false);
+
+    } else if (_room == kRoomName_Monster) {
+      bool overTransparencyPlaceFront = _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceFront")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
+      bool overTransparencyPlaceMiddle = _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceMiddle")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
+      bool overTransparencyPlaceBack = _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceBack")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
+      if (_clickToPlace == 0) {
+        if (_selectedMonster == kSelectedMonster_Orc) {
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+          if (overTransparencyPlaceFront) {
+            _selectedMonsterArea[0] = _areaPosition[kArea_Front];
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+            _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[0]);
+          } else if (overTransparencyPlaceMiddle) {
+            _selectedMonsterArea[0] = _areaPosition[kArea_Middle];
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+            _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[0]);
+          } else if (overTransparencyPlaceBack) {
+            _selectedMonsterArea[0] = _areaPosition[kArea_Back];
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+            _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[0]);
+          }
+        } else if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+          if (overTransparencyPlaceFront) {
+            _selectedMonsterArea[0] = _areaPosition[kArea_Front];
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+            _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[0]);
+          } else if (overTransparencyPlaceMiddle) {
+            _selectedMonsterArea[0] = _areaPosition[kArea_Middle];
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+            _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[0]);
+          } else if (overTransparencyPlaceBack) {
+            _selectedMonsterArea[0] = _areaPosition[kArea_Back];
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+            _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[0]);
+          }
+        } else if (_selectedMonster == kSelectedMonster_Ghost) {
+          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+          if (overTransparencyPlaceFront) {
+            _selectedMonsterArea[0] = _areaPosition[kArea_Front];
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+            _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[0]);
+          } else if (overTransparencyPlaceMiddle) {
+            _selectedMonsterArea[0] = _areaPosition[kArea_Middle];
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+            _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[0]);
+          } else if (overTransparencyPlaceBack) {
+            _selectedMonsterArea[0] = _areaPosition[kArea_Back];
+            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+            _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[0]);
+          }
         }
+
+      } else if (_clickToPlace == 1) {
+        if (_decideMonster[0] == kSelectedMonster_Orc) {
+          if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
+            if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+              if (overTransparencyPlaceMiddle) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceBack) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Back];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+              }
+            } else if (_selectedMonster == kSelectedMonster_Ghost) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+              if (overTransparencyPlaceMiddle) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceBack) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Back];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+              }
+            }
+          } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Middle]) {
+            if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+              if (overTransparencyPlaceFront) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceBack) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Back];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+              }
+            } else if (_selectedMonster == kSelectedMonster_Ghost) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+              if (overTransparencyPlaceFront) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceBack) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Back];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+              }
+            }
+          } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Back]) {
+            if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+              if (overTransparencyPlaceFront) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceMiddle) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+              }
+            } else if (_selectedMonster == kSelectedMonster_Ghost) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+              if (overTransparencyPlaceFront) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceMiddle) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+              }
+            }
+          }
+        } else if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
+          if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
+            if (_selectedMonster == kSelectedMonster_Orc) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+              if (overTransparencyPlaceMiddle) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceBack) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Back];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+              }
+            } else if (_selectedMonster == kSelectedMonster_Ghost) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+              if (overTransparencyPlaceMiddle) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceBack) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Back];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+              }
+            }
+          } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Middle]) {
+            if (_selectedMonster == kSelectedMonster_Orc) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+              if (overTransparencyPlaceFront) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceBack) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Back];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+              }
+            } else if (_selectedMonster == kSelectedMonster_Ghost) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+              if (overTransparencyPlaceFront) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceBack) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Back];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+              }
+            }
+          } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Back]) {
+            if (_selectedMonster == kSelectedMonster_Orc) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+              if (overTransparencyPlaceFront) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceMiddle) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+              }
+            } else if (_selectedMonster == kSelectedMonster_Ghost) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
+              if (overTransparencyPlaceFront) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceMiddle) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
+              }
+            }
+          }
+        } else if (_decideMonster[0] == kSelectedMonster_Ghost) {
+          if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
+            if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+              if (overTransparencyPlaceMiddle) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceBack) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Back];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+              }
+            } else if (_selectedMonster == kSelectedMonster_Orc) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+              if (overTransparencyPlaceMiddle) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceBack) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Back];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+              }
+            }
+          } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Middle]) {
+            if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+              if (overTransparencyPlaceFront) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceBack) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Back];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+              }
+            } else if (_selectedMonster == kSelectedMonster_Orc) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+              if (overTransparencyPlaceFront) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceBack) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Back];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+              }
+            }
+          } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Back]) {
+            if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
+              if (overTransparencyPlaceFront) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceMiddle) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
+              }
+            } else if (_selectedMonster == kSelectedMonster_Orc) {
+              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
+              if (overTransparencyPlaceFront) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Front];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+              } else if (overTransparencyPlaceMiddle) {
+                _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
+                _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+                _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
+              }
+            }
+          }
+        }
+
+      } else if (_clickToPlace == 2) {
+
       }
     }
+  } else if (_isCombat) {
 
-  } else if (_room == kRoomName_Spell) {
-    bool overContinue = _uiLayerDRH->getChildByName("continue버튼기본")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
-    if (overContinue) {
-      _uiLayerDRH->getChildByName("continue버튼오버")->setVisible(true);
-    } else {
-      _uiLayerDRH->getChildByName("continue버튼오버")->setVisible(false);
-    }
-
-  } else if (_room == kRoomName_Monster) {
-    bool overTransparencyPlaceFront = _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceFront")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
-    bool overTransparencyPlaceMiddle = _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceMiddle")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
-    bool overTransparencyPlaceBack = _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceBack")->getBoundingBox().containsPoint(Vec2(mousePosition->getCursorX(), mousePosition->getCursorY()));
-    if (_clickToPlace == 0) {
-      if (_selectedMonster == kSelectedMonster_Orc) {
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-        if (overTransparencyPlaceFront) {
-          _selectedMonsterArea[0] = _areaPosition[kArea_Front];
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
-          _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[0]);
-        } else if (overTransparencyPlaceMiddle) {
-          _selectedMonsterArea[0] = _areaPosition[kArea_Middle];
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
-          _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[0]);
-        } else if (overTransparencyPlaceBack) {
-          _selectedMonsterArea[0] = _areaPosition[kArea_Back];
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
-          _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[0]);
-        }
-      } else if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-        if (overTransparencyPlaceFront) {
-          _selectedMonsterArea[0] = _areaPosition[kArea_Front];
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
-          _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[0]);
-        } else if (overTransparencyPlaceMiddle) {
-          _selectedMonsterArea[0] = _areaPosition[kArea_Middle];
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
-          _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[0]);
-        } else if (overTransparencyPlaceBack) {
-          _selectedMonsterArea[0] = _areaPosition[kArea_Back];
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
-          _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[0]);
-        }
-      } else if (_selectedMonster == kSelectedMonster_Ghost) {
-        _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-        if (overTransparencyPlaceFront) {
-          _selectedMonsterArea[0] = _areaPosition[kArea_Front];
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
-          _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[0]);
-        } else if (overTransparencyPlaceMiddle) {
-          _selectedMonsterArea[0] = _areaPosition[kArea_Middle];
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
-          _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[0]);
-        } else if (overTransparencyPlaceBack) {
-          _selectedMonsterArea[0] = _areaPosition[kArea_Back];
-          _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
-          _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[0]);
-        }
-      }
-
-    } else if (_clickToPlace == 1) {
-      if (_decideMonster[0] == kSelectedMonster_Orc) {
-        if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
-          if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-            if (overTransparencyPlaceMiddle) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceBack) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Back];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-            }
-          } else if (_selectedMonster == kSelectedMonster_Ghost) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-            if (overTransparencyPlaceMiddle) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceBack) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Back];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-            }
-          }
-        } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Middle]) {
-          if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-            if (overTransparencyPlaceFront) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceBack) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Back];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-            }
-          } else if (_selectedMonster == kSelectedMonster_Ghost) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-            if (overTransparencyPlaceFront) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceBack) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Back];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-            }
-          }
-        } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Back]) {
-          if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-            if (overTransparencyPlaceFront) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceMiddle) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-            }
-          } else if (_selectedMonster == kSelectedMonster_Ghost) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-            if (overTransparencyPlaceFront) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceMiddle) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-            }
-          }
-        }
-      } else if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
-        if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
-          if (_selectedMonster == kSelectedMonster_Orc) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-            if (overTransparencyPlaceMiddle) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceBack) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Back];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-            }
-          } else if (_selectedMonster == kSelectedMonster_Ghost) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-            if (overTransparencyPlaceMiddle) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceBack) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Back];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-            }
-          }
-        } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Middle]) {
-          if (_selectedMonster == kSelectedMonster_Orc) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-            if (overTransparencyPlaceFront) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceBack) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Back];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-            }
-          } else if (_selectedMonster == kSelectedMonster_Ghost) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-            if (overTransparencyPlaceFront) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceBack) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Back];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-            }
-          }
-        } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Back]) {
-          if (_selectedMonster == kSelectedMonster_Orc) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-            if (overTransparencyPlaceFront) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceMiddle) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-            }
-          } else if (_selectedMonster == kSelectedMonster_Ghost) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setVisible(true);
-            if (overTransparencyPlaceFront) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceMiddle) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("ghost")->setPosition(_selectedMonsterArea[1]);
-            }
-          }
-        }
-      } else if (_decideMonster[0] == kSelectedMonster_Ghost) {
-        if (_selectedMonsterArea[0] == _areaPosition[kArea_Front]) {
-          if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-            if (overTransparencyPlaceMiddle) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceBack) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Back];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-            }
-          } else if (_selectedMonster == kSelectedMonster_Orc) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-            if (overTransparencyPlaceMiddle) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceBack) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Back];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-            }
-          }
-        } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Middle]) {
-          if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-            if (overTransparencyPlaceFront) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceBack) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Back];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-            }
-          } else if (_selectedMonster == kSelectedMonster_Orc) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-            if (overTransparencyPlaceFront) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceBack) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Back];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-            }
-          }
-        } else if (_selectedMonsterArea[0] == _areaPosition[kArea_Back]) {
-          if (_selectedMonster == kSelectedMonster_SkeletonMagus) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(true);
-            if (overTransparencyPlaceFront) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceMiddle) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("skeletonMagus")->setPosition(_selectedMonsterArea[1]);
-            }
-          } else if (_selectedMonster == kSelectedMonster_Orc) {
-            _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setVisible(true);
-            if (overTransparencyPlaceFront) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Front];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-            } else if (overTransparencyPlaceMiddle) {
-              _selectedMonsterArea[1] = _areaPosition[kArea_Middle];
-              _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
-              _monsterLayer->getChildByName("orc")->setPosition(_selectedMonsterArea[1]);
-            }
-          }
-        }
-      }
-    
-    } else if (_clickToPlace == 2) {
-      
-    }
   }
+}
+
+void Tutorial::callPerFrame(float delta) {
+  if (_isCombat) {
+    
+  }
+}
+
+void Tutorial::callOnce(float delta) {
 }

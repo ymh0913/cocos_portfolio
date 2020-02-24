@@ -46,6 +46,7 @@ class Tutorial : Scene
   byte _room;
   byte _continue;
   bool _isTrap;
+  bool _isCombat;
   Layer* _bgLayerDRH, *_uiLayerDRH, *_labelLayerDRH;
   TutorialBg* _tutorialBg;
   byte _randBg[4];
@@ -69,6 +70,8 @@ class Tutorial : Scene
   Vec2 _turnPosition[6];
   TutorialMaster* _tutorialMaster;
   Layer* _masterLayer;
+  void callPerFrame(float delta);
+  void callOnce(float delta);
 };
 
 #endif // __TUTORIAL_H__
