@@ -21,27 +21,27 @@ TutorialHero::TutorialHero() {
   auto scoutIdleAnimate = Animate::create(scoutIdleAnimation);
   _scoutIdleAction = RepeatForever::create(scoutIdleAnimate);
 
-  _scum = Sprite::create("TutorialScene/Hero/Scum/scum_idle_00 #103540.png");
-  _scum->setPosition(Vec2(300, 300));
-  _scum->setScale(1.5f);
-  auto scumIdleAnimation = Animation::create();
-  scumIdleAnimation->setDelayPerUnit(0.15f);
-  scumIdleAnimation->addSpriteFrameWithFile(
-    "TutorialScene/Hero/Scum/scum_idle_00 #103540.png");
-  scumIdleAnimation->addSpriteFrameWithFile(
-    "TutorialScene/Hero/Scum/scum_idle_01 #103620.png");
-  scumIdleAnimation->addSpriteFrameWithFile(
-    "TutorialScene/Hero/Scum/scum_idle_02 #103700.png");
-  scumIdleAnimation->addSpriteFrameWithFile(
-    "TutorialScene/Hero/Scum/scum_idle_03 #103777.png");
-  scumIdleAnimation->addSpriteFrameWithFile(
-    "TutorialScene/Hero/Scum/scum_idle_04 #103856.png");
-  scumIdleAnimation->addSpriteFrameWithFile(
-    "TutorialScene/Hero/Scum/scum_idle_05 #105495.png");
-  scumIdleAnimation->addSpriteFrameWithFile(
-    "TutorialScene/Hero/Scum/scum_idle_06 #105568.png");
-  auto scumIdleAnimate = Animate::create(scumIdleAnimation);
-  _scumIdleAction = RepeatForever::create(scumIdleAnimate);
+  _thug = Sprite::create("TutorialScene/Hero/Thug/scum_idle_00 #103540.png");
+  _thug->setPosition(Vec2(300, 300));
+  _thug->setScale(1.5f);
+  auto thugIdleAnimation = Animation::create();
+  thugIdleAnimation->setDelayPerUnit(0.15f);
+  thugIdleAnimation->addSpriteFrameWithFile(
+    "TutorialScene/Hero/Thug/scum_idle_00 #103540.png");
+  thugIdleAnimation->addSpriteFrameWithFile(
+    "TutorialScene/Hero/Thug/scum_idle_01 #103620.png");
+  thugIdleAnimation->addSpriteFrameWithFile(
+    "TutorialScene/Hero/Thug/scum_idle_02 #103700.png");
+  thugIdleAnimation->addSpriteFrameWithFile(
+    "TutorialScene/Hero/Thug/scum_idle_03 #103777.png");
+  thugIdleAnimation->addSpriteFrameWithFile(
+    "TutorialScene/Hero/Thug/scum_idle_04 #103856.png");
+  thugIdleAnimation->addSpriteFrameWithFile(
+    "TutorialScene/Hero/Thug/scum_idle_05 #105495.png");
+  thugIdleAnimation->addSpriteFrameWithFile(
+    "TutorialScene/Hero/Thug/scum_idle_06 #105568.png");
+  auto thugIdleAnimate = Animate::create(thugIdleAnimation);
+  _thugIdleAction = RepeatForever::create(thugIdleAnimate);
 
   _barbarian = Sprite::create("TutorialScene/Hero/Barbarian/barbarian_1_idle_00.png");
   _barbarian->setPosition(Vec2(450, 300));

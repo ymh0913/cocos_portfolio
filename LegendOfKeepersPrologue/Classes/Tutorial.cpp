@@ -26,6 +26,7 @@ Tutorial::Tutorial(Scene * pScene) {
   _tutorialHero = new (nothrow) TutorialHero;
   _tutorialTrap = new (nothrow) TutorialTrap;
   _tutorialMonster = new (nothrow) TutorialMonster;
+  _tutorialMaster = new (nothrow) TutorialMaster;
 
   // 공통 UI
   for (byte i = 0; i < 3; i++) {
@@ -130,8 +131,8 @@ Tutorial::Tutorial(Scene * pScene) {
   _heroLayer = Layer::create();
   _heroLayer->addChild(_tutorialHero->getScout(), 0, "scoutIdle");
   _heroLayer->getChildByName("scoutIdle")->runAction(_tutorialHero->getScoutIdleAction());
-  _heroLayer->addChild(_tutorialHero->getScum(), 0, "scumIdle");
-  _heroLayer->getChildByName("scumIdle")->runAction(_tutorialHero->getScumIdleAction());
+  _heroLayer->addChild(_tutorialHero->getThug(), 0, "thugIdle");
+  _heroLayer->getChildByName("thugIdle")->runAction(_tutorialHero->getThugIdleAction());
   _heroLayer->addChild(_tutorialHero->getBarbarian(), 0, "barbarianIdle");
   _heroLayer->getChildByName("barbarianIdle")->runAction(_tutorialHero->getBarbarianIdleAction());
   _heroLayer->setOpacity(7);
@@ -228,6 +229,23 @@ Tutorial::Tutorial(Scene * pScene) {
   _uiLayer[kRoomName_Monster]->getChildByName("previous버튼오버")->setVisible(false);
   _uiLayer[kRoomName_Monster]->addChild(_tutorialUI->getPrevious(2), 0, "previous버튼클릭");
   _uiLayer[kRoomName_Monster]->getChildByName("previous버튼클릭")->setVisible(false);
+  _turnPosition[0] = Vec2(60, 600), _turnPosition[1] = Vec2(60, 550), _turnPosition[2] = Vec2(60, 500);
+  _turnPosition[3] = Vec2(60, 450), _turnPosition[4] = Vec2(60, 400), _turnPosition[5] = Vec2(60, 350);
+  _uiLayer[kRoomName_Monster]->addChild(_tutorialUI->getThugTurn(), 0, "thugTurn");
+  _uiLayer[kRoomName_Monster]->getChildByName("thugTurn")->setPosition(_turnPosition[0]);
+  _uiLayer[kRoomName_Monster]->addChild(_tutorialUI->getScoutTurn(), 0, "scoutTurn");
+  _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[1]);
+  _uiLayer[kRoomName_Monster]->addChild(_tutorialUI->getBarbarianTurn(), 0, "barbarianTurn");
+  _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[2]);
+  _uiLayer[kRoomName_Monster]->addChild(_tutorialUI->getOrcTurn(), 0, "orcTurn");
+  _uiLayer[kRoomName_Monster]->addChild(_tutorialUI->getSkeletonMagusTurn(), 0, "skeletonMagusTurn");
+  _uiLayer[kRoomName_Monster]->addChild(_tutorialUI->getGhostTurn(), 0, "ghostTurn");
+  _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
+  _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[4]);
+  _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[5]);
+  _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(false);
+  _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(false);
+  _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(false);
   _uiLayer[kRoomName_Monster]->setVisible(false);
   _scene->addChild(_uiLayer[kRoomName_Monster], 2);
   // Label
@@ -279,6 +297,18 @@ Tutorial::Tutorial(Scene * pScene) {
   _monsterLayer->setVisible(false);
   _scene->addChild(_monsterLayer, 1);
 
+  /* RoomName_Master */
+  _bgLayer[kRoomName_Master]->addChild(_tutorialBg->getBgDungeonRoom(_randBg[kRoomName_Master]), 0, "튜토리얼배경");
+  _bgLayer[kRoomName_Master]->addChild(_tutorialBg->getBgDungeonGround(kRoomName_Master), 0, "튜토리얼땅배경");
+  _bgLayer[kRoomName_Master]->setVisible(false);
+  _scene->addChild(_bgLayer[kRoomName_Master]);
+  // Master
+  _masterLayer = Layer::create();
+  _masterLayer->addChild(_tutorialMaster->getSlaveholder(), 0, "slaveholder");
+  _masterLayer->getChildByName("slaveholder")->runAction(_tutorialMaster->getSlaveholderIdleAction());
+  _masterLayer->setVisible(false);
+  _scene->addChild(_masterLayer);
+
   // 터치 이벤트 등록
   _touchListener = EventListenerTouchOneByOne::create();
   _touchListener->setSwallowTouches(true);
@@ -300,6 +330,7 @@ Tutorial::~Tutorial() {
   CC_SAFE_DELETE(_tutorialHero);
   CC_SAFE_DELETE(_tutorialTrap);
   CC_SAFE_DELETE(_tutorialMonster);
+  CC_SAFE_DELETE(_tutorialMaster);
 }
 
 bool Tutorial::onTouchBegan(Touch * touch, Event * event) {
@@ -453,6 +484,27 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
     }
 
   } else if (_room == kRoomName_Monster) {
+    bool clickConfirm = _scene->getChildByName("confirm버튼클릭")->getBoundingBox().containsPoint(clickPoint);
+    bool clickPrevious = _uiLayer[kRoomName_Monster]->getChildByName("previous버튼클릭")->getBoundingBox().containsPoint(clickPoint);
+    if (clickConfirm) {
+      if (_clickToPlace == 0) {
+
+      } else {
+        _room = kRoomName_Master;
+        _bgLayer[kRoomName_Master]->setVisible(true);
+        _masterLayer->setVisible(true);
+        _uiLayer[kRoomName_Monster]->setVisible(false);
+        _labelLayer[kRoomName_Monster]->setVisible(false);
+        _monsterLayer->setVisible(false);
+        _bgLayerDRH->setVisible(false);
+        _uiLayerDRH->setVisible(false);
+        _labelLayerDRH->setVisible(false);
+        _heroLayer->setVisible(false);
+      }
+    } else if (clickPrevious) {
+      _room = kRoomName_Trap;
+    }
+
     if (_clickToPlace == -1) {
       bool clickContinue = _uiLayerDRH->getChildByName("continue버튼클릭")->getBoundingBox().containsPoint(clickPoint);
       if (clickContinue) {
@@ -482,11 +534,11 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
         _labelLayer[kRoomName_Monster]->getChildByName("some")->setVisible(false);
       }
     } else if (_clickToPlace == 0) {
-      bool clickOrcBtn = _uiLayer[kRoomName_Monster]->getChildByName("orc버튼오버")->getBoundingBox().containsPoint(clickPoint);
+      bool clickOrcBtn = _uiLayer[kRoomName_Monster]->getChildByName("orc버튼클릭")->getBoundingBox().containsPoint(clickPoint);
       bool clickOrcPortrait = _monsterLayer->getChildByName("orcPortrait")->getBoundingBox().containsPoint(clickPoint);
-      bool clickSkeletonMagusBtn = _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagus버튼오버")->getBoundingBox().containsPoint(clickPoint);
+      bool clickSkeletonMagusBtn = _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagus버튼클릭")->getBoundingBox().containsPoint(clickPoint);
       bool clickSkeletonMagusPortrait = _monsterLayer->getChildByName("skeletonMagusPortrait")->getBoundingBox().containsPoint(clickPoint);
-      bool clickGhostBtn = _uiLayer[kRoomName_Monster]->getChildByName("ghost버튼오버")->getBoundingBox().containsPoint(clickPoint);
+      bool clickGhostBtn = _uiLayer[kRoomName_Monster]->getChildByName("ghost버튼클릭")->getBoundingBox().containsPoint(clickPoint);
       bool clickGhostPortrait = _monsterLayer->getChildByName("ghostPortrait")->getBoundingBox().containsPoint(clickPoint);
       if ((clickOrcBtn || clickOrcPortrait) && (!_isDecidedMonster[kSelectedMonster_Orc])) {
         _selectedMonster = kSelectedMonster_Orc;
@@ -531,6 +583,9 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
           _decideMonster[0] = kSelectedMonster_Orc;
           _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(true);
           _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
           _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(127);
           _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(true);
           _monsterLayer->getChildByName("orcPortraitDisable")->setOpacity(127);
@@ -546,6 +601,9 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
           _decideMonster[0] = kSelectedMonster_SkeletonMagus;
           _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(true);
           _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[2]);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
           _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(127);
           _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(true);
           _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setOpacity(127);
@@ -561,6 +619,10 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
           _decideMonster[0] = kSelectedMonster_Ghost;
           _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(true);
           _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setPosition(_selectedMonsterArea[0].x - 100, _selectedMonsterArea[0].y);
+          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[1]);
+          _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[2]);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
           _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(127);
           _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(true);
           _monsterLayer->getChildByName("ghostPortraitDisable")->setOpacity(127);
@@ -581,6 +643,9 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
         _isDecidedMonster[kSelectedMonster_Orc] = false;
         _monsterLayer->getChildByName("orcPortrait")->setVisible(true);
         _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(Vec2::ZERO);
+        _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[2]);
         _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(255);
         _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(false);
         _monsterLayer->getChildByName("orc")->setVisible(false);
@@ -592,6 +657,9 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
         _isDecidedMonster[kSelectedMonster_SkeletonMagus] = false;
         _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(true);
         _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(Vec2::ZERO);
+        _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[2]);
         _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(255);
         _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(false);
         _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
@@ -603,6 +671,10 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
         _isDecidedMonster[kSelectedMonster_Ghost] = false;
         _monsterLayer->getChildByName("ghostPortrait")->setVisible(true);
         _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(Vec2::ZERO);
+        _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[1]);
+        _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[2]);
         _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(255);
         _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(false);
         _monsterLayer->getChildByName("ghost")->setVisible(false);
@@ -657,6 +729,10 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
             _decideMonster[1] = kSelectedMonster_SkeletonMagus;
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(true);
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[2]);
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
             _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(127);
             _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(true);
             _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setOpacity(127);
@@ -672,6 +748,11 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
             _decideMonster[1] = kSelectedMonster_Ghost;
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(true);
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+            _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[1]);
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
+            _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[2]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
             _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(127);
             _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(true);
             _monsterLayer->getChildByName("ghostPortraitDisable")->setOpacity(127);
@@ -728,6 +809,10 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
             _decideMonster[1] = kSelectedMonster_Orc;
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(true);
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
             _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(127);
             _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(true);
             _monsterLayer->getChildByName("orcPortraitDisable")->setOpacity(127);
@@ -743,6 +828,11 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
             _decideMonster[1] = kSelectedMonster_Ghost;
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(true);
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+            _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[1]);
+            _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[2]);
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
             _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(127);
             _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(true);
             _monsterLayer->getChildByName("ghostPortraitDisable")->setOpacity(127);
@@ -799,6 +889,9 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
             _decideMonster[1] = kSelectedMonster_Orc;
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(true);
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
             _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(127);
             _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(true);
             _monsterLayer->getChildByName("orcPortraitDisable")->setOpacity(127);
@@ -814,6 +907,9 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
             _decideMonster[1] = kSelectedMonster_SkeletonMagus;
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(true);
             _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setPosition(_selectedMonsterArea[1].x - 100, _selectedMonsterArea[1].y);
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(true);
+            _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+            _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
             _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(127);
             _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(true);
             _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setOpacity(127);
@@ -831,33 +927,77 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
       if (clickRemoveOrc && _isDecidedMonster[kSelectedMonster_Orc] == true) {
         _selectedMonster = kSelectedMonster_None;
         _clickToPlace--;
-        _selectedMonsterArea[0] = Vec2::ZERO;
-        _decideMonster[0] = kSelectedMonster_None;
+        if (_decideMonster[0] == kSelectedMonster_Orc) {
+          _decideMonster[0] = kSelectedMonster_None;
+          _selectedMonsterArea[0] = Vec2::ZERO;
+        } else if (_decideMonster[1] == kSelectedMonster_Orc) {
+          _decideMonster[1] = kSelectedMonster_None;
+          _selectedMonsterArea[1] = Vec2::ZERO;
+        }
         _isDecidedMonster[kSelectedMonster_Orc] = false;
         _monsterLayer->getChildByName("orcPortrait")->setVisible(true);
         _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(Vec2::ZERO);
+        if (_isDecidedMonster[kSelectedMonster_SkeletonMagus]) {
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[2]);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+        } else if (_isDecidedMonster[kSelectedMonster_Ghost]) {
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+        }
         _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(255);
         _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(false);
         _monsterLayer->getChildByName("orc")->setVisible(false);
+
       } else if (clickRemoveSkeletonMagus && _isDecidedMonster[kSelectedMonster_SkeletonMagus] == true) {
         _selectedMonster = kSelectedMonster_None;
         _clickToPlace--;
-        _selectedMonsterArea[0] = Vec2::ZERO;
-        _decideMonster[0] = kSelectedMonster_None;
+        if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
+          _decideMonster[0] = kSelectedMonster_None;
+          _selectedMonsterArea[0] = Vec2::ZERO;
+        } else if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
+          _decideMonster[1] = kSelectedMonster_None;
+          _selectedMonsterArea[1] = Vec2::ZERO;
+        }
         _isDecidedMonster[kSelectedMonster_SkeletonMagus] = false;
         _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(true);
         _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(Vec2::ZERO);
+        if (_isDecidedMonster[kSelectedMonster_Orc]) {
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+        } else if (_isDecidedMonster[kSelectedMonster_Ghost]) {
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+        }
         _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(255);
         _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(false);
         _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
+
       } else if (clickRemoveGhost && _isDecidedMonster[kSelectedMonster_Ghost] == true) {
         _selectedMonster = kSelectedMonster_None;
         _clickToPlace--;
-        _selectedMonsterArea[0] = Vec2::ZERO;
-        _decideMonster[0] = kSelectedMonster_None;
+        if (_decideMonster[0] == kSelectedMonster_Ghost) {
+          _decideMonster[0] = kSelectedMonster_None;
+          _selectedMonsterArea[0] = Vec2::ZERO;
+        } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
+          _decideMonster[1] = kSelectedMonster_None;
+          _selectedMonsterArea[1] = Vec2::ZERO;
+        }
         _isDecidedMonster[kSelectedMonster_Ghost] = false;
         _monsterLayer->getChildByName("ghostPortrait")->setVisible(true);
         _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(Vec2::ZERO);
+        if (_isDecidedMonster[kSelectedMonster_Orc]) {
+          _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[1]);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+        } else if (_isDecidedMonster[kSelectedMonster_SkeletonMagus]) {
+          _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[1]);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[2]);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[3]);
+        }
         _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(255);
         _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(false);
         _monsterLayer->getChildByName("ghost")->setVisible(false);
@@ -961,6 +1101,12 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
           _decideMonster[2] = kSelectedMonster_Ghost;
           _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(true);
           _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
+          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(_turnPosition[1]);
+          _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[2]);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[3]);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[4]);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[5]);
           _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(127);
           _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(true);
           _monsterLayer->getChildByName("ghostPortraitDisable")->setOpacity(127);
@@ -983,10 +1129,14 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
           _decideMonster[2] = kSelectedMonster_SkeletonMagus;
           _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(true);
           _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[4]);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[5]);
           _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(127);
-          _monsterLayer->getChildByName("SkeletonMagusPortraitDisable")->setVisible(true);
-          _monsterLayer->getChildByName("SkeletonMagusPortraitDisable")->setOpacity(127);
-          _monsterLayer->getChildByName("PortraitDisable")->setColor(Color3B(127, 127, 127));
+          _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(true);
+          _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setOpacity(127);
+          _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setColor(Color3B(127, 127, 127));
           _uiLayer[kRoomName_Monster]->getChildByName("clickToPlaceSkeletonMagus")->setVisible(false);
           _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(false);
         }
@@ -1005,6 +1155,10 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
           _decideMonster[2] = kSelectedMonster_Orc;
           _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(true);
           _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setPosition(_selectedMonsterArea[2].x - 100, _selectedMonsterArea[2].y);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(true);
+          _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[4]);
+          _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+          _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[5]);
           _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(127);
           _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(true);
           _monsterLayer->getChildByName("orcPortraitDisable")->setOpacity(127);
@@ -1013,6 +1167,7 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
           _monsterLayer->getChildByName("orcPortrait")->setVisible(false);
         }
       }
+
     } else if (_clickToPlace == 3) {
       bool clickRemoveOrc = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->getBoundingBox().containsPoint(clickPoint);
       bool clickRemoveSkeletonMagus = _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->getBoundingBox().containsPoint(clickPoint);
@@ -1020,38 +1175,78 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
       if (clickRemoveOrc && _isDecidedMonster[kSelectedMonster_Orc] == true) {
         _selectedMonster = kSelectedMonster_None;
         _clickToPlace--;
-        _selectedMonsterArea[0] = Vec2::ZERO;
-        _decideMonster[0] = kSelectedMonster_None;
+        if (_decideMonster[0] == kSelectedMonster_Orc) {
+          _decideMonster[0] = kSelectedMonster_None;
+          _selectedMonsterArea[0] = Vec2::ZERO;
+        } else if (_decideMonster[1] == kSelectedMonster_Orc) {
+          _decideMonster[1] = kSelectedMonster_None;
+          _selectedMonsterArea[1] = Vec2::ZERO;
+        } else if (_decideMonster[2] == kSelectedMonster_Orc) {
+          _decideMonster[2] = kSelectedMonster_None;
+          _selectedMonsterArea[2] = Vec2::ZERO;
+        }
         _isDecidedMonster[kSelectedMonster_Orc] = false;
         _monsterLayer->getChildByName("orcPortrait")->setVisible(true);
         _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveOrc")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(Vec2::ZERO);
+        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+        _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
         _labelLayer[kRoomName_Monster]->getChildByName("grogmar")->setOpacity(255);
         _monsterLayer->getChildByName("orcPortraitDisable")->setVisible(false);
         _monsterLayer->getChildByName("orc")->setVisible(false);
+
       } else if (clickRemoveSkeletonMagus && _isDecidedMonster[kSelectedMonster_SkeletonMagus] == true) {
         _selectedMonster = kSelectedMonster_None;
         _clickToPlace--;
-        _selectedMonsterArea[0] = Vec2::ZERO;
-        _decideMonster[0] = kSelectedMonster_None;
+        if (_decideMonster[0] == kSelectedMonster_SkeletonMagus) {
+          _decideMonster[0] = kSelectedMonster_None;
+          _selectedMonsterArea[0] = Vec2::ZERO;
+        } else if (_decideMonster[1] == kSelectedMonster_SkeletonMagus) {
+          _decideMonster[1] = kSelectedMonster_None;
+          _selectedMonsterArea[1] = Vec2::ZERO;
+        } else if (_decideMonster[2] == kSelectedMonster_SkeletonMagus) {
+          _decideMonster[2] = kSelectedMonster_None;
+          _selectedMonsterArea[2] = Vec2::ZERO;
+        }
         _isDecidedMonster[kSelectedMonster_SkeletonMagus] = false;
         _monsterLayer->getChildByName("skeletonMagusPortrait")->setVisible(true);
         _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveSkeletonMagus")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(Vec2::ZERO);
+        _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
         _labelLayer[kRoomName_Monster]->getChildByName("khidus")->setOpacity(255);
         _monsterLayer->getChildByName("skeletonMagusPortraitDisable")->setVisible(false);
         _monsterLayer->getChildByName("skeletonMagus")->setVisible(false);
+
       } else if (clickRemoveGhost && _isDecidedMonster[kSelectedMonster_Ghost] == true) {
         _selectedMonster = kSelectedMonster_None;
         _clickToPlace--;
-        _selectedMonsterArea[0] = Vec2::ZERO;
-        _decideMonster[0] = kSelectedMonster_None;
+        if (_decideMonster[0] == kSelectedMonster_Ghost) {
+          _decideMonster[0] = kSelectedMonster_None;
+          _selectedMonsterArea[0] = Vec2::ZERO;
+        } else if (_decideMonster[1] == kSelectedMonster_Ghost) {
+          _decideMonster[1] = kSelectedMonster_None;
+          _selectedMonsterArea[1] = Vec2::ZERO;
+        } else if (_decideMonster[2] == kSelectedMonster_Ghost) {
+          _decideMonster[2] = kSelectedMonster_None;
+          _selectedMonsterArea[2] = Vec2::ZERO;
+        }
         _isDecidedMonster[kSelectedMonster_Ghost] = false;
         _monsterLayer->getChildByName("ghostPortrait")->setVisible(true);
         _uiLayer[kRoomName_Monster]->getChildByName("monsterRemoveGhost")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setVisible(false);
+        _uiLayer[kRoomName_Monster]->getChildByName("ghostTurn")->setPosition(Vec2::ZERO);
+        _uiLayer[kRoomName_Monster]->getChildByName("scoutTurn")->setPosition(_turnPosition[1]);
+        _uiLayer[kRoomName_Monster]->getChildByName("orcTurn")->setPosition(_turnPosition[2]);
+        _uiLayer[kRoomName_Monster]->getChildByName("skeletonMagusTurn")->setPosition(_turnPosition[3]);
+        _uiLayer[kRoomName_Monster]->getChildByName("barbarianTurn")->setPosition(_turnPosition[4]);
         _labelLayer[kRoomName_Monster]->getChildByName("aurora")->setOpacity(255);
         _monsterLayer->getChildByName("ghostPortraitDisable")->setVisible(false);
         _monsterLayer->getChildByName("ghost")->setVisible(false);
       }
     }
+  } else if (_room == kRoomName_Master) {
   }
 }
 
@@ -1378,7 +1573,5 @@ void Tutorial::onMouseMove(Event * event) {
     } else if (_clickToPlace == 2) {
       
     }
-
-
   }
 }

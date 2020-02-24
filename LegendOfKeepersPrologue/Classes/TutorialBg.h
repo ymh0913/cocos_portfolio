@@ -18,7 +18,7 @@ class TutorialBg
   Sprite* getPlace(byte i);
  private:
   Sprite* _bgDungeonRoom[5];
-  Sprite* _bgDungeonGround[3];
+  Sprite* _bgDungeonGround[4];
   Sprite* _dRH;
   Sprite* _dRHSpeak;
   RepeatForever* _dRHSpeakAction;

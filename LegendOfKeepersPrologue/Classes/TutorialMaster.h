@@ -5,9 +5,13 @@
 
 class TutorialMaster
 {
-  public:
+ public:
   TutorialMaster();
-  private:
+  Sprite* getSlaveholder();
+  RepeatForever* getSlaveholderIdleAction();
+ private:
+  Sprite* _slaveholder;
+  RepeatForever* _slaveholderIdleAction;
 };
 
 #endif // __TUTORIAL_MASTER_H__

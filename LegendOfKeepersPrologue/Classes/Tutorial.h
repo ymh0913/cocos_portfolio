@@ -66,6 +66,9 @@ class Tutorial : Scene
   Vec2 _selectedMonsterArea[3];
   bool _isDecidedMonster[3];
   char _decideMonster[3];
+  Vec2 _turnPosition[6];
+  TutorialMaster* _tutorialMaster;
+  Layer* _masterLayer;
 };
 
 #endif // __TUTORIAL_H__

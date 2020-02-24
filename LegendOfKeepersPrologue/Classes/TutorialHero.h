@@ -9,15 +9,15 @@ class TutorialHero
   TutorialHero();
   Sprite* getScout() { return _scout; }
   RepeatForever* getScoutIdleAction() { return _scoutIdleAction; }
-  Sprite* getScum() { return _scum; }
-  RepeatForever* getScumIdleAction() { return _scumIdleAction; }
+  Sprite* getThug() { return _thug; }
+  RepeatForever* getThugIdleAction() { return _thugIdleAction; }
   Sprite* getBarbarian() { return _barbarian; }
   RepeatForever* getBarbarianIdleAction() { return _barbarianIdleAction; }
  private:
   Sprite* _scout;
   RepeatForever* _scoutIdleAction;
-  Sprite* _scum;
-  RepeatForever* _scumIdleAction;
+  Sprite* _thug;
+  RepeatForever* _thugIdleAction;
   Sprite* _barbarian;
   RepeatForever* _barbarianIdleAction;
 };

@@ -23,7 +23,7 @@ TutorialBg::TutorialBg() {
     _bgDungeonRoom[i]->setPosition(Vec2(-160, 150));
   }
 
-  for (byte i = 0; i < 3; i++) {
+  for (byte i = 0; i < 4; i++) {
     _bgDungeonGround[i] = Sprite::create("TutorialScene/Bg/bg_dungeon_ground_1.png");
     _bgDungeonGround[i]->setAnchorPoint(Vec2(0, 0));
     _bgDungeonGround[i]->setScaleX(2);
@@ -95,9 +95,11 @@ Sprite * TutorialBg::getBgDungeonRoom(byte i) {
 Sprite * TutorialBg::getBgDungeonGround(byte i) {
   if (i == 0) {
     return _bgDungeonGround[i];
-  } else if(i == 1){
+  } else if (i == 1) {
     return _bgDungeonGround[i];
-  } else {
+  } else if (i == 2) {
+    return _bgDungeonGround[i];
+  } else if (i = 3) {
     return _bgDungeonGround[i];
   }
 }

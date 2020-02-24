@@ -23,6 +23,12 @@ class TutorialUI
   Sprite* getClickToPlace(byte i);
   Sprite* getTransparencyPlace(byte i);
   Sprite* getPrevious(byte i);
+  Sprite* getThugTurn();
+  Sprite* getScoutTurn();
+  Sprite* getBarbarianTurn();
+  Sprite* getOrcTurn();
+  Sprite* getSkeletonMagusTurn();
+  Sprite* getGhostTurn();
  private:
   Sprite* _btnOptions[3];
   Sprite* _btnContinue[3];
@@ -40,6 +46,12 @@ class TutorialUI
   Sprite* _monsterRemove[3];
   Sprite* _transparencyPlace[3];
   Sprite* _previous[3];
+  Sprite* _thugTurn;
+  Sprite* _scoutTurn;
+  Sprite* _barbarianTurn;
+  Sprite* _orcTurn;
+  Sprite* _skeletonMagusTurn;
+  Sprite* _ghostTurn;
 };
 
 #endif // __TUTORIAL_UI_H__

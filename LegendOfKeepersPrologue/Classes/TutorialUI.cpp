@@ -71,24 +71,10 @@ TutorialUI::TutorialUI() {
 
   for (byte i = 0; i < 3; i++) {
     _monsterRemove[i] = Sprite::create("TutorialScene/UI/brazierfire_1_idle_00.png");
-    /*if (i == 0) {
-      _monsterRemove[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 50, 300));
-    } else if (i == 1) {
-      _monsterRemove[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 200, 300));
-    } else {
-      _monsterRemove[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 350, 300));
-    }*/
   }
 
   for (byte i = 0; i < 3; i++) {
     _clickToPlace[i] = Sprite::create("TutorialScene/UI/elementalist_attack_wolf_00.png");
-    /*if (i == 0) {
-      _clickToPlace[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 50, 300));
-    } else if (i == 1) {
-      _clickToPlace[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 50, 300));
-    } else {
-      _clickToPlace[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 50, 300));
-    }*/
   }
 
   for (byte i = 0; i < 3; i++) {
@@ -115,6 +101,19 @@ TutorialUI::TutorialUI() {
     }
     _previous[i]->setPosition(Vec2(100, 100));
   }
+
+  _thugTurn = Sprite::create("TutorialScene/UI/Turn/turn_hero_scum #104843.png");
+  _thugTurn->setScale(1.5f);
+  _scoutTurn = Sprite::create("TutorialScene/UI/Turn/turn_hero_scout #104769.png");
+  _scoutTurn->setScale(1.5f);
+  _barbarianTurn = Sprite::create("TutorialScene/UI/Turn/turn_hero_barbarian.png");
+  _barbarianTurn->setScale(1.5f);
+  _orcTurn = Sprite::create("TutorialScene/UI/Turn/turn_mobs_orcwarrior.png");
+  _orcTurn->setScale(1.5f);
+  _skeletonMagusTurn = Sprite::create("TutorialScene/UI/Turn/turn_mobs_skeletonmage #104245.png");
+  _skeletonMagusTurn->setScale(1.5f);
+  _ghostTurn = Sprite::create("TutorialScene/UI/Turn/turn_mobs_ghost #103862.png");
+  _ghostTurn->setScale(1.5f);
 }
 
 Sprite * TutorialUI::getBtnOptions(byte i) {
@@ -225,4 +224,28 @@ Sprite * TutorialUI::getPrevious(byte i) {
   } else {
     return _previous[i];
   }
+}
+
+Sprite * TutorialUI::getThugTurn() {
+  return _thugTurn;
+}
+
+Sprite * TutorialUI::getScoutTurn() {
+  return _scoutTurn;
+}
+
+Sprite * TutorialUI::getBarbarianTurn() {
+  return _barbarianTurn;
+}
+
+Sprite * TutorialUI::getOrcTurn() {
+  return _orcTurn;
+}
+
+Sprite * TutorialUI::getSkeletonMagusTurn() {
+  return _skeletonMagusTurn;
+}
+
+Sprite * TutorialUI::getGhostTurn() {
+  return _ghostTurn;
 }
