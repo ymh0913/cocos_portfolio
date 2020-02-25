@@ -70,7 +70,7 @@ class Tutorial : Scene
   Vec2 _turnPosition[6];
   TutorialMaster* _tutorialMaster;
   Layer* _masterLayer;
-  void callPerFrame(float delta);
+  void setRoomMaster();
   void callOnce(float delta);
 };
 

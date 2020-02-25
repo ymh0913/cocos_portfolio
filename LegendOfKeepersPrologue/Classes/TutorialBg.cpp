@@ -76,6 +76,11 @@ TutorialBg::TutorialBg() {
       _place[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 400, 250));
     }
   }
+
+  _empty = Sprite::create("TutorialScene/Bg/empty.png");
+  _empty->setAnchorPoint(Vec2(0, 0));
+  _empty->setColor(Color3B(127, 127, 127));
+  _empty->setScale(10);
 }
 
 Sprite * TutorialBg::getBgDungeonRoom(byte i) {

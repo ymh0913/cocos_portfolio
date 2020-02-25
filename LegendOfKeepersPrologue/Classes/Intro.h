@@ -5,7 +5,6 @@
 #include "IntroBg.h"
 #include "IntroUI.h"
 #include "IntroLabel.h"
-#include "TutorialScene.h"
 
 class Intro : Scene
 {

@@ -2,8 +2,6 @@
 
 Tutorial::Tutorial(Scene * pScene) {
   _scene = pScene;
-  log("_pScene = %d\n", pScene);
-  log("_scene = %d\n", _scene);
 
   // 멤버변수 초기화
   _room = kRoomName_Trap;
@@ -91,7 +89,7 @@ Tutorial::Tutorial(Scene * pScene) {
   for (byte i = 0; i < 4; i++) {
     _randBg[i] = rand() % 5;
   }
-  log("%d %d %d %d\n", _randBg[0], _randBg[1], _randBg[2], _randBg[3]);
+  log("%d %d %d %d", _randBg[0], _randBg[1], _randBg[2], _randBg[3]);
   for (byte i = 0; i < 4; i++) {
     for (byte j = 0; j < 4; j++) {
       if (i == j) {
@@ -303,17 +301,16 @@ Tutorial::Tutorial(Scene * pScene) {
   /* RoomName_Master */
   _bgLayer[kRoomName_Master]->addChild(_tutorialBg->getBgDungeonRoom(_randBg[kRoomName_Master]), 0, "튜토리얼배경");
   _bgLayer[kRoomName_Master]->addChild(_tutorialBg->getBgDungeonGround(kRoomName_Master), 0, "튜토리얼땅배경");
+  _bgLayer[kRoomName_Master]->addChild(_tutorialBg->getEmpty(), 0, "빈화면");
+  _bgLayer[kRoomName_Master]->getChildByName("빈화면")->setVisible(false);
   _bgLayer[kRoomName_Master]->setVisible(false);
   _scene->addChild(_bgLayer[kRoomName_Master]);
   // Master
   _masterLayer = Layer::create();
   _masterLayer->addChild(_tutorialMaster->getSlaveholder(), 0, "slaveholder");
-  _masterLayer->getChildByName("slaveholder")->runAction(_tutorialMaster->getSlaveholderIdleAction());
+  //_masterLayer->getChildByName("slaveholder")->runAction(_tutorialMaster->getSlaveholderIdleAction());
   _masterLayer->setVisible(false);
   _scene->addChild(_masterLayer);
-
-  // Schedule
-  _scene->schedule(schedule_selector(Tutorial::callPerFrame));
 
   // 터치 이벤트 등록
   _touchListener = EventListenerTouchOneByOne::create();
@@ -504,7 +501,11 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
           _room = kRoomName_Master;
           _isCombat = true;
           _bgLayer[kRoomName_Master]->setVisible(true);
+          _bgLayer[kRoomName_Master]->getChildByName("빈화면")->setVisible(true);
           _masterLayer->setVisible(true);
+          _bgLayer[kRoomName_Master]->getChildByName("튜토리얼배경")->runAction(
+            Sequence::create(CallFunc::create(CC_CALLBACK_0(Tutorial::setRoomMaster, this)),
+                             MoveBy::create(1, Vec2(-960, 0)), nullptr));
           _uiLayer[kRoomName_Monster]->getChildByName("previous버튼기본")->setVisible(false);
           _uiLayer[kRoomName_Monster]->getChildByName("previous버튼오버")->setVisible(false);
           _uiLayer[kRoomName_Monster]->getChildByName("previous버튼클릭")->setVisible(false);
@@ -519,7 +520,6 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
           _uiLayerDRH->setVisible(false);
           _labelLayerDRH->setVisible(false);
           _heroLayer->setVisible(false);
-          _scene->scheduleOnce(schedule_selector(Tutorial::callOnce), 0);
         }
       } else if (clickPrevious) {
         _room = kRoomName_Trap;
@@ -1603,12 +1603,9 @@ void Tutorial::onMouseMove(Event * event) {
   }
 }
 
-void Tutorial::callPerFrame(float delta) {
-  if (_isCombat) {
-    
-  }
+void Tutorial::setRoomMaster() {
+  _bgLayer[kRoomName_Master]->getChildByName("빈화면")->setVisible(true);
 }
 
 void Tutorial::callOnce(float delta) {
-  log("check");
 }

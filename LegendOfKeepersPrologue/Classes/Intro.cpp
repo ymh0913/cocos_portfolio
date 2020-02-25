@@ -1,4 +1,5 @@
 #include "Intro.h"
+#include "TutorialScene.h"
 
 Intro::Intro(Scene * pScene) {
   // 레이어 생성
@@ -19,7 +20,7 @@ Intro::Intro(Scene * pScene) {
   _isBottom = false;
 
   // 배경 클래스
-  _introBg = new (nothrow) IntroBg;
+  _introBg = new IntroBg;
   _bgLayer[0]->addChild(_introBg->getKeyArtBackground(), 0, "인트로배경");
   _bgLayer[0]->addChild(_introBg->getLegendOfKeepersLogo(), 0, "인트로로고");
   pScene->addChild(_bgLayer[0]);
@@ -33,7 +34,7 @@ Intro::Intro(Scene * pScene) {
   pScene->addChild(_bgLayer[2]);
 
   // UI 클래스
-  _introUI = new (nothrow) IntroUI;
+  _introUI = new IntroUI;
   for (byte i = 0; i < 3; i++) {
     if (i == 0) {
       _uiLayer[0]->addChild(_introUI->getBtnPlay(i), 0, "Play버튼기본");
@@ -143,7 +144,7 @@ Intro::Intro(Scene * pScene) {
   pScene->addChild(_uiLayer[2]);
 
   // Label 클래스
-  _introLabel = new (nothrow) IntroLabel;
+  _introLabel = new IntroLabel;
   _labelLayer[0]->addChild(_introLabel->getPlay(), 0, "Play레이블");
   _labelLayer[0]->addChild(_introLabel->getSettings(), 0, "Settings레이블");
   _labelLayer[0]->addChild(_introLabel->getModding(), 0, "Modding레이블");
@@ -452,8 +453,7 @@ void Intro::onTouchEnded(Touch * touch, Event * event) {
       } else if (clickYes) {
         _uiLayer[2]->getChildByName("Yes버튼클릭")->setVisible(true);
         auto pScene = TutorialScene::createScene();
-        //DIRECTOR->replaceScene(pScene);
-        log("pScene %d\n", pScene);
+        DIRECTOR->replaceScene(pScene);
         DIRECTOR->pushScene(pScene);
       } else {
         _uiLayer[2]->getChildByName("No버튼클릭")->setVisible(false);
