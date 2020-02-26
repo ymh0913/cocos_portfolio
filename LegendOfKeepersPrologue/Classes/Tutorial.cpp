@@ -21,13 +21,13 @@ Tutorial::Tutorial(Scene * pScene) {
   }
 
   // 동적할당
-  _tutorialBg = new TutorialBg;
-  _tutorialUI = new TutorialUI;
-  _tutorialLabel = new TutorialLabel;
-  _tutorialHero = new TutorialHero;
-  _tutorialTrap = new TutorialTrap;
-  _tutorialMonster = new TutorialMonster;
-  _tutorialMaster = new TutorialMaster;
+  _tutorialBg = new (nothrow) TutorialBg;
+  _tutorialUI = new (nothrow) TutorialUI;
+  _tutorialLabel = new (nothrow) TutorialLabel;
+  _tutorialHero = new (nothrow) TutorialHero;
+  _tutorialTrap = new (nothrow) TutorialTrap;
+  _tutorialMonster = new (nothrow) TutorialMonster;
+  _tutorialMaster = new (nothrow) TutorialMaster;
 
   // 공통 UI
   for (byte i = 0; i < 3; i++) {
@@ -136,6 +136,8 @@ Tutorial::Tutorial(Scene * pScene) {
   _heroLayer->getChildByName("thugIdle")->runAction(_tutorialHero->getThugIdleAction());
   _heroLayer->addChild(_tutorialHero->getBarbarian(), 0, "barbarianIdle");
   _heroLayer->getChildByName("barbarianIdle")->runAction(_tutorialHero->getBarbarianIdleAction());
+  _heroLayer->addChild(_tutorialHero->getScoutLifeBar(), 0, "scoutLifeBar");
+  _heroLayer->getChildByName("scoutLifeBar")->setVisible(false);
   _heroLayer->setOpacity(7);
   _scene->addChild(_heroLayer, 1);
   // 트랩
@@ -163,14 +165,26 @@ Tutorial::Tutorial(Scene * pScene) {
   _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getBgDungeonGround(kRoomName_Monster), 0, "튜토리얼땅배경");
   for (byte i = 0; i < 3; i++) {
     if (i == 0) {
-      _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getPlace(i), 0, "placeFront");
-      _bgLayer[kRoomName_Monster]->getChildByName("placeFront")->setVisible(false);
+      _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getPlacementMobtrapsFront(i), 0, "placeFront기본");
+      _bgLayer[kRoomName_Monster]->getChildByName("placeFront기본")->setVisible(false);
+      _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getPlacementMobtrapsMiddle(i), 0, "placeMiddle기본");
+      _bgLayer[kRoomName_Monster]->getChildByName("placeMiddle기본")->setVisible(false);
+      _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getPlacementMobtrapsBack(i), 0, "placeBack기본");
+      _bgLayer[kRoomName_Monster]->getChildByName("placeBack기본")->setVisible(false);
     } else if (i == 1) {
-      _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getPlace(i), 0, "placeMiddle");
-      _bgLayer[kRoomName_Monster]->getChildByName("placeMiddle")->setVisible(false);
+      _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getPlacementMobtrapsFront(i), 0, "placeFront오버");
+      _bgLayer[kRoomName_Monster]->getChildByName("placeFront오버")->setVisible(false);
+      _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getPlacementMobtrapsMiddle(i), 0, "placeMiddle오버");
+      _bgLayer[kRoomName_Monster]->getChildByName("placeMiddle오버")->setVisible(false);
+      _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getPlacementMobtrapsBack(i), 0, "placeBack오버");
+      _bgLayer[kRoomName_Monster]->getChildByName("placeBack오버")->setVisible(false);
     } else {
-      _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getPlace(i), 0, "placeBack");
-      _bgLayer[kRoomName_Monster]->getChildByName("placeBack")->setVisible(false);
+      _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getPlacementMobtrapsFront(i), 0, "placeFront클릭");
+      _bgLayer[kRoomName_Monster]->getChildByName("placeFront클릭")->setVisible(false);
+      _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getPlacementMobtrapsMiddle(i), 0, "placeMiddle클릭");
+      _bgLayer[kRoomName_Monster]->getChildByName("placeMiddle클릭")->setVisible(false);
+      _bgLayer[kRoomName_Monster]->addChild(_tutorialBg->getPlacementMobtrapsBack(i), 0, "placeBack클릭");
+      _bgLayer[kRoomName_Monster]->getChildByName("placeBack클릭")->setVisible(false);
     }
   }
   _bgLayer[kRoomName_Monster]->setVisible(false);
@@ -308,7 +322,6 @@ Tutorial::Tutorial(Scene * pScene) {
   // Master
   _masterLayer = Layer::create();
   _masterLayer->addChild(_tutorialMaster->getSlaveholder(), 0, "slaveholder");
-  //_masterLayer->getChildByName("slaveholder")->runAction(_tutorialMaster->getSlaveholderIdleAction());
   _masterLayer->setVisible(false);
   _scene->addChild(_masterLayer);
 
@@ -499,30 +512,24 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
 
         } else {
           _room = kRoomName_Master;
-          _isCombat = true;
           _bgLayer[kRoomName_Master]->setVisible(true);
-          _bgLayer[kRoomName_Master]->getChildByName("빈화면")->setVisible(true);
           _masterLayer->setVisible(true);
-          _bgLayer[kRoomName_Master]->getChildByName("튜토리얼배경")->runAction(
-            Sequence::create(CallFunc::create(CC_CALLBACK_0(Tutorial::setRoomMaster, this)),
-                             MoveBy::create(1, Vec2(-960, 0)), nullptr));
-          _uiLayer[kRoomName_Monster]->getChildByName("previous버튼기본")->setVisible(false);
-          _uiLayer[kRoomName_Monster]->getChildByName("previous버튼오버")->setVisible(false);
-          _uiLayer[kRoomName_Monster]->getChildByName("previous버튼클릭")->setVisible(false);
+          _masterLayer->getChildByName("slaveholder")->runAction(Sequence::create(
+            _tutorialMaster->getSlaveholderAttack1Action(),
+            CallFunc::create(CC_CALLBACK_0(Tutorial::setCombatTransition, this)),
+            DelayTime::create(2),
+            CallFunc::create(CC_CALLBACK_0(Tutorial::setCombat, this)), nullptr));
+          _scene->scheduleOnce(schedule_selector(Tutorial::callOnce), 0);
+          _uiLayer[kRoomName_Monster]->setVisible(false);
+          _labelLayer[kRoomName_Monster]->setVisible(false);
+          _monsterLayer->setVisible(false);
           _scene->getChildByName("confirm버튼기본")->setVisible(false);
           _scene->getChildByName("confirm버튼오버")->setVisible(false);
           _scene->getChildByName("confirm버튼클릭")->setVisible(false);
           _scene->getChildByName("confirm")->setVisible(false);
-          _uiLayer[kRoomName_Monster]->setVisible(false);
-          _labelLayer[kRoomName_Monster]->setVisible(false);
-          _monsterLayer->setVisible(false);
-          _bgLayerDRH->setVisible(false);
-          _uiLayerDRH->setVisible(false);
-          _labelLayerDRH->setVisible(false);
-          _heroLayer->setVisible(false);
         }
       } else if (clickPrevious) {
-        _room = kRoomName_Trap;
+        _room = kRoomName_Spell;
       }
 
       if (_clickToPlace == -1) {
@@ -531,9 +538,9 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
           _scene->getChildByName("confirm버튼기본")->setVisible(true);
           _scene->getChildByName("confirm")->setVisible(true);
           _clickToPlace++;
-          _bgLayer[kRoomName_Monster]->getChildByName("placeFront")->setVisible(true);
-          _bgLayer[kRoomName_Monster]->getChildByName("placeMiddle")->setVisible(true);
-          _bgLayer[kRoomName_Monster]->getChildByName("placeBack")->setVisible(true);
+          _bgLayer[kRoomName_Monster]->getChildByName("placeFront기본")->setVisible(true);
+          _bgLayer[kRoomName_Monster]->getChildByName("placeMiddle기본")->setVisible(true);
+          _bgLayer[kRoomName_Monster]->getChildByName("placeBack기본")->setVisible(true);
           _uiLayer[kRoomName_Monster]->setVisible(true);
           _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceFront")->setVisible(true);
           _uiLayer[kRoomName_Monster]->getChildByName("transparencyPlaceMiddle")->setVisible(true);
@@ -1268,7 +1275,8 @@ void Tutorial::onTouchEnded(Touch * touch, Event * event) {
       }
     } else if (_room == kRoomName_Master) {
     }
-  } else if (_isCombat) {
+
+  } else {
 
   }
 }
@@ -1603,9 +1611,25 @@ void Tutorial::onMouseMove(Event * event) {
   }
 }
 
-void Tutorial::setRoomMaster() {
-  _bgLayer[kRoomName_Master]->getChildByName("빈화면")->setVisible(true);
+void Tutorial::setCombatTransition() {
+  _bgLayer[kRoomName_Trap]->setVisible(false);
+  _bgLayer[kRoomName_Spell]->setVisible(false);
+  _bgLayer[kRoomName_Monster]->setVisible(false);
+  _bgLayer[kRoomName_Master]->setVisible(false);
+  _masterLayer->setVisible(false);
+  _scene->setVisible(false);
+}
+
+void Tutorial::setCombat() {
+  _isCombat = true;
+  _scene->setVisible(true);
+  _bgLayer[kRoomName_Trap]->setVisible(true);
+  _trapLayer->setVisible(true);
+}
+
+void Tutorial::callPerFrame(float delta) {
 }
 
 void Tutorial::callOnce(float delta) {
+  log("check");
 }

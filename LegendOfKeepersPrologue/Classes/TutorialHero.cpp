@@ -62,4 +62,7 @@ TutorialHero::TutorialHero() {
     "TutorialScene/Hero/Barbarian/barbarian_1_idle_05.png");
   auto barbarianIdleAnimate = Animate::create(barbarianIdleAnimation);
   _barbarianIdleAction = RepeatForever::create(barbarianIdleAnimate);
+
+  _scoutLifeBar = Sprite::create("TutorialScene/Progress Timer/border_life_empty.png");
+  _scoutLifeBar->setPosition(Vec2(150, 250));
 }

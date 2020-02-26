@@ -189,9 +189,6 @@ Intro::~Intro() {
   CC_SAFE_DELETE(_introBg);
   CC_SAFE_DELETE(_introUI);
   CC_SAFE_DELETE(_introLabel);
-
-  // 모든 이벤트 리스너 해제
-  _eventDispatcher->removeAllEventListeners();
 }
 
 bool Intro::onTouchBegan(Touch * touch, Event * event) {
@@ -452,9 +449,11 @@ void Intro::onTouchEnded(Touch * touch, Event * event) {
         _uiLayer[2]->getChildByName("No버튼클릭")->setVisible(true);
       } else if (clickYes) {
         _uiLayer[2]->getChildByName("Yes버튼클릭")->setVisible(true);
+        // 이벤트리스너를 해제해야 씬전환(Repleace)해서도 이벤트리스너를 받아들인다.
+        // Push로 하는 씬전환은 해제없이도 이벤트를 반응한다.
+        _eventDispatcher->removeAllEventListeners();
         auto pScene = TutorialScene::createScene();
         DIRECTOR->replaceScene(pScene);
-        DIRECTOR->pushScene(pScene);
       } else {
         _uiLayer[2]->getChildByName("No버튼클릭")->setVisible(false);
         _uiLayer[2]->getChildByName("Yes버튼클릭")->setVisible(false);

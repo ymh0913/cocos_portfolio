@@ -23,12 +23,26 @@ TutorialMaster::TutorialMaster() {
   slaveholderIdleAnimation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_idle_15.png");
   auto slaveholderIdleAnimate = Animate::create(slaveholderIdleAnimation);
   _slaveholderIdleAction = RepeatForever::create(slaveholderIdleAnimate);
-}
+  _slaveholderIdleAction->retain();
 
-Sprite * TutorialMaster::getSlaveholder() {
-  return _slaveholder;
-}
-
-RepeatForever * TutorialMaster::getSlaveholderIdleAction() {
-  return _slaveholderIdleAction;
+  auto slaveholderAttack1Animation = Animation::create();
+  slaveholderAttack1Animation->setDelayPerUnit(0.15f);
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_00.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_01.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_02.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_03.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_04.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_05.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_06.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_07.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_08.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_09.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_10.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_11.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_12.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_13.png");
+  slaveholderAttack1Animation->addSpriteFrameWithFile("TutorialScene/Master/Slave Holder/centaure_attack1_14.png");
+  auto slaveholderAttack1Animate = Animate::create(slaveholderAttack1Animation);
+  _slaveholderAttack1Action = Repeat::create(slaveholderAttack1Animate, 1);
+  _slaveholderAttack1Action->retain(); // retain()함수가 있어야 호출코드를 영역을 벗어나더라도 액션이 유지된다.
 }

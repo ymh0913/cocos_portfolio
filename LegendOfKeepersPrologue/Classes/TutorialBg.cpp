@@ -67,19 +67,27 @@ TutorialBg::TutorialBg() {
   _borderScreen->setPosition(Vec2(540, 360));
 
   for (byte i = 0; i < 3; i++) {
-    _place[i] = Sprite::create("TutorialScene/Bg/_0025_chest_open.png");
     if (i == 0) {
-      _place[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 100, 250));
+      _placementMobtrapsFront[i] = Sprite::create("TutorialScene/Bg/placement_mobtraps_state.png");
+      _placementMobtrapsMiddle[i] = Sprite::create("TutorialScene/Bg/placement_mobtraps_state.png");
+      _placementMobtrapsBack[i] = Sprite::create("TutorialScene/Bg/placement_mobtraps_state.png");
     } else if (i == 1) {
-      _place[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 250, 250));
+      _placementMobtrapsFront[i] = Sprite::create("TutorialScene/Bg/placement_mobtraps_over.png");
+      _placementMobtrapsMiddle[i] = Sprite::create("TutorialScene/Bg/placement_mobtraps_over.png");
+      _placementMobtrapsBack[i] = Sprite::create("TutorialScene/Bg/placement_mobtraps_over.png");
     } else {
-      _place[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 400, 250));
+      _placementMobtrapsFront[i] = Sprite::create("TutorialScene/Bg/placement_mobtraps_press.png");
+      _placementMobtrapsMiddle[i] = Sprite::create("TutorialScene/Bg/placement_mobtraps_press.png");
+      _placementMobtrapsBack[i] = Sprite::create("TutorialScene/Bg/placement_mobtraps_press.png");
     }
+    _placementMobtrapsFront[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 100, 250));
+    _placementMobtrapsMiddle[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 250, 250));
+    _placementMobtrapsBack[i]->setPosition(Vec2(VISIBLESIZE.width / 2 + 400, 250));
   }
 
   _empty = Sprite::create("TutorialScene/Bg/empty.png");
   _empty->setAnchorPoint(Vec2(0, 0));
-  _empty->setColor(Color3B(127, 127, 127));
+  _empty->setColor(Color3B::BLACK);
   _empty->setScale(10);
 }
 
@@ -109,12 +117,32 @@ Sprite * TutorialBg::getBgDungeonGround(byte i) {
   }
 }
 
-Sprite * TutorialBg::getPlace(byte i) {
+Sprite * TutorialBg::getPlacementMobtrapsFront(byte i) {
   if (i == 0) {
-    return _place[i];
+    return _placementMobtrapsFront[i];
   } else if (i == 1) {
-    return _place[i];
+    return _placementMobtrapsFront[i];
   } else {
-    return _place[i];
+    return _placementMobtrapsFront[i];
+  }
+}
+
+Sprite * TutorialBg::getPlacementMobtrapsMiddle(byte i) {
+  if (i == 0) {
+    return _placementMobtrapsMiddle[i];
+  } else if (i == 1) {
+    return _placementMobtrapsMiddle[i];
+  } else {
+    return _placementMobtrapsMiddle[i];
+  }
+}
+
+Sprite * TutorialBg::getPlacementMobtrapsBack(byte i) {
+  if (i == 0) {
+    return _placementMobtrapsBack[i];
+  } else if (i == 1) {
+    return _placementMobtrapsBack[i];
+  } else {
+    return _placementMobtrapsBack[i];
   }
 }

@@ -24,6 +24,7 @@
 
 #include "AppDelegate.h"
 #include "IntroScene.h"
+#include "TutorialScene.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -100,7 +101,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::EXACT_FIT);    
 
     // create a scene. it's an autorelease object
-    auto scene = IntroScene::createScene();
+    //auto scene = IntroScene::createScene();
+    auto scene = TutorialScene::createScene();
 
     // run
     director->runWithScene(scene);
